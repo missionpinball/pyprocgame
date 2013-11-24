@@ -31,10 +31,19 @@ class Desktop(object):
 		self.add_key_map(pyglet.window.key.LSHIFT, 3)
 		self.add_key_map(pyglet.window.key.RSHIFT, 1)
 		self.frame_drawer = FrameDrawer()
-	
-	def add_key_map(self, key, switch_number):
+		self.sticky_keys = {}
+
+	def add_key_map(self, key, switch_number, sticky_key=False, initial_state="open"):
 		"""Maps the given *key* to *switch_number*, where *key* is one of the key constants in :mod:`pygame.locals`."""
 		self.key_map[key] = switch_number
+
+		if sticky_key:
+			key = str(key)
+			if initial_state == "closed":  # if the initial switch stated should be closed, close the switch
+				self.sticky_keys[key] = "closed"
+				self.key_events.append({'type': pinproc.EventTypeSwitchClosedDebounced, 'value': switch_number})
+			else:
+				self.sticky_keys[key] = "open"
 
 	def clear_key_map(self):
 		"""Empties the key map."""
@@ -60,16 +69,39 @@ class Desktop(object):
 			self.append_exit_event()
 		
 		@self.window.event
+		# capture key presses and add them to the event queue
 		def on_key_press(symbol, modifiers):
 			if (symbol == pyglet.window.key.C and modifiers & pyglet.window.key.MOD_CTRL) or (symbol == pyglet.window.key.ESCAPE):
 				self.append_exit_event()
-			elif symbol in self.key_map:
-				self.key_events.append({'type':pinproc.EventTypeSwitchClosedDebounced, 'value':self.key_map[symbol]})
-		
+
+			else:
+				key_press = str(symbol)
+				# if a modifier key was pressed along with the regular key, combine them in the way they're in the key_map
+				if modifiers:
+					key_press = str(modifiers) + "-" + key_press
+
+				# check our built-up key_press string against the existing key_map dictionary
+				if key_press in self.sticky_keys:  # is this is a sticky key?
+					if self.sticky_keys.get(key_press) == "closed":  # Switch is currently closed, so open it
+						self.key_events.append({'type': pinproc.EventTypeSwitchOpenDebounced, 'value': self.key_map[key_press]})
+						self.sticky_keys[key_press] = "open"
+					else:  # Switch is currently open, so close it
+						self.sticky_keys[key_press] = "closed"
+						self.key_events.append({'type': pinproc.EventTypeSwitchClosedDebounced, 'value': self.key_map[key_press]})
+
+				elif key_press in self.key_map:  # for non-sticky keys, still want to make sure the key press is valid
+					self.key_events.append({'type': pinproc.EventTypeSwitchClosedDebounced, 'value': self.key_map[key_press]})
+
 		@self.window.event
 		def on_key_release(symbol, modifiers):
-			if symbol in self.key_map:
-				self.key_events.append({'type':pinproc.EventTypeSwitchOpenDebounced, 'value':self.key_map[symbol]})
+			# see the above on_key_press() method for comments on this method
+			key_press = str(symbol)
+			if modifiers:
+				key_press = str(modifiers) + "-" + key_press
+
+			# if our key is valid and not in the sticky_keys dictionary, process the key up event
+			if key_press in self.key_map and key_press not in self.sticky_keys:
+				self.key_events.append({'type': pinproc.EventTypeSwitchOpenDebounced, 'value': self.key_map[key_press]})
 
 	def draw(self, frame):
 		"""Draw the given :class:`~procgame.dmd.Frame` in the window."""

@@ -8,6 +8,7 @@ import pinproc
 import time
 import datetime
 import traceback
+import pyglet
 
 class BasicGame(GameController):
 	""":class:`BasicGame` is a subclass of :class:`~procgame.game.GameController` 
@@ -59,12 +60,68 @@ class BasicGame(GameController):
 		key_map_config = config.value_for_key_path(keypath='keyboard_switch_map', default={})
 		if self.desktop:
 			for k, v in key_map_config.items():
+				k = str(k)  # k is the value of the key entry in config.yaml
 				switch_name = str(v)
-				if self.switches.has_key(switch_name):
+				pyglet_key = ""  # will hold our key entry converted to pyglet key format
+				key_code = ""  # the built-up command we'll use to convert pyglet_key to our key_code entry
+				sticky_key = False  # sets whether a key is the push on / push off type
+				initial_state = ""  # used w/ sticky keys to set the initial switch state
+
+				# figure out the P-ROC switch number from the switch_name in the yaml file
+				if switch_name in self.switches:
 					switch_number = self.switches[switch_name].number
 				else:
 					switch_number = pinproc.decode(self.machine_type, switch_name)
-				self.desktop.add_key_map(ord(str(k)), switch_number)
+
+				# Add this key to the sticky_key dictionary if there's an asterisk
+				if k.endswith("*"):  # an asterisk on the end indicates some kind of sticky key
+					if k.endswith("**"):  # two asterisks indicate default state should be closed.
+						initial_state = "closed"
+					else:  # guess we have just one asterisk
+						initial_state = "open"
+					sticky_key = True
+					k = k.rstrip("*")  # strip the asterisk(s) off and continue processing
+
+				# Process the key map entry
+				k = k.upper()  # convert to everything to uppercase for backwards compatibility
+
+				if len(k) > 1:  # there's more than one list item, meaning we have a modifier key
+					k = k.split('-')  # convert our key entry into a list
+					k.reverse()  # reverse the list order so the base key is always in position 0
+					mod_value = 0  # stores the added together value of the modifier keys
+					for i in range((len(k)-1)):  # loop through the modifier keys and add their values together
+						mod_value += int(eval("pyglet.window.key.MOD_" + k[i+1]))  # convert entry to pyglet key code
+					key_code = str(mod_value) + "-"  # add the dash back in to separate our modifier value from the key code
+
+				# convert the yaml file key entry to a pyglet key code. Lots of ifs here to catch all the options
+				if len(str(k[0])) == 1 and str(k[0]).isalpha():  # if it's a single alpha character
+					pyglet_key = str(k[0])
+
+				elif len(str(k[0])) == 1 and str(k[0]).isdigit():  # if it's a single digit
+					pyglet_key = "_" + str(k[0])
+
+				# Let's look for some other single character stuff for backwards compatibility
+				elif str(k[0]) == "/":
+					pyglet_key = "SLASH"
+				elif str(k[0]) == ".":
+					pyglet_key = "PERIOD"
+				elif str(k[0]) == ",":
+					pyglet_key = "COMMA"
+				elif str(k[0]) == "-":
+					pyglet_key = "MINUS"
+				elif str(k[0]) == "=":
+					pyglet_key = "EQUAL"
+
+				# now the catch all to try anything else that's specified.
+				else:
+					pyglet_key = str(k[0])
+				try:  # we use "try" so it doesn't crash if there's an invalid key name
+					key_code = key_code + str(eval("pyglet.window.key." + str(pyglet_key)))
+				except:
+					self.logger.warning("%s is not a valid pyglet key code. Skipping this entry", pyglet_key)
+
+				# Finally it's time to add the new pyglet code / switch number pair to the key map
+				self.desktop.add_key_map(str(key_code), switch_number, sticky_key, initial_state)
 
 	def reset(self):
 		"""Calls super's reset and adds the :class:`ScoreDisplay` mode to the mode queue."""
