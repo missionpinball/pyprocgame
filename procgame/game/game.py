@@ -590,10 +590,8 @@ class GameController(object):
 		self.dmd_event()
 		try:
 			while self.done == False:
-				
 				if min_seconds_per_cycle:
 					t0 = time.time()
-				
 				loops += 1
 				for event in self.get_events():
 					self.process_event(event)
@@ -607,7 +605,6 @@ class GameController(object):
 					self.modes.logger.info("Modes changed in last run loop cycle, now:")
 					self.modes.log_queue()
 					self.modes.changed = False
-				
 				if min_seconds_per_cycle:
 					dt = time.time() - t0
 					if min_seconds_per_cycle > dt:
@@ -616,5 +613,8 @@ class GameController(object):
 			if loops != 0:
 				dt = time.time()-self.t0
 				print "\nOverall loop rate: %0.3fHz\n" % (loops/dt)
-
-
+				#unload OSC server
+				try:
+					self.osc.OSC_shutdown()
+				except:
+					pass

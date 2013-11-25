@@ -5,6 +5,7 @@ __all__ = [
 	'replay',
 	'scoredisplay',
 	'trough',
+	'osc'
 	]
 from ballsave import *
 from ballsearch import *
@@ -12,6 +13,7 @@ from drops import *
 from replay import *
 from scoredisplay import *
 from trough import *
+from osc import *
 
 from ..game import Mode
 class TransitionOutHelperMode(Mode):
