@@ -111,6 +111,8 @@ class BasicGame(GameController):
 					pyglet_key = "MINUS"
 				elif str(k[0]) == "=":
 					pyglet_key = "EQUAL"
+				elif str(k[0]) == ";":
+					pyglet_key = "SEMICOLON"
 
 				# now the catch all to try anything else that's specified.
 				else:
@@ -267,7 +269,6 @@ class BasicRecordableGame(BasicGame):
 			eventStr = eventStr + "|" + str(event['time'])
 		self._switch_record_file.write(eventStr+"\n")
 		self.logger.info("%s:\tswitch recorded-\t%s",str(currentTime),friendly_switch_name)
-		print event
 
 	def run_loop(self, min_seconds_per_cycle=None):
 		""" We override the original run loop to encapsulate it inside of a 
