@@ -35,6 +35,9 @@ class Desktop(object):
 
 	def add_key_map(self, key, switch_number, sticky_key=False, initial_state="open"):
 		"""Maps the given *key* to *switch_number*, where *key* is one of the key constants in :mod:`pygame.locals`."""
+		if isinstance(key, basestring):  # deletes any random zeros that come through as modifiers
+			if key[0:2]=='0-':
+				key=key[2:]
 		self.key_map[key] = switch_number
 
 		if sticky_key:
