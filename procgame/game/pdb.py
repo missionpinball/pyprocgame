@@ -7,6 +7,7 @@ from gameitems import GameItem
 proc_output_module = 3
 proc_pdb_bus_addr = 0xC00
 
+
 class LED(GameItem):
     """Represents an LED in a pinball machine. Groups an arbitrary number of LED
     outputs from the PD-LED to a single LED item (as specified in the
@@ -39,7 +40,7 @@ class LED(GameItem):
         Paramters
         color - should be a list, even for LED objects that are single color
         """
-        
+
         if len(color) >= len(self.addrs):  # if the number of colors is the same or greater than the number of LED outputs
             for i in range(len(self.addrs)):
                 self.game.proc.PRLED_color(self.board_addr, self.addrs[i], color[i])
@@ -55,7 +56,7 @@ class LED(GameItem):
         Paramters
         color - should be a list, even for LED objects that are single color
         """
-            
+
         if len(color) >= len(self.addrs):  # if the number of colors is the same or greater than the number of LED outputs
             for i in range(len(self.addrs)):
                 self.game.proc.PRLED_fade_color(self.board_addr,
@@ -76,27 +77,30 @@ class LED(GameItem):
         (rounded down to the nearest multiple of 4ms)"""
         self.function = 'None'
         self.game.proc.PRLED_fade_rate(self.board_addr, int(fadetime/4))
-        
+
     def color_with_fade(self, color, fadetime):
         """ Changes the LED to the new color via the fadetime parameter
         Paramters
         color - should be a list, even for LED objects that are single color
         fadetime - fade time in ms, max 262144, rounded to the nearest 4ms
         """
-        
+
         fadetime = int(fadetime/4)
 
-        if len(color) >= len(self.addrs):  # if the number of colors is the same or greater than the number of LED outputs
+        if len(color) >= len(self.addrs):
+            # if the number of colors is the same or greater than the number
+            # of LED outputs
 
             for i in range(len(self.addrs)):
-                self.game.proc.PRLED_fade_color(self.board_addr,
+                self.game.proc.PRLED_fade(self.board_addr,
                                                 self.addrs[i],
                                                 color[i], fadetime)
                 self.current_color[i] = color[i]
 
         else:  # The LED has more outputs than the color we're sending it
-            for i in range(len(color)):  # write the colors we can, ignore the rest
-                self.game.proc.PRLED_fade_color(self.board_addr,
+            for i in range(len(color)):
+                # write the colors we can, ignore the rest
+                self.game.proc.PRLED_fade(self.board_addr,
                                                 self.addrs[i],
                                                 color[i],
                                                 fadetime)
@@ -104,11 +108,11 @@ class LED(GameItem):
 
     def disable(self):
         """Disables (turns off) this LED instantly.
-        For multi-color LEDs it turns all elements on.
+        For multi-color LEDs it turns all elements off.
         """
         self.function = 'None'
         for i in range(len(self.addrs)):  # loop through the count based on the number of LED outputs
-            self.game.proc.PRLED_color(self.board_addr, self.addrs[i], 0)
+            #self.game.proc.PRLED_color(self.board_addr, self.addrs[i], 0)
             self.current_color[i] = 0
 
     def enable(self):
@@ -117,7 +121,7 @@ class LED(GameItem):
         """
         self.function = 'None'
         for i in range(len(self.addrs)):  # loop through the count based on the number of LED outputs
-            self.game.proc.PRLED_color(self.board_addr, self.addrs[i], 255)
+            #self.game.proc.PRLED_color(self.board_addr, self.addrs[i], 255)
             self.current_color[i] = 255
 
     def script(self, new_script, runtime=0, repeat=True):
@@ -186,6 +190,7 @@ class Switch(object):
         cr_list = num_str.split('/')
         return (32 + int(cr_list[0])*16 + int(cr_list[1]))
 
+
 class Coil(object):
     def __init__(self, pdb, number_str):
         self.pdb = pdb
@@ -198,8 +203,7 @@ class Coil(object):
             self.coil_type = 'pdb'
             (self.boardnum, self.banknum, self.outputnum) = decode_pdb_address(number_str, self.pdb.aliases)
         else:
-            coil_type = 'unknown'
-
+            self.coil_type = 'unknown'
 
     def bank(self):
         if self.coil_type == 'dedicated':
@@ -208,17 +212,22 @@ class Coil(object):
             return self.boardnum*2 + self.banknum
         else:
             return -1
+
     def output(self):
         return self.outputnum
 
     def is_direct_coil(self, string):
-        if len(string) < 2 or len(string) > 3: return False
-        if not string[0] == 'C': return False
-        if not string[1:].isdigit(): return False
+        if len(string) < 2 or len(string) > 3:
+            return False
+        if not string[0] == 'C':
+            return False
+        if not string[1:].isdigit():
+            return False
         return True
 
     def is_pdb_coil(self, string):
         return is_pdb_address(string, self.pdb.aliases)
+
 
 class Lamp(object):
     def __init__(self, pdb, number_str):
@@ -227,7 +236,7 @@ class Lamp(object):
         if self.is_direct_lamp(upper_str):
             self.lamp_type = 'dedicated'
             self.output = int(number_str[1:])
-        elif self.is_pdb_lamp(number_str): # C-Ax-By-z:R-Ax-By-z  or  C-x/y/z:R-x/y/z
+        elif self.is_pdb_lamp(number_str):  # C-Ax-By-z:R-Ax-By-z  or C-x/y/z:R-x/y/z
             self.lamp_type = 'pdb'
             source_addr, sink_addr = self.split_matrix_addr_parts(number_str)
             (self.source_boardnum, self.source_banknum, self.source_outputnum) = decode_pdb_address(source_addr, self.pdb.aliases)
@@ -237,18 +246,25 @@ class Lamp(object):
 
     def source_board(self):
         return self.source_boardnum
+
     def sink_board(self):
         return self.sink_boardnum
+
     def source_bank(self):
         return self.source_boardnum*2 + self.source_banknum
+
     def sink_bank(self):
         return self.sink_boardnum*2 + self.sink_banknum
+
     def source_output(self):
         return self.source_outputnum
+
     def sink_output(self):
         return self.sink_outputnum
+
     def dedicated_bank(self):
         return self.banknum
+
     def dedicated_output(self):
         return self.output
 
@@ -260,7 +276,8 @@ class Lamp(object):
 
     def split_matrix_addr_parts(self, string):
         # Input is of form C-Ax-By-z:R-Ax-By-z  or  C-x/y/z:R-x/y/z  or  aliasX:aliasY
-        # We want to return only the address part: Ax-By-z, x/y/z, or aliasX.  That is, remove the two character prefix if present.
+        # We want to return only the address part: Ax-By-z, x/y/z, or aliasX.
+        # That is, remove the two character prefix if present.
         addrs = string.rsplit(':')
         if len(addrs) is not 2:
             return []
@@ -268,9 +285,9 @@ class Lamp(object):
         for addr in addrs:
             bits = addr.split('-')
             if len(bits) is 1:
-                addrs_out.append(addr) # Append unchanged.
-            else:                                    # Generally this will be len(bits) 2 or 4.
-                addrs_out.append('-'.join(bits[1:])) # Remove the first bit and rejoin.
+                addrs_out.append(addr)  # Append unchanged.
+            else:  # Generally this will be len(bits) 2 or 4.
+                addrs_out.append('-'.join(bits[1:]))  # Remove the first bit and rejoin.
         return addrs_out
 
     def is_pdb_lamp(self, string):
@@ -281,6 +298,7 @@ class Lamp(object):
                 print "not pdb address!", addr
                 return False
         return True
+
 
 class PDBConfig(object):
     indexes = []
@@ -311,16 +329,16 @@ class PDBConfig(object):
                 self.aliases.append(alias)
 
         # Make a list of unique coil banks
-        for name in config['PRCoils']:
-            item_dict = config['PRCoils'][name]
+        for name in config['Coils']:
+            item_dict = config['Coils'][name]
             coil = Coil(self, str(item_dict['number']))
             if coil.bank() not in coil_bank_list:
                 coil_bank_list.append(coil.bank())
 
         # Make a list of unique lamp source banks.  The P-ROC only supports 2.
         # TODO: What should be done if 2 is exceeded?
-        for name in config['PRLamps']:
-            item_dict = config['PRLamps'][name]
+        for name in config['Lamps']:
+            item_dict = config['Lamps'][name]
             lamp = Lamp(self, str(item_dict['number']))
 
             # Catalog PDB banks
@@ -459,7 +477,6 @@ class PDBConfig(object):
 
             proc.driver_update_state(state)
 
-
     def get_globals(self, config):
         if 'PRDriverGlobals' in config and 'lamp_matrix_strobe_time' in config['PRDriverGlobals']:
             self.lamp_matrix_strobe_time = int(config['PRDriverGlobals']['lamp_matrix_strobe_time'])
@@ -476,38 +493,37 @@ class PDBConfig(object):
         else:
             self.use_watchdog = True
 
-
     def configure_globals(self, proc, lamp_source_bank_list, enable=True):
 
         if enable: self.logger.info("Configuring PDB Driver Globals:  polarity = %s  matrix column index 0 = %d  matrix column index 1 = %d", True, lamp_source_bank_list[0], lamp_source_bank_list[1]);
-        proc.driver_update_global_config(enable, # Don't enable outputs yet
-                        True,  # Polarity
-                        False, # N/A
-                        False, # N/A
-                        1, # N/A
-                        lamp_source_bank_list[0],
-                        lamp_source_bank_list[1],
-                        False, # Active low rows? No
-                        False, # N/A
-                        False, # Stern? No
-                        False, # Reset watchdog trigger
-                        self.use_watchdog, # Enable watchdog
-                        self.watchdog_time)
+        proc.driver_update_global_config(enable,  # Don't enable outputs yet
+                                         True,  # Polarity
+                                         False, # N/A
+                                         False, # N/A
+                                         1, # N/A
+                                         lamp_source_bank_list[0],
+                                         lamp_source_bank_list[1],
+                                         False, # Active low rows? No
+                                         False, # N/A
+                                         False, # Stern? No
+                                         False, # Reset watchdog trigger
+                                         self.use_watchdog, # Enable watchdog
+                                         self.watchdog_time)
 
         # Now set up globals
         proc.driver_update_global_config(True, # Don't enable outputs yet
-                        True,  # Polarity
-                        False, # N/A
-                        False, # N/A
-                        1, # N/A
-                        lamp_source_bank_list[0],
-                        lamp_source_bank_list[1],
-                        False, # Active low rows? No
-                        False, # N/A
-                        False, # Stern? No
-                        False, # Reset watchdog trigger
-                        self.use_watchdog, # Enable watchdog
-                        self.watchdog_time)
+                                         True,  # Polarity
+                                         False, # N/A
+                                         False, # N/A
+                                         1, # N/A
+                                         lamp_source_bank_list[0],
+                                         lamp_source_bank_list[1],
+                                         False, # Active low rows? No
+                                         False, # N/A
+                                         False, # Stern? No
+                                         False, # Reset watchdog trigger
+                                         self.use_watchdog, # Enable watchdog
+                                         self.watchdog_time)
 
     # Return the P-ROC number for the requested driver string.
     # This method uses the driver string to look in the indexes list that
@@ -515,7 +531,7 @@ class PDBConfig(object):
     # is the first driver number in the group, and the driver offset is added
     # to that.
     def get_proc_number(self, section, number_str):
-        if section == 'PRCoils':
+        if section == 'Coils':
             coil = Coil(self, number_str)
             bank = coil.bank()
             if bank == -1: return (-1)
@@ -523,7 +539,7 @@ class PDBConfig(object):
             num = index * 8 + coil.output()
             return num
 
-        if section == 'PRLamps':
+        if section == 'Lamps':
             lamp = Lamp(self, number_str)
             if lamp.lamp_type == 'unknown': return (-1)
             elif lamp.lamp_type == 'dedicated':
@@ -535,7 +551,7 @@ class PDBConfig(object):
             num = index * 8 + lamp.sink_output()
             return num
 
-        if section == 'PRSwitches':
+        if section == 'Switches':
             switch = Switch(self, number_str)
             num = switch.proc_num()
             return num
