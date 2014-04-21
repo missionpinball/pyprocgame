@@ -16,70 +16,100 @@ class LED(GameItem):
 
     Subclass of :class:`GameItem`.
     """
-    last_time_changed = 0
-    """The last :class:`time` that this driver's state was modified."""
 
     def __init__(self, game, name, number):
-        """game = Game object, name, number = LED name, number from machine.yaml"""
+        """game = Game object, name, number = LED name, number from
+        machine.yaml
+        """
         GameItem.__init__(self, game, name, number)
         self.logger = logging.getLogger('game.LED')
 
         cr_list = number.split('-')  # split the LED number into a list
-        self.board_addr = int(cr_list[0][1:])  # pull the digit from first list entry to be the board address
+        # pull the digit from first list entry to be the board address
+        self.board_addr = int(cr_list[0][1:])
         self.addrs = []
         self.current_color = []
-        for color in cr_list[1:]:  # loop through the remaining list entries to populate the color addresses for that LED
+        # Loop through the remaining list entries to populate the color
+        # addresses for that LED
+        for color in cr_list[1:]:
             self.addrs.append(int(color[1:]))
             self.current_color.append(0)
 
-        self.logger.info("Creating LED: %s, board_addr: %s, color_addrs: %s", self.name, self.board_addr, self.addrs)
+        self.logger.info("Creating LED: %s, board_addr: %s, color_addrs: %s",
+                         self.name, self.board_addr, self.addrs)
         self.function = 'none'
+        self.brightness_compensation = [1.0, 1.0, 1.0]
+        # brightness_compensation allows you to set a default multiplier for
+        # the "max" brightness of an LED. Recommended setting is 0.85
+        self.default_fade = 0
 
     def color(self, color):
-        """ Instantly changes the LED to the new color. Ignores the board's fade time setting.
+        """Instantly changes the LED to the new color. Ignores the board's fade
+        time setting.
+
         Paramters
         color - should be a list, even for LED objects that are single color
         """
+        # If this LED has a default fade set, use color_with_fade instead:
+        if self.default_fade:
+            self.color_with_fade(color, self.default_fade)
+            return
 
-        if len(color) >= len(self.addrs):  # if the number of colors is the same or greater than the number of LED outputs
+        # If the number of colors is the same or greater than the number of LED
+        # outputs:
+        if len(color) >= len(self.addrs):
             for i in range(len(self.addrs)):
-                self.game.proc.PRLED_color(self.board_addr, self.addrs[i], color[i])
+                self.game.proc.led_color(self.board_addr, self.addrs[i],
+                                           color[i] *
+                                           self.brightness_compensation[i])
                 self.current_color[i] = color[i]
 
-        else:  # The LED has more outputs than the color we're sending it
-            for i in range(len(color)):  # write the colors we can, ignore the rest
-                self.game.proc.PRLED_color(self.board_addr, self.addrs[i], color[i])
+        else:  # The LED has more outputs than the color we're sending it.
+            for i in range(len(color)):
+                # Write the colors we can, ignore the rest.
+                self.game.proc.led_color(self.board_addr, self.addrs[i],
+                                           color[i] *
+                                           self.brightness_compensation[i])
                 self.current_color[i] = color[i]
 
     def fade_to_color(self, color):
-        """ Changes the LED to the new color via the fadetime the PD-LED board is currently set to
+        """ Changes the LED to the new color via the fadetime the PD-LED board
+        is currently set to.
+
         Paramters
         color - should be a list, even for LED objects that are single color
         """
-
-        if len(color) >= len(self.addrs):  # if the number of colors is the same or greater than the number of LED outputs
+        # If the number of colors is the same or greater than the number of LED
+        # outputs:
+        if len(color) >= len(self.addrs):
             for i in range(len(self.addrs)):
-                self.game.proc.PRLED_fade_color(self.board_addr,
+                self.game.proc.led_fade_color(self.board_addr,
                                                 self.addrs[i],
-                                                color[i])
+                                                color[i] *
+                                                self.brightness_compensation[i])
                 self.current_color[i] = color[i]
 
-        else:  # The LED has more outputs than the color we're sending it
-            for i in range(len(color)):  # write the colors we can, ignore the rest
-                self.game.proc.PRLED_fade_color(self.board_addr,
+        else:  # The LED has more outputs than the color we're sending it.
+            for i in range(len(color)):
+                # Write the colors we can, ignore the rest.
+                self.game.proc.led_fade_color(self.board_addr,
                                                 self.addrs[i],
-                                                color[i])
+                                                color[i] *
+                                                self.brightness_compensation[i])
                 self.current_color[i] = color[i]
 
     def set_fade_rate(self, fadetime):
         """Sets the default fade rate of the board this LED is on.
-        Takes parameter "fadetime" which is the new fade time in ms
-        (rounded down to the nearest multiple of 4ms)"""
-        self.function = 'None'
-        self.game.proc.PRLED_fade_rate(self.board_addr, int(fadetime/4))
+
+        Parameters:
+        fadetime - the new fade time in ms (rounded down to the nearest
+        multiple of 4ms)
+        """
+        self.game.proc.led_fade_rate(self.board_addr, int(fadetime/4))
 
     def color_with_fade(self, color, fadetime):
         """ Changes the LED to the new color via the fadetime parameter
+
         Paramters
         color - should be a list, even for LED objects that are single color
         fadetime - fade time in ms, max 262144, rounded to the nearest 4ms
@@ -92,27 +122,31 @@ class LED(GameItem):
             # of LED outputs
 
             for i in range(len(self.addrs)):
-                self.game.proc.PRLED_fade(self.board_addr,
-                                                self.addrs[i],
-                                                color[i], fadetime)
+                self.game.proc.led_fade(self.board_addr,
+                                          self.addrs[i],
+                                          color[i] *
+                                          self.brightness_compensation[i],
+                                          fadetime)
                 self.current_color[i] = color[i]
 
         else:  # The LED has more outputs than the color we're sending it
             for i in range(len(color)):
                 # write the colors we can, ignore the rest
-                self.game.proc.PRLED_fade(self.board_addr,
-                                                self.addrs[i],
-                                                color[i],
-                                                fadetime)
+                self.game.proc.led_fade(self.board_addr,
+                                          self.addrs[i],
+                                          color[i] *
+                                          self.brightness_compensation[i],
+                                          fadetime)
                 self.current_color[i] = color[i]
 
     def disable(self):
-        """Disables (turns off) this LED instantly.
-        For multi-color LEDs it turns all elements off.
+        """Disables (turns off) this LED instantly. For multi-color LEDs it
+        turns all elements off.
         """
         self.function = 'None'
-        for i in range(len(self.addrs)):  # loop through the count based on the number of LED outputs
-            #self.game.proc.PRLED_color(self.board_addr, self.addrs[i], 0)
+        # loop through the count based on the number of LED outputs
+        for i in range(len(self.addrs)):
+            self.game.proc.led_color(self.board_addr, self.addrs[i], 0)
             self.current_color[i] = 0
 
     def enable(self):
@@ -120,54 +154,11 @@ class LED(GameItem):
         For multi-color LEDs it turns all elements on.
         """
         self.function = 'None'
-        for i in range(len(self.addrs)):  # loop through the count based on the number of LED outputs
-            #self.game.proc.PRLED_color(self.board_addr, self.addrs[i], 255)
+        # loop through the count based on the number of LED outputs
+        for i in range(len(self.addrs)):  
+            self.game.proc.led_color(self.board_addr, self.addrs[i],
+                                       255 * self.brightness_compensation[i])
             self.current_color[i] = 255
-
-    def script(self, new_script, runtime=0, repeat=True):
-        """Script this LED to be according to the given `script`."""
-        self.script_i = -1
-        self.active_script = new_script
-        self.runtime = runtime
-        self.function = 'script'
-        self.start_time = time.time()
-        self.finished = False
-        self.repeat = repeat
-        self.iterate_script()
-
-    def get_script_duration(self, script):
-        """not currently used"""
-        time = 0
-        for entry in script:
-            time += entry['duration']
-        return time
-
-    def iterate_script(self):
-        if self.script_i == len(self.active_script)-1:
-            self.script_i = 0
-        else:
-            self.script_i += 1
-
-        entry = self.active_script[self.script_i]
-        if entry['fade_time'] == 0:
-            self.color(entry['color'])
-        else:
-            self.color_with_fade(entry['color'], entry['fade_time'])
-
-        self.next_action_time = time.time() + entry['duration']
-        self.last_time_changed = time.time()
-
-        if self.script_i == len(self.active_script)-1:
-            if not self.repeat:
-                self.finished = True
-
-    def tick(self):
-        if self.function == 'script':
-            if (self.runtime == 0 and not self.finished) or (time.time() - self.start_time) < self.runtime:
-                if time.time() >= self.next_action_time:
-                    self.iterate_script()
-            else:
-                self.function = 'none'
 
 
 class Switch(object):
