@@ -613,8 +613,3 @@ class GameController(object):
 			if loops != 0:
 				dt = time.time()-self.t0
 				print "\nOverall loop rate: %0.3fHz\n" % (loops/dt)
-				#unload OSC server
-				try:
-					self.osc.OSC_shutdown()
-				except:
-					pass
