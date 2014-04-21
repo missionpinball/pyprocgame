@@ -12,6 +12,7 @@ __all__ = [
 	'sound',
 	'util',
 	'tools',
+	'LEDs'
 	]
 
 from _version import __version_info__

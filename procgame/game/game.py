@@ -11,6 +11,7 @@ from gameitems import *
 from procgame import util
 from mode import *
 from pdb import PDBConfig, LED
+from procgame import LEDs
 
 def config_named(name):
 	if not os.path.isfile(name): # If we cannot find this file easily, try searching the config_path:
@@ -69,6 +70,9 @@ class GameController(object):
 
 	logger = None
 	""":class:`Logger` object instance; instantiated in :meth:`__init__` with the logger name "game"."""
+
+	LEDs = None
+	""":class:`LEDcontroller` object instance; instantiated in :meth:`__init__`"""
 	
 	def __init__(self, machine_type):
 		super(GameController, self).__init__()
@@ -78,6 +82,8 @@ class GameController(object):
 		self.proc.reset(1)
 		self.modes = ModeQueue(self)
 		self.t0 = time.time()
+
+		self.LEDs = LEDs.LEDcontroller(self)
 	
 	def create_pinproc(self):
 		"""Instantiates and returns the class to use as the P-ROC device.
@@ -582,7 +588,11 @@ class GameController(object):
 			lamp.tick()
 		for led in self.leds:
 			led.tick()
-	
+
+	def LED_event(self):
+		if self.LEDs:
+			self.LEDs.update()
+
 	def run_loop(self, min_seconds_per_cycle=None):
 		"""Called by the programmer to read and process switch events until interrupted."""
 		loops = 0
@@ -598,6 +608,7 @@ class GameController(object):
 				self.tick()
 				self.tick_virtual_drivers()
 				self.modes.tick()
+				self.LED_event()
 				if self.proc:
 					self.proc.watchdog_tickle()
 					self.proc.flush()
