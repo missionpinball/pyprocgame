@@ -64,6 +64,9 @@ class LEDshow(object):
         # active_LEDs keys are LEDname
         # vals are color, prevcolor, fadestart, fadeend, dest_color
         self.tocks_per_sec = 32  # how many steps per second this show runs at
+        # you can safely read this value to determine the current playback rate
+        # But don't update it directly to change the speed of a running show.
+        # Use the change_speed() method instead.
         self.secs_per_tock = 0  # calculated based on tocks_per_sec
         self.repeat = False  # whether this show repeats when finished
         self.num_repeats = 0  # if self.repeat=True, how many times it repeats
@@ -240,6 +243,24 @@ class LEDshow(object):
 
         self.game.LEDs._end_show(self, reset)
 
+    def change_speed(self, tocks_per_sec=1):
+        """Changes the playback speed of a running LEDshow.
+
+        :param integer tocks_per_sec: The new tocks_per_second play rate.
+
+        If you want to change the playback speed by a percentage, you can
+        access the current tocks_per_second rate via LEDshow's tocks_per_second
+        variable. So if you want to double the playback speed of your show,
+        you could do something like:
+
+                    self.your_show.change_speed(self.your_show.tocks_per_second*2)
+
+        Note that you can't just update the show's tocks_per_second directly
+        because we also need to update self.secs_per_tock.
+        """
+        self.tocks_per_sec = tocks_per_sec
+        self.secs_per_tock = 1/float(tocks_per_sec)
+
     def _advance(self):
         # Advances through the LEDshow. This method schedules all the LEDs
         # that need to be serviced now, tracks the current show's location and
@@ -363,7 +384,8 @@ class LEDshow(object):
         i = {}
         i['dest_color'] = colorwithfade[0]
         i['fadestart'] = self.game.LEDs.current_time
-        i['fadeend'] = (int(colorwithfade[1]) * secs_per_tock) + self.game.LEDs.current_time
+        i['fadeend'] = ((int(colorwithfade[1]) * secs_per_tock) +
+                        self.game.LEDs.current_time)
         return i
         # todo check to make sure we received a list?
 
@@ -513,8 +535,8 @@ class Playlist(object):
 
         :param integer step: Which step number you're configuring
 
-        :param float time: The time in seconds that you want this step to run before
-        moving on to the next one.
+        :param float time: The time in seconds that you want this step to run
+        before moving on to the next one.
 
         :param object trigger_show: If you want to move to the next step after
         one of the LEDshows in this step is done playing, specify that LEDshow
@@ -1475,13 +1497,13 @@ class LEDcontroller(object):
             If False it will turn the LED off first before fading.
 
         Note that since you enable LEDs with priorities, you can actually
-        "enable" the LED multiple times at different priorites. Then if you
+        "enable" the LED multiple times at different priorties. Then if you
         disable the LED via a higher priority, the lower priority will still
         be there. This means that in your game, each mode can do whatever it
         wants with LEDs and you don't have to worry about a higher priority
         mode clearing out an LED and messing up the lower priority mode's
         status.
-
+        
         The ability for this enable method to also keep track of the priority
         that a LED is enabled is the reason you'd want to use this method
         versus calling :meth:`leds.color` directly. If you do use
