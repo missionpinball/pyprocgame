@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>highscore Submodule &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="../index.html" />
+    <link rel="up" title="procgame Module Reference" href="../ref-index.html" />
+    <link rel="next" title="lamps Submodule" href="lamps.html" />
+    <link rel="prev" title="game Submodule" href="game.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lamps.html" title="lamps Submodule"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="game.html" title="game Submodule"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" accesskey="U">procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-procgame.highscore">
+<span id="highscore-submodule"></span><h1>highscore Submodule<a class="headerlink" href="#module-procgame.highscore" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The highscore module provides a set of classes to make gathering and displaying high score information relatively simple.   Classic Grand Champion, High Score #1-#4 style high score tables can be created with just a few lines.  With a few more lines you can gather more sophisticated high scores, such as loop champion or similar.</p>
+<p>While <tt class="xref py py-class docutils literal"><span class="pre">InitialEntryMode</span></tt> prompts the player for their initials, most developers will want to use <tt class="xref py py-class docutils literal"><span class="pre">EntrySequenceManager</span></tt>, which coordinates the display of a series of <tt class="xref py py-class docutils literal"><span class="pre">InitialEntryMode</span></tt> s.   <tt class="xref py py-class docutils literal"><span class="pre">EntrySequenceManager</span></tt> is designed to be used with a subclass of <tt class="xref py py-class docutils literal"><span class="pre">HighScoreLogic</span></tt>, which enables the developer to take advantage of these classes while using completely custom logic to determine what initials need to be prompted for.  <tt class="xref py py-class docutils literal"><span class="pre">CategoryLogic</span></tt>, is a powerful <tt class="xref py py-class docutils literal"><span class="pre">HighScoreLogic</span></tt> subclass that most developers will find suitable for implementing modern high score functionality.</p>
+<p>Finally, <tt class="xref py py-func docutils literal"><span class="pre">generate_highscore_frames()</span></tt> can help to quickly create a traditional high score display.</p>
+<div class="section" id="using-entrysequencemanager">
+<h3>Using EntrySequenceManager<a class="headerlink" href="#using-entrysequencemanager" title="Permalink to this headline">¶</a></h3>
+<p>In your <tt class="xref py py-class docutils literal"><span class="pre">GameController</span></tt> subclass&#8217;s setup method, configure the categories you wish to track scores for.  The categories are used each time the game ends, as we&#8217;ll see in the next step.  In this case we&#8217;ll setup two categories: a &#8216;classic&#8217; category for the traditional Grand Champion and high scores 1-4, and a more modern &#8216;loop champ&#8217; category.  We set <tt class="xref py py-attr docutils literal"><span class="pre">score_for_player</span></tt> to tell the category how to obtain that particular score value.  Note that because the loop champ only has one title, only the highest loop score will be saved.  The number of titles is used to determine how many scores are saved.</p>
+<div class="highlight-python"><div class="highlight"><pre>def setup(self):
+    self.highscore_categories = []
+
+    cat = highscore.HighScoreCategory()
+    cat.game_data_key = &#39;ClassicHighScoreData&#39;
+    cat.titles = [&#39;Grand Champion&#39;, &#39;High Score 1&#39;, ... , `High Score 4`]
+    self.highscore_categories.append(cat)
+
+    cat = highscore.HighScoreCategory()
+    cat.game_data_key = &#39;LoopsHighScoreData&#39;
+    cat.titles = [&#39;Loop Champ&#39;]
+    cat.score_for_player = lambda category, player: player.loops
+    cat.score_suffix_singular = &#39; loop&#39;
+    cat.score_suffix_plural = &#39; loops&#39;
+    self.highscore_categories.append(cat)
+
+    for category in self.highscore_categories:
+        category.load_from_game(self)
+</pre></div>
+</div>
+<p>We use <tt class="xref py py-class docutils literal"><span class="pre">EntrySequenceManager</span></tt> to manage the high score prompting process once the game has finished.  We instantiate it like a normal mode, set the finished handler and logic, and then add it to the mode queue:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">game_ended</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">seq_manager</span> <span class="o">=</span> <span class="n">highscore</span><span class="o">.</span><span class="n">EntrySequenceManager</span><span class="p">(</span><span class="n">game</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">seq_manager</span><span class="o">.</span><span class="n">finished_handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">highscore_entry_finished</span>
+    <span class="n">seq_manager</span><span class="o">.</span><span class="n">logic</span> <span class="o">=</span> <span class="n">highscore</span><span class="o">.</span><span class="n">CategoryLogic</span><span class="p">(</span><span class="n">game</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">highscore_categories</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">seq_manager</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, we write the finished handler to remove the sequence manager and add the attract mode to prepare for starting a new game:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">highscore_entry_finished</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">start_attract_mode</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>An attract mode that displays the high scores might look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Attract</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">Mode</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">mode_started</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">script</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&#39;seconds&#39;</span><span class="p">:</span><span class="mf">2.0</span><span class="p">,</span> <span class="s">&#39;layer&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">}]</span>
+        <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">highscore</span><span class="o">.</span><span class="n">generate_highscore_frames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">highscore_categories</span><span class="p">):</span>
+            <span class="n">layer</span> <span class="o">=</span> <span class="n">dmd</span><span class="o">.</span><span class="n">FrameLayer</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">)</span>
+            <span class="n">script</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s">&#39;seconds&#39;</span><span class="p">:</span><span class="mf">2.0</span><span class="p">,</span> <span class="s">&#39;layer&#39;</span><span class="p">:</span><span class="n">layer</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">dmd</span><span class="o">.</span><span class="n">ScriptedLayer</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>That the <tt class="docutils literal"><span class="pre">None</span></tt> layer allows the score display to be seen (as it is beneath the attract mode) for one period of the script.</p>
+</div>
+<div class="section" id="default-scores">
+<h3>Default Scores<a class="headerlink" href="#default-scores" title="Permalink to this headline">¶</a></h3>
+<p>Default scores and initials should be set using the game data template (the <em>template_filename</em> argument to <a class="reference internal" href="game.html#procgame.game.GameController.load_game_data" title="procgame.game.GameController.load_game_data"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.GameController.load_game_data()</span></tt></a>).  The key must match the <tt class="xref py py-attr docutils literal"><span class="pre">HighScoreCategory.game_data_key</span></tt> value.  Example:</p>
+<div class="highlight-python"><div class="highlight"><pre>ClassicHighScores:
+  - {inits: GSS, score: 5000000}
+  - {inits: ASP, score: 4000000}
+  - {inits: JRP, score: 3000000}
+  - {inits: JAG, score: 2000000}
+  - {inits: JTW, score: 1000000}
+LoopsHighScoreData:
+  - {inits: GSS, score: 5}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="categorylogic">
+<h3>CategoryLogic<a class="headerlink" href="#categorylogic" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="entryprompt">
+<h3>EntryPrompt<a class="headerlink" href="#entryprompt" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="highscore">
+<h3>HighScore<a class="headerlink" href="#highscore" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="highscorecategory">
+<h3>HighScoreCategory<a class="headerlink" href="#highscorecategory" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="highscorelogic">
+<h3>HighScoreLogic<a class="headerlink" href="#highscorelogic" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="initialentrymode">
+<h3>InitialEntryMode<a class="headerlink" href="#initialentrymode" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="entrysequencemanager">
+<h3>EntrySequenceManager<a class="headerlink" href="#entrysequencemanager" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="helper-methods">
+<h2>Helper Methods<a class="headerlink" href="#helper-methods" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">highscore Submodule</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a><ul>
+<li><a class="reference internal" href="#using-entrysequencemanager">Using EntrySequenceManager</a></li>
+<li><a class="reference internal" href="#default-scores">Default Scores</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#categorylogic">CategoryLogic</a></li>
+<li><a class="reference internal" href="#entryprompt">EntryPrompt</a></li>
+<li><a class="reference internal" href="#highscore">HighScore</a></li>
+<li><a class="reference internal" href="#highscorecategory">HighScoreCategory</a></li>
+<li><a class="reference internal" href="#highscorelogic">HighScoreLogic</a></li>
+<li><a class="reference internal" href="#initialentrymode">InitialEntryMode</a></li>
+<li><a class="reference internal" href="#entrysequencemanager">EntrySequenceManager</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#helper-methods">Helper Methods</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="game.html"
+                        title="previous chapter">game Submodule</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="lamps.html"
+                        title="next chapter">lamps Submodule</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ref/highscore.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lamps.html" title="lamps Submodule"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="game.html" title="game Submodule"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" >procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

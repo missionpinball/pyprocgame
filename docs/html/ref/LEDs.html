@@ -1,0 +1,861 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>LEDs Submodule &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="../index.html" />
+    <link rel="up" title="procgame Module Reference" href="../ref-index.html" />
+    <link rel="next" title="config Submodule" href="config.html" />
+    <link rel="prev" title="procgame Module Reference" href="../ref-index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="config.html" title="config Submodule"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../ref-index.html" title="procgame Module Reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" accesskey="U">procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-procgame.LEDs">
+<span id="leds-submodule"></span><h1>LEDs Submodule<a class="headerlink" href="#module-procgame.LEDs" title="Permalink to this headline">¶</a></h1>
+<p>The LEDs module is used to control LEDs connected to a PD-LED driver board. It contains several classes and methods which allow LED shows, scripts, commands, priorities, fades, and all sorts of things. Full instructions and an overview are available on the <a class="reference external" href="http://www.pinballcontrollers.com/wiki/Controlling_LEDs_with_the_PD-LED_board">PinballControllers.com wiki</a>. The documentation here is meant to be more of a reference guide.</p>
+<p>Current status is beta. Please post to the <a href="#id1"><span class="problematic" id="id2">`Drive Boards forum at PinballControllers.com&lt;http://www.pinballcontrollers.com/forum/index.php?board=16.0&gt;`_</span></a> with questions.</p>
+<p>This documentation could also be thought of as &#8220;beta&#8221;. There are lots of things to clean up.</p>
+<div class="section" id="core-classes">
+<h2>Core Classes<a class="headerlink" href="#core-classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ledcontroller">
+<h3>LEDcontroller<a class="headerlink" href="#ledcontroller" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.LEDs.LEDcontroller">
+<em class="property">class </em><tt class="descclassname">procgame.LEDs.</tt><tt class="descname">LEDcontroller</tt><big>(</big><em>game</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDcontroller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages all the LEDs in the pinball machine. Handles updates,
+priorities, restores, running and stopping LEDshows, etc. There should be
+only one per game.</p>
+<p>Parameters:</p>
+<blockquote>
+<div>&#8216;game&#8217;: Parent game object.</div></blockquote>
+<p>Contains <a class="reference internal" href="#procgame.LEDs.LEDcontroller.update" title="procgame.LEDs.LEDcontroller.update"><tt class="xref py py-meth docutils literal"><span class="pre">update()</span></tt></a> which should be called once per game loop to do the
+actual work.</p>
+<p><strong>Using LEDcontroller</strong></p>
+<p>todo</p>
+<dl class="method">
+<dt id="procgame.LEDs.LEDcontroller.convert_hex_to_list">
+<tt class="descname">convert_hex_to_list</tt><big>(</big><em>inputstring</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDcontroller.convert_hex_to_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a string input of hex numbers and returns a list of integers</p>
+<p>Parameters:</p>
+<blockquote>
+<div>&#8216;inputstring&#8217;: incoming string with hex colors, like ffff00.</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div>List of colors as integers, like [255, 255, 0]</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.LEDcontroller.disable">
+<tt class="descname">disable</tt><big>(</big><em>LEDname</em>, <em>priority=0</em>, <em>clear_all=True</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDcontroller.disable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command to disable an LED</p>
+<p>Parameters:</p>
+<blockquote>
+<div><p>&#8216;LEDname&#8217;: The name of the LED you&#8217;re disabling</p>
+<p>&#8216;priority&#8217;: Which priority you&#8217;re clearing (disabling) the LED at.
+(See <em>clear_all</em> below for details.) If you don&#8217;t pass a priority,
+then it will disable the LED and remove <em>all</em> entries from the
+manual commands list. i.e. In that case it disables/removes all the
+previously issued manual commands</p>
+<p>&#8216;clear_all&#8217;: If True, it will clear all the commands from the
+priority you passed and from any lower priority commands. If False
+then it only clears out the command from the priority that was
+passed.</p>
+</div></blockquote>
+<p>Once cleared, <a class="reference internal" href="#procgame.LEDs.LEDcontroller" title="procgame.LEDs.LEDcontroller"><tt class="xref py py-class docutils literal"><span class="pre">LEDcontroller</span></tt></a> restore the LED&#8217;s state from any
+commands or shows running at a lower priority.</p>
+<p>Note that this method does not affect running <a class="reference internal" href="#procgame.LEDs.LEDshow" title="procgame.LEDs.LEDshow"><tt class="xref py py-class docutils literal"><span class="pre">LEDshow</span></tt></a> shows,
+so if you clear the <a class="reference internal" href="#procgame.LEDs.LEDcontroller.enable" title="procgame.LEDs.LEDcontroller.enable"><tt class="xref py py-meth docutils literal"><span class="pre">enable()</span></tt></a> commands but you have a running
+LEDshow which enables that LED, then the LED will be enabled. If you
+want to absolutely disable the LED regardless of whatever LEDshow is
+running, then use <a class="reference internal" href="#procgame.LEDs.LEDcontroller.enable" title="procgame.LEDs.LEDcontroller.enable"><tt class="xref py py-meth docutils literal"><span class="pre">enable()</span></tt></a> with <em>color=000000</em>, <em>blend=False</em>,
+and a <em>priority</em> that&#8217;s higher than any running show.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.LEDcontroller.enable">
+<tt class="descname">enable</tt><big>(</big><em>LEDname</em>, <em>priority=0</em>, <em>color=None</em>, <em>dest_color=None</em>, <em>fade=0</em>, <em>blend=True</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDcontroller.enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a single one-time command to enable an LED.</p>
+<p>Parameters:</p>
+<p>LEDname - the LED you&#8217;re enabling</p>
+<blockquote>
+<div><p>&#8216;priority&#8217;: - the priority this LED will be enabled at. This is
+used when determining what other enables, scripts, and LEDshows
+will play over or under it). If you enable an LED with the same
+priority that was previously used to enable it, it will overwrite
+the old color with the new one.</p>
+<p>&#8216;color&#8217;: A hex string (like &#8220;ff00aa&#8221;) for what color you want to
+enable this LED to be. Note if you have a single color (i.e. one
+element) LED, then just pass it &#8220;ff&#8221; to enable it on full
+brightness, or &#8220;80&#8221; for 50%, etc.</p>
+<p>&#8216;dest_color&#8217;: If you want to fade the LED to your color instead of
+enabling it instantly, pass <em>dest_color</em> instead of <em>color</em>.</p>
+<p>&#8216;fade&#8217;: If you want to fade the LED on, use <em>fade</em> to specify the
+fade on time (in ms). Note this also requires <em>dest_color</em> above
+instead of <em>color</em>.</p>
+<p>&#8216;blend&#8217;: True/False. If <em>True</em> and if you&#8217;re using a fade, it will
+fade from whatever color the LED currently is to your <em>dest_color</em>.
+If False it will turn the LED off first before fading.</p>
+</div></blockquote>
+<p>Note that since you enable LEDs with priorities, you can actually
+&#8220;enable&#8221; the LED multiple times at different priorties. Then if you
+disable the LED via a higher priority, the lower priority will still
+be there. This means that in your game, each mode can do whatever it
+wants with LEDs and you don&#8217;t have to worry about a higher priority
+mode clearing out an LED and messing up the lower priority mode&#8217;s
+status.</p>
+<p>The ability for this enable method to also keep track of the priority
+that a LED is enabled is the reason you&#8217;d want to use this method
+versus calling <tt class="xref py py-meth docutils literal"><span class="pre">leds.color()</span></tt> directly. If you do use
+<tt class="xref py py-meth docutils literal"><span class="pre">leds.color()</span></tt> to enable an LED directly, <a class="reference internal" href="#procgame.LEDs.LEDcontroller" title="procgame.LEDs.LEDcontroller"><tt class="xref py py-class docutils literal"><span class="pre">LEDcontroller</span></tt></a>
+won&#8217;t know about it, and your LED could be overwritten the next time
+a LEDshow, script, or enable command is used.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.LEDcontroller.get_LED_state">
+<tt class="descname">get_LED_state</tt><big>(</big><em>LEDname</em>, <em>priority=0</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDcontroller.get_LED_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks at all the active shows and returns the current
+details for a given LED.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>LEDname</strong> (<em>string</em>) &#8211; The LED we&#8217;re looking for</li>
+<li><strong>priority</strong> (<em>integer</em>) &#8211; Returns the color from the highest priority</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>lower than the priority passed it.</p>
+<dl class="docutils">
+<dt>Returns tuple of:</dt>
+<dd>&#8216;color&#8217;: The restored color for the LED.
+&#8216;priority&#8217;: The priority of that LED.
+&#8216;blend&#8217;: If the LED we&#8217;re restoring is blending below itself.
+&#8216;fadeend&#8217;: (optional) If there&#8217;s a fade, what fade time should be
+used.
+&#8216;dest_color&#8217;: (optional) If there&#8217;s a fade, what fade color
+should be used.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.LEDcontroller.get_midfade_color">
+<tt class="descname">get_midfade_color</tt><big>(</big><em>fadestart</em>, <em>fadeend</em>, <em>midpoint_time</em>, <em>orig_color</em>, <em>dest_color</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDcontroller.get_midfade_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Figures out the new fade values based on a current fade in progress.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd>&#8216;fadestart&#8217;: The realtime time that this fade begin.
+&#8216;fadeend&#8217;: The realtime time that this fade ends.
+&#8216;midpoint_time&#8217;: The current time &#8220;mid point&#8221; that we&#8217;re using for our
+new fade.
+&#8216;orig_color&#8217;: The original color in hex.
+&#8216;dest_color&#8217;: the final destination color in hex.</dd>
+<dt>Returns:</dt>
+<dd>&#8216;color&#8217;: The current color we need to reset the LED to in hex</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.LEDcontroller.restore_LED_state">
+<tt class="descname">restore_LED_state</tt><big>(</big><em>LEDname</em>, <em>priority=None</em>, <em>fadeend=None</em>, <em>color=None</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDcontroller.restore_LED_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restores an LED to whatever state it should be in below the passed
+priority parameter. Similar to <a class="reference internal" href="#procgame.LEDs.LEDcontroller.get_LED_state" title="procgame.LEDs.LEDcontroller.get_LED_state"><tt class="xref py py-meth docutils literal"><span class="pre">get_LED_state()</span></tt></a> except it actually
+makes the change rather than only returning values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>LEDname</strong> (<em>string</em>) &#8211; The name of the LED we want to restore</li>
+<li><strong>priority</strong> (<em>integer</em>) &#8211; We will only restore the LED to a priority</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>lower than this.</p>
+<p>Optional parameters which are used if our current LED is fading to off
+and we need to blend it with whatever is below it
+:param string fadeend: Realtime of when the fade will end
+:param string color: The current hex color of the LED</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.LEDcontroller.run_script">
+<tt class="descname">run_script</tt><big>(</big><em>LEDname</em>, <em>script</em>, <em>priority=0</em>, <em>repeat=True</em>, <em>blend=False</em>, <em>tps=1000</em>, <em>num_repeats=0</em>, <em>callback=None</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDcontroller.run_script" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs a LED script. Scripts are similar to LEDshows, except they only
+apply to single LEDs and you can &#8220;attach&#8221; any script to any LED.
+Scripts are used anytime you want an LED to have more than one action.
+A simple example would be a flash an LED. You would make a script that
+turned it on (with your color), then off, repeating forever.</p>
+<p>Scripts could be more complex, like cycling through multiple colors,
+blinking out secret messages in Morse code, etc.</p>
+<p>Interally we actually just take a script and dynamically convert it
+into a LEDshow (that just happens to only be for a single LED), so we
+can have all the other LEDshow-like features, including playback speed,
+repeats, blends, callbacks, etc.</p>
+<p>Parameters:</p>
+<blockquote>
+<div>&#8216;LEDname&#8217;: The name of the LED for this script to control.
+&#8216;script&#8217;: A list of dictionaries of script commands. (See below)
+&#8216;priority&#8217;: The priority the LED in this script should operate at.
+&#8216;repeat&#8217;: True/False. Whether the script repeats (loops).
+&#8216;blend&#8217;: Whether the script should blend the LED colors with lower
+prioirty things. todo
+&#8216;tps&#8217;: Tocks per second. todo
+&#8216;num_repeats&#8217;: How many times this script should repeat before
+ending. A value of 0 indicates it will repeat forever. Also
+requires <em>repeat=True</em>.
+&#8216;callback&#8217;: A callback function that is called when the script is
+stopped. todo update</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div><a class="reference internal" href="#procgame.LEDs.LEDshow" title="procgame.LEDs.LEDshow"><tt class="xref py py-class docutils literal"><span class="pre">LEDshow</span></tt></a> object. Since running a script just sets up and
+runs a regular LEDshow, run_script returns the LEDshow object. In
+most cases you won&#8217;t need this, but it&#8217;s nice if you want to know
+exactly which LEDshow was created by this script so you can stop
+it later. (See the examples below for usage.)</div></blockquote>
+<p>The script is a list of dictionaries, with each list item being a
+sequential instruction, and the dictionary defining what you want to
+do at that step. Dictionary items for each step are:</p>
+<blockquote>
+<div>&#8216;color&#8217;: The hex color for the LED
+&#8216;time&#8217;: How long (in ms) you want the LED to be at that color
+&#8216;fade&#8217;: True/False. Whether you want that LED to fade to the color
+(using the <em>time</em> above), or whether you want it to switch to that
+color instantly.</div></blockquote>
+<p>Example usage:</p>
+<p>Here&#8217;s how you would use the script to flash an RGB LED between red
+and off:</p>
+<blockquote>
+<div>self.flash_red = []
+self.flash_red.append({&#8220;color&#8221;: &#8220;ff0000&#8221;, &#8220;time&#8221;: 100})
+self.flash_red.append({&#8220;color&#8221;: &#8220;000000&#8221;, &#8220;time&#8221;: 100})
+self.game.LEDs.run_script(&#8220;LED1&#8221;, self.flash_red, &#8220;4&#8221;, blend=True)</div></blockquote>
+<p>Once the &#8220;flash_red&#8221; script is defined as self.flash_red, you can use
+it anytime for any LED. So if you want to flash two LEDs red, it would
+be:</p>
+<blockquote>
+<div>self.game.LEDs.run_script(&#8220;LED1&#8221;, self.flash_red, &#8220;4&#8221;, blend=True)
+self.game.LEDs.run_script(&#8220;LED2&#8221;, self.flash_red, &#8220;4&#8221;, blend=True)</div></blockquote>
+<p>Most likely you would define your scripts once when the game loads and
+then call them as needed.</p>
+<p>You can also make more complex scripts. For example, here&#8217;s a script
+which smoothly cycles an RGB LED through all colors of the rainbow:</p>
+<blockquote>
+<div>self.rainbow = []
+self.rainbow.append({&#8216;color&#8217;: &#8216;ff0000&#8217;, &#8216;time&#8217;: 400, &#8216;fade&#8217;: True})
+self.rainbow.append({&#8216;color&#8217;: &#8216;ff7700&#8217;, &#8216;time&#8217;: 400, &#8216;fade&#8217;: True})
+self.rainbow.append({&#8216;color&#8217;: &#8216;ffcc00&#8217;, &#8216;time&#8217;: 400, &#8216;fade&#8217;: True})
+self.rainbow.append({&#8216;color&#8217;: &#8216;00ff00&#8217;, &#8216;time&#8217;: 400, &#8216;fade&#8217;: True})
+self.rainbow.append({&#8216;color&#8217;: &#8216;0000ff&#8217;, &#8216;time&#8217;: 400, &#8216;fade&#8217;: True})
+self.rainbow.append({&#8216;color&#8217;: &#8216;ff00ff&#8217;, &#8216;time&#8217;: 400, &#8216;fade&#8217;: True})</div></blockquote>
+<p>If you have single color LEDs, your <em>color</em> entries in your script
+would only contain a single hex value for the intensity of that LED.
+For example, a script to flash a single-color LED on-and-off (which you
+can apply to any LED):</p>
+<blockquote>
+<div>self.flash = []
+self.flash.append({&#8220;color&#8221;: &#8220;ff&#8221;, &#8220;time&#8221;: 100})
+self.flash.append({&#8220;color&#8221;: &#8220;00&#8221;, &#8220;time&#8221;: 100})</div></blockquote>
+<p>If you&#8217;d like to save a reference to the <a class="reference internal" href="#procgame.LEDs.LEDshow" title="procgame.LEDs.LEDshow"><tt class="xref py py-class docutils literal"><span class="pre">LEDshow</span></tt></a> that&#8217;s
+created by this script, call it like this:</p>
+<blockquote>
+<div>self.blah = self.game.LEDs.run_script(&#8220;LED2&#8221;, self.flash_red, &#8220;4&#8221;)</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.LEDcontroller.stop_script">
+<tt class="descname">stop_script</tt><big>(</big><em>LEDname=None</em>, <em>priority=0</em>, <em>show=None</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDcontroller.stop_script" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops and remove an LED script.</p>
+<p>Rarameters:</p>
+<blockquote>
+<div>&#8216;LEDname&#8217;: The LED(s) with the script you want to stop.
+&#8216;priority&#8217;: The priority of the script(s) you want to stop.
+&#8216;show&#8217;: The show object associated with a script you want to stop.</div></blockquote>
+<p>In a practical sense there are several ways you can use this
+stop_script method:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Specify <em>LEDname</em> only to stop (and remove) all active LEDshows</li>
+</ul>
+<p>created from scripts for that LEDname, regardless of priority.
+- Specify <em>priority</em> only to stop (and remove) all active LEDshows
+based on scripts running at that priority for all LEDs.
+- Specify <em>LEDname</em> and <em>priority</em> to stop (and remove) all active
+LEDshows for that LEDname at the specific priority you passed.
+- Specify a <em>show</em> object to stop and remove that specific show.
+- If you call stop_script() without passing it anything, it will
+remove all the LEDsshows started from all scripts. This is useful
+for things like end of ball or tilt where you just want to kill
+everything.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.LEDcontroller.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDcontroller.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs once per game loop and services any LED updates that are
+needed. This checks several places:</p>
+<ol class="arabic simple">
+<li>Running LEDshows</li>
+</ol>
+<p>2. The LEDcontroller queue for any future commands that should be
+processed now.</p>
+<p>Parameters:</p>
+<blockquote>
+<div>none</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="ledshow">
+<h3>LEDshow<a class="headerlink" href="#ledshow" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.LEDs.LEDshow">
+<em class="property">class </em><tt class="descclassname">procgame.LEDs.</tt><tt class="descname">LEDshow</tt><big>(</big><em>game</em>, <em>filename=None</em>, <em>actions=None</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDshow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a LEDshow which is a sequential list of LEDs, colors, and
+timings that can be played back. Individual shows can be started, stopped,
+reset, etc. Shows can be played at any speed, sped up, slowed down, etc.</p>
+<p>Parameters:</p>
+<blockquote>
+<div>&#8216;game&#8217;: Parent game object.
+&#8216;filename&#8217;: File (and path) of the LEDshow yaml file
+&#8216;actions&#8217;: List of LEDshow actions which are passed directly instead of
+read from a yaml file</div></blockquote>
+<p>If you pass <em>filename</em>, it will process the actions based on that file.
+Otherwise it will look for the actions from the list passed via <em>actions</em>.
+Either <em>filename</em> or <em>actions</em> is required.</p>
+<dl class="method">
+<dt id="procgame.LEDs.LEDshow.change_speed">
+<tt class="descname">change_speed</tt><big>(</big><em>tocks_per_sec=1</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDshow.change_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the playback speed of a running LEDshow.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tocks_per_sec</strong> (<em>integer</em>) &#8211; The new tocks_per_second play rate.</td>
+</tr>
+</tbody>
+</table>
+<p>If you want to change the playback speed by a percentage, you can
+access the current tocks_per_second rate via LEDshow&#8217;s tocks_per_second
+variable. So if you want to double the playback speed of your show,
+you could do something like:</p>
+<blockquote>
+<div>self.your_show.change_speed(self.your_show.tocks_per_second*2)</div></blockquote>
+<p>Note that you can&#8217;t just update the show&#8217;s tocks_per_second directly
+because we also need to update self.secs_per_tock.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.LEDshow.play">
+<tt class="descname">play</tt><big>(</big><em>repeat=False</em>, <em>priority=0</em>, <em>blend=False</em>, <em>hold=False</em>, <em>tocks_per_sec=32</em>, <em>start_location=-1</em>, <em>callback=None</em>, <em>num_repeats=0</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDshow.play" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plays a LEDshow. There are many parameters you can use here which
+affect how the show is played. This includes things like the playback
+speed, priority, whether this show blends with others, etc. These are
+all set when the show plays. (For example, you could have a LEDshow
+file which lights a bunch of LEDs sequentially in a circle pattern,
+but you can have that circle &#8220;spin&#8221; as fast as you want depending on
+how you play the show.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>repeat</strong> (<em>boolean</em>) &#8211; True/False, whether the show repeats when it&#8217;s</td>
+</tr>
+</tbody>
+</table>
+<p>done.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>priority</strong> (<em>integer</em>) &#8211; The relative priority of this show. If there&#8217;s ever a</td>
+</tr>
+</tbody>
+</table>
+<p>situation where multiple shows (or LED commands) want to control the
+same LED, the one with the higher priority will win. (&#8220;Higher&#8221; means
+a bigger number, so a show with priority 2 will override a priority 1.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>blend</strong> (<em>boolean</em>) &#8211; Controls whether this show &#8220;blends&#8221; with lower</td>
+</tr>
+</tbody>
+</table>
+<p>priority shows and scripts. For example, if this show turns a LED off,
+but a lower priority show has that LED set to blue, then the LED will
+&#8220;show through&#8221; as blue while it&#8217;s off here. If you don&#8217;t want that
+behavior, set blend to be False. Then off here will be off for sure
+(unless there&#8217;s a higher priority show or command that turns the LED
+on).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hold</strong> (<em>boolean</em>) &#8211; If True, then when this LEDshow ends, all the LEDs</td>
+</tr>
+</tbody>
+</table>
+<p>that are on at that time will remain on. If False, it turns them all
+off when the show ends</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tocks_per_sec</strong> (<em>integer</em>) &#8211; This is how fast your show runs. (&#8220;Playback speed,&#8221; in</td>
+</tr>
+</tbody>
+</table>
+<p>other words. Your LEDshow files specify action times in terms of
+&#8216;tocks&#8217;, like &#8220;make this LED red for 3 tocks, then off for 4 tocks,
+then a different LED on for 6 tocks. When you play a show, you specify
+how many tocks per second you want it to play. Default is 32, but you
+might even want tocks_per_sec of only 1 or 2 if your show doesn&#8217;t
+need to move than fast. Note this does not affect fade rates. So you
+can have tocks_per_sec of 1 but still have LEDs fade on and off at
+whatever rate you want. Also the term &#8220;tocks&#8221; was chosen so as not to
+confuse it with &#8220;ticks&#8221; which is used by the game loop.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>start_location</strong> (<em>integer</em>) &#8211; Which position in the show file the show should start</td>
+</tr>
+</tbody>
+</table>
+<p>in. Usually this is 0 but it&#8217;s nice to start part way through. Also
+used for restarting shows that you paused.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>callback</strong> (<em>object</em>) &#8211; A callback function that is invoked when the show is</td>
+</tr>
+</tbody>
+</table>
+<p>stopped.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num_repeats</strong> (<em>integer</em>) &#8211; How many times you want this show to repeat before</td>
+</tr>
+</tbody>
+</table>
+<p>stopping. A value of 0 means that it repeats indefinitely. Note this
+only works if you also have repeat=True.</p>
+<p>Example usage from a game mode:</p>
+<dl class="docutils">
+<dt>Load the show (typically done once when the game is booting up)</dt>
+<dd>self.show1 = LEDs.LEDshow(self.game, &#8220;LEDshowsshow1.yaml&#8221;)</dd>
+<dt>Play the show:</dt>
+<dd>self.show1.play(repeat=True, tocks_per_sec=10, priority=3)</dd>
+<dt>Stop the show:</dt>
+<dd>self.show1.stop()</dd>
+<dt>Play the show again, but twice as fast as before</dt>
+<dd>self.show1.play(repeat=True, tocks_per_sec=20, priority=3)</dd>
+<dt>Play the show so it only repeats twice and then stops itself</dt>
+<dd><dl class="first last docutils">
+<dt>self.show1.play(repeat=True, tocks_per_sec=20, priority=3,</dt>
+<dd>num_repeats=True)</dd>
+</dl>
+</dd>
+<dt>Play two shows at once:</dt>
+<dd>self.show1.play(repeat=True, tocks_per_sec=20, priority=3)
+self.show2.play(repeat=True, tocks_per_sec=5, priority=3)</dd>
+</dl>
+<p>Play two shows at once, but have one be a higher priority meaning it
+will &#8220;win&#8221; if both shows want to control the same LED at the same time:</p>
+<blockquote>
+<div>self.show1.play(repeat=True, tocks_per_sec=20, priority=4)
+self.show2.play(repeat=True, tocks_per_sec=5, priority=3)</div></blockquote>
+<p>etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.LEDshow.stop">
+<tt class="descname">stop</tt><big>(</big><em>reset=True</em>, <em>hold=False</em><big>)</big><a class="headerlink" href="#procgame.LEDs.LEDshow.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops a LEDshow.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reset</strong> (<em>boolean</em>) &#8211; True means it resets the show to the beginning. False it keeps</td>
+</tr>
+</tbody>
+</table>
+<p>it where it is so the show can pick up where it left off</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hold</strong> (<em>boolean</em>) &#8211; Lets you specify that the LEDs will be held in their current</td>
+</tr>
+</tbody>
+</table>
+<p>state after the show ends. Note that if you have a show that&#8217;s set
+to hold but you pass hold=False here, it won&#8217;t work. In that case you&#8217;d
+have to set &lt;show&gt;.hold=False and then call this method to stop the
+show.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="playlist">
+<h3>Playlist<a class="headerlink" href="#playlist" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.LEDs.Playlist">
+<em class="property">class </em><tt class="descclassname">procgame.LEDs.</tt><tt class="descname">Playlist</tt><big>(</big><em>game</em><big>)</big><a class="headerlink" href="#procgame.LEDs.Playlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of <a class="reference internal" href="#procgame.LEDs.LEDshow" title="procgame.LEDs.LEDshow"><tt class="xref py py-class docutils literal"><span class="pre">LEDshow</span></tt></a> objects which are then played sequentially.
+Playlists are useful for things like attract mode where you play one show
+for a few seconds, then another, etc.</p>
+<p>Parameters:</p>
+<blockquote>
+<div>&#8216;game&#8217;: Parent game object</div></blockquote>
+<p>Each step in a playlist can contain more than one <a class="reference internal" href="#procgame.LEDs.LEDshow" title="procgame.LEDs.LEDshow"><tt class="xref py py-class docutils literal"><span class="pre">LEDshow</span></tt></a>. This is
+useful if you have a lot of little shows for different areas of the
+playfield that you want run at the same time. For example, you might have
+one show that only controls a group of rollover lane LEDs, and another
+which blinks the lights in the center of the playfield. You can run them
+at the by putting them in the same step in your playlist. (Note you don&#8217;t
+need to use a playlist if you simply want to run two LEDshows at the same
+time. In that case you could just call <a class="reference internal" href="#procgame.LEDs.LEDshow.play" title="procgame.LEDs.LEDshow.play"><tt class="xref py py-meth docutils literal"><span class="pre">LEDshow.play()</span></tt></a> twice to play
+both shows.</p>
+<p>For each &#8220;step&#8221; in the playlist, you can specify the number of seconds it
+runs those shows before moving on, or you can specify that one of the shows
+in that step plays a certain number of times and then the playlist moves
+to the next step from there.</p>
+<p>You create a show by creating an instance <a class="reference internal" href="#procgame.LEDs.Playlist" title="procgame.LEDs.Playlist"><tt class="xref py py-class docutils literal"><span class="pre">Playlist</span></tt></a>. Then you
+add LEDshows to it via <a class="reference internal" href="#procgame.LEDs.Playlist.add_show" title="procgame.LEDs.Playlist.add_show"><tt class="xref py py-meth docutils literal"><span class="pre">add_show()</span></tt></a>. Finally, you specify the
+settings for each step (like how it knows when to move on) via :meth:
+<cite>step_settings</cite>.</p>
+<p>When you start a playlist (via <a class="reference internal" href="#procgame.LEDs.Playlist.start" title="procgame.LEDs.Playlist.start"><tt class="xref py py-meth docutils literal"><span class="pre">start()</span></tt></a>, you can specify
+settings like what priority the show runs at, whether it repeats, etc.)</p>
+<p>Example usage from a game mode:
+(This example assumes we have self.show1, self.show2, and self.show3
+already loaded.)</p>
+<p>Setup the playlist:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">my_playlist</span> <span class="o">=</span> <span class="n">LEDs</span><span class="o">.</span><span class="n">Playlist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">my_playlist</span><span class="o">.</span><span class="n">add_show</span><span class="p">(</span><span class="n">step_num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">show1</span><span class="p">,</span> <span class="n">tocks_per_sec</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">my_playlist</span><span class="o">.</span><span class="n">add_show</span><span class="p">(</span><span class="n">step_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">show2</span><span class="p">,</span> <span class="n">tocks_per_sec</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">my_playlist</span><span class="o">.</span><span class="n">add_show</span><span class="p">(</span><span class="n">step_num</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">,</span> <span class="n">tocks_per_sec</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">my_playlist</span><span class="o">.</span><span class="n">step_settings</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">my_playlist</span><span class="o">.</span><span class="n">step_settings</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">my_playlist</span><span class="o">.</span><span class="n">step_settings</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Run the playlist:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">my_playlist</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Stop the playlist:</p>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">self.my_playlist.stop()</span></tt></div></blockquote>
+<dl class="method">
+<dt id="procgame.LEDs.Playlist.add_show">
+<tt class="descname">add_show</tt><big>(</big><em>step_num</em>, <em>show</em>, <em>num_repeats=0</em>, <em>tocks_per_sec=32</em>, <em>blend=False</em>, <em>repeat=True</em><big>)</big><a class="headerlink" href="#procgame.LEDs.Playlist.add_show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a LEDshow to this playlist. You have to add at least one show
+before you start playing the playlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>step_num</strong> (<em>integer</em>) &#8211; </td>
+</tr>
+</tbody>
+</table>
+<p>Which step number you&#8217;re adding this show to.
+You have to specify this since it&#8217;s possible to add multiple shows to
+the same step (in cases where you want them both to play at the same
+time during that step). If you want the same show to play in multiple
+steps, then add it multiple times (once to each step). The show plays
+starting with the lowest number step and then moving on. Ideally they&#8217;d
+be 1, 2, 3... but it doesn&#8217;t matter. If you have step numbers of 1, 2,
+5... then the player will figure it out.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>show</strong> (<em>object</em>) &#8211; The LEDshow object that you&#8217;re adding to this step.</li>
+<li><strong>num_repeats</strong> (<em>integer</em>) &#8211; How many times you want this show to repeat</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>within this step. Note this does not affect when the playlist advances
+to the next step. (That is controlled via <a class="reference internal" href="#procgame.LEDs.Playlist.step_settings" title="procgame.LEDs.Playlist.step_settings"><tt class="xref py py-meth docutils literal"><span class="pre">step_settings()</span></tt></a>.)
+Rather, this is just how many loops this show plays. A value of 0
+means it repeats indefinitely. (Well, until the playlist advances to
+the next step.) Note that you also have to have repeat=True for it to
+repeat here.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tocks_per_sec</strong> (<em>integer</em>) &#8211; How fast you want this show to play. See        <a class="reference internal" href="#procgame.LEDs.LEDshow.play" title="procgame.LEDs.LEDshow.play"><tt class="xref py py-meth docutils literal"><span class="pre">LEDshow.play()</span></tt></a> for details.</li>
+<li><strong>blend</strong> (<em>boolean</em>) &#8211; Whether you want this show to blend with lower</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>priority shows below it. See <a class="reference internal" href="#procgame.LEDs.LEDshow.play" title="procgame.LEDs.LEDshow.play"><tt class="xref py py-meth docutils literal"><span class="pre">LEDshow.play()</span></tt></a> for details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>repeat</strong> (<em>boolean</em>) &#8211; Causes the show to keep repeating until the</td>
+</tr>
+</tbody>
+</table>
+<p>playlist moves on to the next step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.Playlist.start">
+<tt class="descname">start</tt><big>(</big><em>priority</em>, <em>repeat=True</em>, <em>repeat_count=0</em>, <em>reset=True</em><big>)</big><a class="headerlink" href="#procgame.LEDs.Playlist.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts playing a playlist. You can only use this after you&#8217;ve added
+at least one show via <a class="reference internal" href="#procgame.LEDs.Playlist.add_show" title="procgame.LEDs.Playlist.add_show"><tt class="xref py py-meth docutils literal"><span class="pre">add_show()</span></tt></a> and configured the settings for
+each step via <a class="reference internal" href="#procgame.LEDs.Playlist.step_settings" title="procgame.LEDs.Playlist.step_settings"><tt class="xref py py-meth docutils literal"><span class="pre">step_settings()</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>priority</strong> (<em>integer</em>) &#8211; What priority you want the <a class="reference internal" href="#procgame.LEDs.LEDshow" title="procgame.LEDs.LEDshow"><tt class="xref py py-class docutils literal"><span class="pre">LEDshow</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+<p>shows in this playlist to play at. These shows will play &#8220;on top&#8221; of
+lower priority stuff, but &#8220;under&#8221; higher priority things.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>repeat</strong> (<em>boolean</em>) &#8211; <ul class="simple">
+<li>Controls whether this playlist to repeats when</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>it&#8217;s finished.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>repeat_count</strong> (<em>integer</em>) &#8211; How many times you want this playlist to</td>
+</tr>
+</tbody>
+</table>
+<p>repeat before it stops itself. (Must be used with <em>repeat=True</em> above.)
+A value of 0 here means that this playlist repeats forever until you
+manually stop it. (This is ideal for attract mode.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reset</strong> (<em>boolean</em>) &#8211; <ul class="simple">
+<li>Controls whether you want this playlist to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>start at the begining (True) or you want it to pick up where it left
+off (False). You can also use <em>reset</em> to restart a playlist that&#8217;s
+currently running.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.Playlist.step_settings">
+<tt class="descname">step_settings</tt><big>(</big><em>step</em>, <em>time=0</em>, <em>trigger_show=None</em><big>)</big><a class="headerlink" href="#procgame.LEDs.Playlist.step_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to configure the settings for a step in a <a class="reference internal" href="#procgame.LEDs.Playlist" title="procgame.LEDs.Playlist"><tt class="xref py py-class docutils literal"><span class="pre">Playlist</span></tt></a>.
+This configuration is required for each step. The main thing you use
+this for is to specify how the playlist knows to move on to the next
+step.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>step</strong> (<em>integer</em>) &#8211; Which step number you&#8217;re configuring</li>
+<li><strong>time</strong> (<em>float</em>) &#8211; The time in seconds that you want this step to run</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>before moving on to the next one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>trigger_show</strong> (<em>object</em>) &#8211; If you want to move to the next step after</td>
+</tr>
+</tbody>
+</table>
+<p>one of the LEDshows in this step is done playing, specify that LEDshow
+here. This is required because if there are multiple LEDshows in this
+step of the playlist which all end at different times, we wouldn&#8217;t know
+which one to watch in order to know when to move on.</p>
+<p>Note that you can have repeats with a trigger show, but in that case
+you also need to have the num_repeats specified. Otherwise if you have
+your trigger show repeating forever then the playlist will never move
+on. (In that case use the <em>time</em> parameter to move on based on time.)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.LEDs.Playlist.stop">
+<tt class="descname">stop</tt><big>(</big><em>reset=True</em><big>)</big><a class="headerlink" href="#procgame.LEDs.Playlist.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops a playlist. Pretty simple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reset</strong> (<em>boolean</em>) &#8211; If <em>True</em>, it resets the playlist tracking</td>
+</tr>
+</tbody>
+</table>
+<p>counter back to the beginning. You can use <em>False</em> here if you want to
+stop and then restart a playlist to pick up where it left off.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="ledshow-file-format-specification">
+<h2>LEDshow File Format Specification<a class="headerlink" href="#ledshow-file-format-specification" title="Permalink to this headline">¶</a></h2>
+<p>blah</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">LEDs Submodule</a><ul>
+<li><a class="reference internal" href="#core-classes">Core Classes</a><ul>
+<li><a class="reference internal" href="#ledcontroller">LEDcontroller</a></li>
+<li><a class="reference internal" href="#ledshow">LEDshow</a></li>
+<li><a class="reference internal" href="#playlist">Playlist</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ledshow-file-format-specification">LEDshow File Format Specification</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../ref-index.html"
+                        title="previous chapter">procgame Module Reference</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="config.html"
+                        title="next chapter">config Submodule</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ref/LEDs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="config.html" title="config Submodule"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../ref-index.html" title="procgame Module Reference"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" >procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

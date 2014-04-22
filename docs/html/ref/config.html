@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>config Submodule &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="../index.html" />
+    <link rel="up" title="procgame Module Reference" href="../ref-index.html" />
+    <link rel="next" title="desktop Submodule" href="desktop.html" />
+    <link rel="prev" title="LEDs Submodule" href="LEDs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="desktop.html" title="desktop Submodule"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="LEDs.html" title="LEDs Submodule"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" accesskey="U">procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="config-submodule">
+<h1>config Submodule<a class="headerlink" href="#config-submodule" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">config</span></tt> submodule serves as a central location for pyprocgame runtime configuration settings.  When this module is loaded the YAML format configuration file located at <tt class="file docutils literal"><span class="pre">~/.pyprocgame/config.yaml</span></tt> is loaded (if it exists) into <a class="reference internal" href="#procgame.config.values" title="procgame.config.values"><tt class="xref py py-attr docutils literal"><span class="pre">values</span></tt></a>.  Other modules may then access the data structure either directly or by using the <a class="reference internal" href="#procgame.config.value_for_key_path" title="procgame.config.value_for_key_path"><tt class="xref py py-func docutils literal"><span class="pre">value_for_key_path()</span></tt></a>.</p>
+<p>See <a class="reference internal" href="../install.html#config-yaml"><em>System Configuration File</em></a> for a complete description of the system configuration file format.</p>
+<div class="section" id="members">
+<h2>Members<a class="headerlink" href="#members" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="procgame.config.value_for_key_path">
+<tt class="descclassname">procgame.config.</tt><tt class="descname">value_for_key_path</tt><big>(</big><em>keypath</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#procgame.config.value_for_key_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value at the given <em>keypath</em> within <tt class="xref py py-attr docutils literal"><span class="pre">values</span></tt>.</p>
+<p>A key path is a list of components delimited by dots (periods).  The components are interpreted
+as dictionary keys within the structure.
+For example, the key path <tt class="docutils literal"><span class="pre">'a.b'</span></tt> would yield <tt class="docutils literal"><span class="pre">'c'</span></tt> with the following <tt class="xref py py-attr docutils literal"><span class="pre">values</span></tt> dictionary:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:{</span><span class="s">&#39;b&#39;</span><span class="p">:</span><span class="s">&#39;c&#39;</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>If the key path does not exist <em>default</em> will be returned.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="procgame.config.values">
+<tt class="descclassname">procgame.config.</tt><tt class="descname">values</tt><em class="property"> = {'keyboard_switch_map': {0: 'trough6', 1: 'enter', 2: 'down', 3: 'up', 4: 'esc', 5: 'trough1', 6: 'trough2', 7: 'trough3', 8: 'trough4', 9: 'trough5', 'shift-w': 'alcatrazBallLock2', 'shift-p': 'bumper3', 'shift-q': 'alcatrazBallLock1', 'shift-r': 'alcatrazCaptiveBallHit', 'shift-o': 'bumper2', 'comma': 'rightOutlane', 'shift-i': 'bumper1', 'shift-e': 'alcatrazBallLock3', 'ctrl-shift-e': 'standupN1', 'ctrl-shift-i': 'standupC1', 'ctrl-shift-o': 'standupI', 's': 'startButton', '/': 'flipperLwR', '.': 'slingr', 'ctrl-shift-r': 'standupF', 'ctrl-shift-q': 'standupS1', 'ctrl-shift-p': 'standupS2', 'ctrl-shift-w': 'standupA1', 'ctrl-shift-u': 'standupN2', 'shift-5': 'plumbBobTilt', ';': 'flipperLwL', 'shift-4': 'credit4', 'shift-7**': 'coinDoorClosed', 'shift-6': 'slamTilt', 'ctrl-shift-t': 'standupR', 'shift-1': 'credit1', 'shift-2': 'credit2', 'shift-3': 'credit3', 'x': 'slingl', 'ctrl-shift-y': 'standupA2', 'c': 'leftOutlane', 'b': 'leftInnerInlane', 'e': 'ferryLane3', 'i': 'alcatrazRightLoop', 'k': 'catapultLoaded', 'm': 'rightOuterInlane', 'l': 'launchButton', 'o': 'rightRampMade', 'n': 'rightInnerInlane', 'q': 'ferryLane1', 'p': 'rightOrbitMade', 'ctrl-shift-bracketleft': 'standupO', 'u': 'alcatrazLeftLoop', 't': 'leftOrbitMade', 'w': 'ferryLane2', 'v': 'leftOuterInlane', 'y': 'leftRampMade', 'ctrl-shift-bracketright': 'standupC2', 'minus': 'troughJam'}, 'desktop_dmd_scale': 8, 'pinproc_class': 'procgame.fakepinproc.FakePinPROC', 'font_path': ['z:\\Pinball\\pincode\\v3\\dmd'], 'config_path': ['z:\\Pinball\\pincode\\v3\\config'], 'use_desktop': True}</em><a class="headerlink" href="#procgame.config.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>The configuration data structure loaded from <tt class="file docutils literal"><span class="pre">~/.pyprocgame/config.yaml</span></tt> when this submodule is loaded.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">config Submodule</a><ul>
+<li><a class="reference internal" href="#members">Members</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="LEDs.html"
+                        title="previous chapter">LEDs Submodule</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="desktop.html"
+                        title="next chapter">desktop Submodule</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ref/config.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="desktop.html" title="desktop Submodule"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="LEDs.html" title="LEDs Submodule"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" >procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

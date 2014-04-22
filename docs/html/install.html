@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installation &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="index.html" />
+    <link rel="next" title="pyprocgame Manual" href="manual.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="manual.html" title="pyprocgame Manual"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pyprocgame  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>Before you install pyprocgame, you will need the following software components:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://python.org/">Python 2.6</a></li>
+<li><a class="reference external" href="http://github.com/preble/pypinproc">pypinproc</a> &#8211; native Python extension enabling P-ROC hardware control.  Exposes the <a class="reference external" href="http://github.com/preble/libpinproc">libpinproc</a> API to Python and adds native DMD frame manipulation features.  See the <a class="reference internal" href="#pyprocgame-branch"><em>branch note</em></a> below.</li>
+<li><a class="reference external" href="http://pypi.python.org/pypi/setuptools">setuptools</a> &#8211; required for procgame script installation.  Also adds easy_install, a helpful installer tool for popular Python modules.</li>
+<li><a class="reference external" href="http://pyyaml.org/">pyyaml</a> &#8211; YAML parsing.</li>
+<li>One of the Python graphics and sound modules:<ul>
+<li><a class="reference external" href="http://www.pyglet.org/">pyglet</a></li>
+<li><a class="reference external" href="http://www.pygame.org/">pygame</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="http://www.pythonware.com/products/pil/">Python Imaging Library</a> (PIL)</li>
+</ul>
+</div>
+<div class="section" id="download-pyprocgame">
+<h2>Download pyprocgame<a class="headerlink" href="#download-pyprocgame" title="Permalink to this headline">¶</a></h2>
+<p>Download the pyprocgame source code from <a class="reference external" href="http://github.com/preble/pyprocgame">http://github.com/preble/pyprocgame</a>.</p>
+<div class="admonition note" id="pyprocgame-branch">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>Which branch should I download?</em>
+The two main branches of pyprocgame are master and dev.  Master is the stable branch and is recommended for most users.  New features are first made available in the dev branch, but bugs are much more likely to be found in the dev branch.  Whichever branch you select, <strong>make sure that libpinproc, pypinproc, and pyprocgame are all from the same branch</strong>!</p>
+</div>
+</div>
+<div class="section" id="installing-pyprocgame">
+<h2>Installing pyprocgame<a class="headerlink" href="#installing-pyprocgame" title="Permalink to this headline">¶</a></h2>
+<p>Using the command prompt, change to the pyprocgame directory and install pyprocgame with the following command: (depending on your system configuration you may need to use <tt class="docutils literal"><span class="pre">sudo</span></tt>)</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py install
+</pre></div>
+</div>
+<p>This will install pyprocgame such that you can import it from any Python script on your system:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">procgame.game</span>
+</pre></div>
+</div>
+<p>It will also install the &#8220;procgame&#8221; command line tool into a system-dependent location.  On Linux and Mac OS X systems this will probably be in your path such that you can type, from the command line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">procgame</span>
+</pre></div>
+</div>
+<p>and see a list of available commands.  If it is not in your path you can invoke it directly, or modify your PATH environment variable.  Note that on Windows the procgame script is typically located in C:\Python26\Scripts.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you need to modify the pyprocgame source code (most users will not need to do this) you can use the setup.py script to configure pyprocgame to be &#8220;installed&#8221; at its present location.  This allows you use pyprocgame as described above without modifying your Python path, etc.  Simply run <tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">develop</span></tt>.  You can reverse this command with <tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">develop</span> <span class="pre">--uninstall</span></tt>.  Note that this requires the <tt class="xref py py-mod docutils literal"><span class="pre">setuptools</span></tt> module to be installed.</p>
+</div>
+</div>
+<div class="section" id="system-configuration-file">
+<span id="config-yaml"></span><h2>System Configuration File<a class="headerlink" href="#system-configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>pyprocgame does not require configuration, but a system configuration file can be used to establish settings specific to your development environment.  Note that this is distinct from the machine configuration file, which configures pyprocgame for the hardware elements of the pinball machine.</p>
+<p>The system configuration file is located at <tt class="file docutils literal"><span class="pre">~/.pyprocgame/config.yaml</span></tt>.  It is in the <a class="reference external" href="http://yaml.org/">YAML file format</a>, a human-friendly file format.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On UNIX-like platforms the <tt class="docutils literal"><span class="pre">~</span></tt> (tilde) is shorthand for the user&#8217;s home directory.  Windows does not understand this shorthand, so if you do not know your home directory, run <tt class="docutils literal"><span class="pre">procgame</span> <span class="pre">config</span></tt> to find your configuration file path.</p>
+</div>
+<p>Any plain text editor can be used to edit the system configuration file, or you can use the <tt class="docutils literal"><span class="pre">procgame</span></tt> tool.  See <a class="reference internal" href="tools.html#tool-config"><em>procgame config</em></a> for more information.</p>
+<p>The system configuration values are processed and accessed by the <tt class="xref py py-mod docutils literal"><span class="pre">procgame.config</span></tt> module.</p>
+<div class="section" id="configuration-keys-values">
+<h3>Configuration Keys/Values<a class="headerlink" href="#configuration-keys-values" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="11%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Top Level Key</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">config_path</span></tt></td>
+<td>Sequence</td>
+<td>List of paths that will be searched for machine
+configuration files via
+<a class="reference internal" href="ref/game.html#procgame.game.GameController.load_config" title="procgame.game.GameController.load_config"><tt class="xref py py-meth docutils literal"><span class="pre">load_config()</span></tt></a>.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">desktop_dmd_scale</span></tt></td>
+<td>Number</td>
+<td>(pyglet <a class="reference internal" href="ref/desktop.html#procgame.desktop.Desktop" title="procgame.desktop.Desktop"><tt class="xref py py-class docutils literal"><span class="pre">Desktop</span></tt></a> only)
+Sets the scale factor of the desktop DMD display.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">dmd_cache_path</span></tt></td>
+<td>String</td>
+<td>Provide a path to the directory to store cached
+animations in.  If this key is not present, no
+images will be cached.  See
+<a class="reference internal" href="ref/dmd.html#procgame.dmd.Animation.load" title="procgame.dmd.Animation.load"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.Animation.load()</span></tt></a> for further
+details.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">font_path</span></tt></td>
+<td>Sequence</td>
+<td>List of paths that will be searched by
+<a class="reference internal" href="ref/dmd.html#procgame.dmd.font_named" title="procgame.dmd.font_named"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.font_named()</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">keyboard_switch_map</span></tt></td>
+<td>Mapping</td>
+<td>Maps characters (keys) to switches (values); used
+by <a class="reference internal" href="ref/desktop.html#procgame.desktop.Desktop" title="procgame.desktop.Desktop"><tt class="xref py py-class docutils literal"><span class="pre">Desktop</span></tt></a> to interpret
+keypresses as switch events.  Switch values are
+run through <a class="reference internal" href="ref-pinproc.html#pinproc.decode" title="pinproc.decode"><tt class="xref py py-meth docutils literal"><span class="pre">pinproc.decode()</span></tt></a>.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">pinproc_class</span></tt></td>
+<td>String</td>
+<td>Full name of a class to use as a standin for the
+<tt class="xref py py-class docutils literal"><span class="pre">PinPROC</span></tt> class.  Typically used
+with <tt class="xref py py-class docutils literal"><span class="pre">procgame.fakepinproc.FakePinPROC</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="example-configuration">
+<h3>Example Configuration<a class="headerlink" href="#example-configuration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre>font_path:
+    - .
+    - ~/Projects/PROC/shared/dmd
+pinproc_class: procgame.fakepinproc.FakePinPROC
+config_path:
+    - ~/Projects/PROC/shared/config
+keyboard_switch_map:
+    # Enter, Up, Down, Exit
+    7: SD8
+    8: SD7
+    9: SD6
+    0: SD5
+    # Start:
+    s: S13
+    z: SF4
+    /: SF2
+desktop_dmd_scale: 2
+dmd_cache_path: ~/.pyprocgame/dmd_cache
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#download-pyprocgame">Download pyprocgame</a></li>
+<li><a class="reference internal" href="#installing-pyprocgame">Installing pyprocgame</a></li>
+<li><a class="reference internal" href="#system-configuration-file">System Configuration File</a><ul>
+<li><a class="reference internal" href="#configuration-keys-values">Configuration Keys/Values</a></li>
+<li><a class="reference internal" href="#example-configuration">Example Configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="manual.html"
+                        title="next chapter">pyprocgame Manual</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/install.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="manual.html" title="pyprocgame Manual"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             >previous</a> |</li>
+        <li><a href="index.html">pyprocgame  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

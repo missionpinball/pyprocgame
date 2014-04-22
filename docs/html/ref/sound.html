@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sound Submodule &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="../index.html" />
+    <link rel="up" title="procgame Module Reference" href="../ref-index.html" />
+    <link rel="next" title="pinproc Module Reference" href="../ref-pinproc.html" />
+    <link rel="prev" title="modes Submodule" href="modes.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../ref-pinproc.html" title="pinproc Module Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modes.html" title="modes Submodule"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" accesskey="U">procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-procgame.sound">
+<span id="sound-submodule"></span><h1>sound Submodule<a class="headerlink" href="#module-procgame.sound" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="soundcontroller">
+<h2>SoundController<a class="headerlink" href="#soundcontroller" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="procgame.sound.SoundController">
+<em class="property">class </em><tt class="descclassname">procgame.sound.</tt><tt class="descname">SoundController</tt><big>(</big><em>delegate</em><big>)</big><a class="headerlink" href="#procgame.sound.SoundController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for pygame sound.</p>
+<dl class="method">
+<dt id="procgame.sound.SoundController.fadeout_music">
+<tt class="descname">fadeout_music</tt><big>(</big><em>time_ms=450</em><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.fadeout_music" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="procgame.sound.SoundController.load_music">
+<tt class="descname">load_music</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.load_music" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="procgame.sound.SoundController.play">
+<tt class="descname">play</tt><big>(</big><em>key</em>, <em>loops=0</em>, <em>max_time=0</em>, <em>fade_ms=0</em><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.play" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="procgame.sound.SoundController.play_music">
+<tt class="descname">play_music</tt><big>(</big><em>key</em>, <em>loops=0</em>, <em>start_time=0.0</em><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.play_music" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start playing music at the given <em>key</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.sound.SoundController.play_voice">
+<tt class="descname">play_voice</tt><big>(</big><em>key</em>, <em>loops=0</em>, <em>max_time=0</em>, <em>fade_ms=0</em><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.play_voice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="procgame.sound.SoundController.register_music">
+<tt class="descname">register_music</tt><big>(</big><em>key</em>, <em>music_file</em><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.register_music" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="procgame.sound.SoundController.register_sound">
+<tt class="descname">register_sound</tt><big>(</big><em>key</em>, <em>sound_file</em><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.register_sound" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="procgame.sound.SoundController.set_volume">
+<tt class="descname">set_volume</tt><big>(</big><em>new_volume</em><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.set_volume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="procgame.sound.SoundController.stop">
+<tt class="descname">stop</tt><big>(</big><em>key</em>, <em>loops=0</em>, <em>max_time=0</em>, <em>fade_ms=0</em><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="procgame.sound.SoundController.stop_music">
+<tt class="descname">stop_music</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.stop_music" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the currently-playing music.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.sound.SoundController.volume_down">
+<tt class="descname">volume_down</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.volume_down" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="procgame.sound.SoundController.volume_up">
+<tt class="descname">volume_up</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.sound.SoundController.volume_up" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">sound Submodule</a><ul>
+<li><a class="reference internal" href="#soundcontroller">SoundController</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modes.html"
+                        title="previous chapter">modes Submodule</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../ref-pinproc.html"
+                        title="next chapter">pinproc Module Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ref/sound.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../ref-pinproc.html" title="pinproc Module Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modes.html" title="modes Submodule"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" >procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

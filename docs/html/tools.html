@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>procgame Command Line Tool &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="index.html" />
+    <link rel="next" title="pyprocgame 0.9 Release Notes" href="notes/2010-01.html" />
+    <link rel="prev" title="pinproc Module Reference" href="ref-pinproc.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="notes/2010-01.html" title="pyprocgame 0.9 Release Notes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ref-pinproc.html" title="pinproc Module Reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pyprocgame  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="procgame-command-line-tool">
+<h1>procgame Command Line Tool<a class="headerlink" href="#procgame-command-line-tool" title="Permalink to this headline">¶</a></h1>
+<p>pyprocgame includes a number of tools to make certain tasks easier.  Your installation should have included a <tt class="docutils literal"><span class="pre">procgame</span></tt> command line tool.  Once <tt class="docutils literal"><span class="pre">procgame</span></tt> is in your path (the steps for this will depend on your specific platform; on some platforms it will already be in your path), you can invoke it on the command line:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ procgame
+Usage: procgame &lt;command&gt; &lt;arg0&gt; &lt;arg1&gt; ... &lt;argN&gt;
+
+Commands:
+  config            Configuration tool.
+  dmdconvert        Converts image files to .dmd files.
+  dmdfontwidths     Interactively assign font width values.
+  dmdplayer         Play a .dmd file.
+  dmdsplashrom      Create a P-ROC ROM with a custom power-up image.
+  lampshow          Play a lamp show.
+</pre></div>
+</div>
+<p>Without any arguments, <tt class="docutils literal"><span class="pre">procgame</span></tt> shows the available commands within the tool.  Run <tt class="docutils literal"><span class="pre">procgame</span></tt> again with the command specified in order to see information about that command:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ procgame dmdconvert
+Usage: procgame dmdconvert [options] &lt;image1.png&gt; [... &lt;imageN.png&gt;] &lt;output.dmd&gt;
+
+  If only one image name is used it may include %d format specifiers to
+  ...
+  ...
+</pre></div>
+</div>
+<p>The following documents the specifics of some of the <tt class="docutils literal"><span class="pre">procgame</span></tt> tools.</p>
+<div class="section" id="config">
+<span id="tool-config"></span><h2>config<a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">config</span></tt> tool assists in managing the pyprocgame configuration file, located at <tt class="docutils literal"><span class="pre">~/.pyprocgame/config.yaml</span></tt>.  Run it without any arguments to see the location of your config.yaml file:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ procgame config
+Your configuration file is located at:
+
+  /home/me/.pyprocgame/config.yaml
+</pre></div>
+</div>
+<p>You can assign string values in your configuration using the <tt class="docutils literal"><span class="pre">--set</span></tt> option:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ procgame config --key=pinproc_class --set=procgame.fakepinproc.FakePinPROC
+</pre></div>
+</div>
+<p>Or clear them with <tt class="docutils literal"><span class="pre">--clear</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ procgame config --key=pinproc_class --clear
+</pre></div>
+</div>
+<p>You can also use <tt class="docutils literal"><span class="pre">config</span></tt> to manage your <tt class="docutils literal"><span class="pre">font_path</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ procgame config --key=font_path --add=&quot;/home/me/dmd_fonts&quot;
+</pre></div>
+</div>
+<p>Run <tt class="docutils literal"><span class="pre">procgame</span> <span class="pre">config</span> <span class="pre">--help</span></tt> to view other options.</p>
+</div>
+<div class="section" id="dmdconvert">
+<span id="tool-dmdconvert"></span><h2>dmdconvert<a class="headerlink" href="#dmdconvert" title="Permalink to this headline">¶</a></h2>
+<p>Use <tt class="docutils literal"><span class="pre">dmdconvert</span></tt> to convert one or more image files into a 16-color <tt class="docutils literal"><span class="pre">.dmd</span></tt> animation file, which can later be loaded by <a class="reference internal" href="ref/dmd.html#procgame.dmd.Animation.load" title="procgame.dmd.Animation.load"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.Animation.load()</span></tt></a>.  Its usage is as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>procgame dmdconvert &lt;image1&gt; [... &lt;imageN&gt;] &lt;output.dmd&gt;
+</pre></div>
+</div>
+<p>If only one image name is supplied, the <tt class="docutils literal"><span class="pre">%d</span></tt> format specifier may be used to iterate over image files matching a pattern:</p>
+<div class="highlight-python"><div class="highlight"><pre>procgame dmdconvert Animation%03d.png Animation.dmd
+</pre></div>
+</div>
+<p>Additionally, UNIX shells with wildcard expansion support allow the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>procgame dmdconvert Animation*.png Animation.dmd
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">dmdconvert</span></tt> requires the Python Imaging Library (PIL).  It does not require that the P-ROC hardware be installed.</p>
+</div>
+<div class="section" id="dmdfontwidths">
+<h2>dmdfontwidths<a class="headerlink" href="#dmdfontwidths" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">dmdfontwidths</span></tt> provides an interactive, text-based interface for specifying the font widths of individual characters in a <tt class="docutils literal"><span class="pre">.dmd</span></tt> font file.  Its usage is as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>procgame dmdfontwidths &lt;font.dmd&gt; &lt;text&gt;
+</pre></div>
+</div>
+<p>The provided text will be displayed using the P-ROC hardware in the given font file, which may be a single-frame <tt class="docutils literal"><span class="pre">.dmd</span></tt>; if it is a second frame will be added to contain the font widths (this is a feature of <a class="reference internal" href="ref/dmd.html#procgame.dmd.Font.load" title="procgame.dmd.Font.load"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.Font.load()</span></tt></a>).</p>
+<p>To assign character widths, enter the character(s) you wish to change and press return.  Then type the width to assign to all of the specified characters at once.  The DMD will be updated with the new font width values.  Repeat this process until the font widths of the given text are to your liking.  Hit return with a blank line to exit.</p>
+<p>Tips:</p>
+<ul class="simple">
+<li>All characters in a new font will have a zero width; as such there will likely be nothing shown on the DMD.</li>
+<li>Given the limited width of the DMD you will likely need to use several text strings to configure all of the characters in the font.</li>
+</ul>
+</div>
+<div class="section" id="dmdplayer">
+<h2>dmdplayer<a class="headerlink" href="#dmdplayer" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">dmdplayer</span></tt> displays a <tt class="docutils literal"><span class="pre">.dmd</span></tt> file on the DMD.  Its usage is as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>procgame dmdplayer &lt;file.dmd&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="dmdsplashrom">
+<span id="tool-dmdsplashrom"></span><h2>dmdsplashrom<a class="headerlink" href="#dmdsplashrom" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">dmdsplashrom</span></tt> requests a new P-ROC ROM image (.p-roc file) with a custom power-up image.  Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre>procgame dmdsplashrom &lt;key&gt; &lt;base_fpga_version&gt; &lt;file.dmd&gt; &lt;output.p-roc&gt;
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">key</span></tt></dt>
+<dd>A transaction key obtained from <a class="reference external" href="mailto:support&#37;&#52;&#48;pinballcontrollers&#46;com">support<span>&#64;</span>pinballcontrollers<span>&#46;</span>com</a>.</dd>
+<dt><tt class="docutils literal"><span class="pre">base_fpga_version</span></tt></dt>
+<dd>Version number of the desired base P-ROC image.  Format is x.yy (ie: 1.18).</dd>
+<dt><tt class="docutils literal"><span class="pre">file.dmd</span></tt></dt>
+<dd>Splash screen image in the .dmd format - must be a single frame at 128x32.</dd>
+<dt><tt class="docutils literal"><span class="pre">output.p-roc</span></tt></dt>
+<dd>Filename for the new P-ROC image.  Must end in &#8221;.p-roc&#8221;.</dd>
+</dl>
+<p>All images made with this utility will have a P-ROC watermark applied, showing &#8216;P-ROC&#8217; and the image version number.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">procgame Command Line Tool</a><ul>
+<li><a class="reference internal" href="#config">config</a></li>
+<li><a class="reference internal" href="#dmdconvert">dmdconvert</a></li>
+<li><a class="reference internal" href="#dmdfontwidths">dmdfontwidths</a></li>
+<li><a class="reference internal" href="#dmdplayer">dmdplayer</a></li>
+<li><a class="reference internal" href="#dmdsplashrom">dmdsplashrom</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ref-pinproc.html"
+                        title="previous chapter">pinproc Module Reference</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="notes/2010-01.html"
+                        title="next chapter">pyprocgame 0.9 Release Notes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tools.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="notes/2010-01.html" title="pyprocgame 0.9 Release Notes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ref-pinproc.html" title="pinproc Module Reference"
+             >previous</a> |</li>
+        <li><a href="index.html">pyprocgame  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,982 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>game Submodule &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="../index.html" />
+    <link rel="up" title="procgame Module Reference" href="../ref-index.html" />
+    <link rel="next" title="highscore Submodule" href="highscore.html" />
+    <link rel="prev" title="events Submodule" href="events.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="highscore.html" title="highscore Submodule"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="events.html" title="events Submodule"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" accesskey="U">procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-procgame.game">
+<span id="game-submodule"></span><h1>game Submodule<a class="headerlink" href="#module-procgame.game" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-procgame.game" title="procgame.game"><tt class="xref py py-mod docutils literal"><span class="pre">procgame.game</span></tt></a> submodule contains the core building blocks of a pyprocgame-based game.
+See <a class="reference internal" href="../manual.html"><em>pyprocgame Manual</em></a> for a discussion on how to create a pyprocgame game.</p>
+<div class="section" id="core-classes">
+<h2>Core Classes<a class="headerlink" href="#core-classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="attrcollection">
+<h3>AttrCollection<a class="headerlink" href="#attrcollection" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.game.AttrCollection">
+<em class="property">class </em><tt class="descclassname">procgame.game.</tt><tt class="descname">AttrCollection</tt><a class="headerlink" href="#procgame.game.AttrCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A collection of <a class="reference internal" href="#procgame.game.GameItem" title="procgame.game.GameItem"><tt class="xref py py-class docutils literal"><span class="pre">procgame.game.GameItem</span></tt></a> objects.</p>
+<dl class="method">
+<dt id="procgame.game.AttrCollection.items_tagged">
+<tt class="descname">items_tagged</tt><big>(</big><em>tag</em><big>)</big><a class="headerlink" href="#procgame.game.AttrCollection.items_tagged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of items with the given <em>tag</em>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="driver">
+<h3>Driver<a class="headerlink" href="#driver" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.game.Driver">
+<em class="property">class </em><tt class="descclassname">procgame.game.</tt><tt class="descname">Driver</tt><big>(</big><em>game</em>, <em>name</em>, <em>number</em><big>)</big><a class="headerlink" href="#procgame.game.Driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a driver in a pinball machine, such as a lamp, coil/solenoid, or flasher.</p>
+<p>Subclass of <a class="reference internal" href="#procgame.game.GameItem" title="procgame.game.GameItem"><tt class="xref py py-class docutils literal"><span class="pre">GameItem</span></tt></a>.</p>
+<dl class="method">
+<dt id="procgame.game.Driver.disable">
+<tt class="descname">disable</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Driver.disable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disables (turns off) this driver.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Driver.enable">
+<tt class="descname">enable</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Driver.enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables this driver indefinitely.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Never use this method with high voltage drivers such as coils and flashers!
+Instead, use time-limited methods such as <a class="reference internal" href="#procgame.game.Driver.pulse" title="procgame.game.Driver.pulse"><tt class="xref py py-meth docutils literal"><span class="pre">pulse()</span></tt></a> and <a class="reference internal" href="#procgame.game.Driver.schedule" title="procgame.game.Driver.schedule"><tt class="xref py py-meth docutils literal"><span class="pre">schedule()</span></tt></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Driver.future_pulse">
+<tt class="descname">future_pulse</tt><big>(</big><em>milliseconds=None</em>, <em>timestamp=0</em><big>)</big><a class="headerlink" href="#procgame.game.Driver.future_pulse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables this driver for <cite>milliseconds</cite> at P-ROC timestamp: <cite>timestamp</cite>.</p>
+<p>If no parameter is provided for <cite>milliseconds</cite>, <tt class="xref py py-attr docutils literal"><span class="pre">default_pulse_time</span></tt> is used.
+If no parameter is provided or <cite>timestamp</cite>, 0 is used.
+<tt class="docutils literal"><span class="pre">ValueError</span></tt> will be raised if <cite>milliseconds</cite> is outside of the range 0-255.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.Driver.last_time_changed">
+<tt class="descname">last_time_changed</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.game.Driver.last_time_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>The last <tt class="xref py py-class docutils literal"><span class="pre">time</span></tt> that this driver&#8217;s state was modified.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Driver.patter">
+<tt class="descname">patter</tt><big>(</big><em>on_time=10</em>, <em>off_time=10</em>, <em>original_on_time=0</em>, <em>now=True</em><big>)</big><a class="headerlink" href="#procgame.game.Driver.patter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables a pitter-patter sequence.</p>
+<p>It starts by activating the driver for <cite>original_on_time</cite> milliseconds.
+Then it repeatedly turns the driver on for <cite>on_time</cite> milliseconds and off for
+<cite>off_time</cite> milliseconds.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Driver.pulse">
+<tt class="descname">pulse</tt><big>(</big><em>milliseconds=None</em><big>)</big><a class="headerlink" href="#procgame.game.Driver.pulse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables this driver for <cite>milliseconds</cite>.</p>
+<p>If no parameters are provided or <cite>milliseconds</cite> is <cite>None</cite>, <tt class="xref py py-attr docutils literal"><span class="pre">default_pulse_time</span></tt> is used.
+<tt class="docutils literal"><span class="pre">ValueError</span></tt> will be raised if <cite>milliseconds</cite> is outside of the range 0-255.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Driver.pulsed_patter">
+<tt class="descname">pulsed_patter</tt><big>(</big><em>on_time=10</em>, <em>off_time=10</em>, <em>run_time=0</em>, <em>now=True</em><big>)</big><a class="headerlink" href="#procgame.game.Driver.pulsed_patter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables a pitter-patter sequence that runs for <cite>run_time</cite> milliseconds.</p>
+<p>Until it ends, the sequence repeatedly turns the driver on for <cite>on_time</cite>
+milliseconds and off for <cite>off_time</cite> milliseconds.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Driver.schedule">
+<tt class="descname">schedule</tt><big>(</big><em>schedule</em>, <em>cycle_seconds=0</em>, <em>now=True</em><big>)</big><a class="headerlink" href="#procgame.game.Driver.schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schedules this driver to be enabled according to the given <cite>schedule</cite> bitmask.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Driver.state">
+<tt class="descname">state</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Driver.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary representing this driver&#8217;s current configuration state.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="gamecontroller">
+<h3>GameController<a class="headerlink" href="#gamecontroller" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.game.GameController">
+<em class="property">class </em><tt class="descclassname">procgame.game.</tt><tt class="descname">GameController</tt><big>(</big><em>machine_type</em><big>)</big><a class="headerlink" href="#procgame.game.GameController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Core object representing the game itself.
+Usually a game developer will create a new game by subclassing this class.
+Consider subclassing <tt class="xref py py-class docutils literal"><span class="pre">BasicGame</span></tt> instead, as it makes use of several
+helpful modes and controllers.</p>
+<dl class="method">
+<dt id="procgame.game.GameController.add_bonus">
+<tt class="descname">add_bonus</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.add_bonus" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds bonus to the current player</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.add_player">
+<tt class="descname">add_player</tt><big>(</big><em>info=None</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.add_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new player to <a class="reference internal" href="#procgame.game.GameController.players" title="procgame.game.GameController.players"><tt class="xref py py-attr docutils literal"><span class="pre">players</span></tt></a> and assigns it an appropriate
+name.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.ball">
+<tt class="descname">ball</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.game.GameController.ball" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of the current ball.  A value of 1 represents the first ball;
+0 indicates game over.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.coils">
+<tt class="descname">coils</tt><em class="property"> = &lt;procgame.game.gameitems.AttrCollection object at 0x05BC55F0&gt;</em><a class="headerlink" href="#procgame.game.GameController.coils" title="Permalink to this definition">¶</a></dt>
+<dd><p>An <a class="reference internal" href="#procgame.game.AttrCollection" title="procgame.game.AttrCollection"><tt class="xref py py-class docutils literal"><span class="pre">AttrCollection</span></tt></a> of <a class="reference internal" href="#procgame.game.Driver" title="procgame.game.Driver"><tt class="xref py py-class docutils literal"><span class="pre">Driver</span></tt></a> objects.
+Populated by <a class="reference internal" href="#procgame.game.GameController.load_config" title="procgame.game.GameController.load_config"><tt class="xref py py-meth docutils literal"><span class="pre">load_config()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.config">
+<tt class="descname">config</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameController.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>YAML game configuration loaded by <a class="reference internal" href="#procgame.game.GameController.load_config" title="procgame.game.GameController.load_config"><tt class="xref py py-meth docutils literal"><span class="pre">load_config()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.convertToPWM">
+<tt class="descname">convertToPWM</tt><big>(</big><em>dutyCycle</em>, <em>maskLength=32</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.convertToPWM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts an input integer from 1 to 100 to a bitmask
+Returns a Hex Output</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.create_pinproc">
+<tt class="descname">create_pinproc</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.create_pinproc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiates and returns the class to use as the P-ROC device.
+This method is called by <a class="reference internal" href="#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">GameController</span></tt></a>&#8216;s init method to
+populate <a class="reference internal" href="#procgame.game.GameController.proc" title="procgame.game.GameController.proc"><tt class="xref py py-attr docutils literal"><span class="pre">proc</span></tt></a>.</p>
+<p>Checks <tt class="xref py py-mod docutils literal"><span class="pre">config</span></tt> for the key path <tt class="docutils literal"><span class="pre">pinproc_class</span></tt>.
+If that key path exists the string is used as the fully qualified class
+name to instantiate.  The class is then instantiated with one
+initializer argument, <a class="reference internal" href="#procgame.game.GameController.machine_type" title="procgame.game.GameController.machine_type"><tt class="xref py py-attr docutils literal"><span class="pre">machine_type</span></tt></a>.</p>
+<p>If that key path does not exist then this method returns an instance
+of <tt class="xref py py-class docutils literal"><span class="pre">pinproc.PinPROC</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.create_player">
+<tt class="descname">create_player</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.create_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiates and returns a new instance of the <a class="reference internal" href="#procgame.game.Player" title="procgame.game.Player"><tt class="xref py py-class docutils literal"><span class="pre">Player</span></tt></a> class
+with the name <em>name</em>.
+This method is called by <a class="reference internal" href="#procgame.game.GameController.add_player" title="procgame.game.GameController.add_player"><tt class="xref py py-meth docutils literal"><span class="pre">add_player()</span></tt></a>.
+This can be used to supply a custom subclass of <a class="reference internal" href="#procgame.game.Player" title="procgame.game.Player"><tt class="xref py py-class docutils literal"><span class="pre">Player</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.current_player">
+<tt class="descname">current_player</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.current_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current <a class="reference internal" href="#procgame.game.Player" title="procgame.game.Player"><tt class="xref py py-class docutils literal"><span class="pre">Player</span></tt></a> as described by :attr:
+<cite>current_player_index</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.current_player_index">
+<tt class="descname">current_player_index</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.game.GameController.current_player_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index in <a class="reference internal" href="#procgame.game.GameController.players" title="procgame.game.GameController.players"><tt class="xref py py-attr docutils literal"><span class="pre">players</span></tt></a> of the current player.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.dmd_event">
+<tt class="descname">dmd_event</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.dmd_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the DMD via <tt class="xref py py-class docutils literal"><span class="pre">DisplayController</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.enable_flippers">
+<tt class="descname">enable_flippers</tt><big>(</big><em>enable</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.enable_flippers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Currently this section only works for WPC-style (dual-wound)
+flippers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.enable_inverted_flippers">
+<tt class="descname">enable_inverted_flippers</tt><big>(</big><em>enable</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.enable_inverted_flippers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables or disables the flippers AND bumpers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.end_run_loop">
+<tt class="descname">end_run_loop</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.end_run_loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by the programmer when he wants the run_loop to end</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.game_data">
+<tt class="descname">game_data</tt><em class="property"> = {}</em><a class="headerlink" href="#procgame.game.GameController.game_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains high score and audit information.  That is, transient
+information specific to one game installation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.game_end">
+<tt class="descname">game_end</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.game_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by the implementor to notify the game that the game has
+ended.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.game_reset">
+<tt class="descname">game_reset</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.game_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the machine</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.get_events">
+<tt class="descname">get_events</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.get_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by <a class="reference internal" href="#procgame.game.GameController.run_loop" title="procgame.game.GameController.run_loop"><tt class="xref py py-meth docutils literal"><span class="pre">run_loop()</span></tt></a> once per cycle to get the events to
+process during this cycle of the run loop.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.gi_control">
+<tt class="descname">gi_control</tt><big>(</big><em>state</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.gi_control" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>if state == &#8220;OFF&#8221;:</dt>
+<dd><p class="first">self.giState = &#8220;OFF&#8221;
+for lamp in self.giLamps:</p>
+<blockquote>
+<div>lamp.disable()</div></blockquote>
+<p class="last">self.lamps.beerMugGI.disable()</p>
+</dd>
+<dt>else:</dt>
+<dd><p class="first">self.giState = &#8220;ON&#8221;
+for lamp in self.giLamps:</p>
+<blockquote>
+<div>lamp.enable()</div></blockquote>
+<p class="last">self.lamps.beerMugGI.enable()</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.is_game_over">
+<tt class="descname">is_game_over</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.is_game_over" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <cite>True</cite> if the game is in game over.  A game is in game over
+if <a class="reference internal" href="#procgame.game.GameController.ball" title="procgame.game.GameController.ball"><tt class="xref py py-attr docutils literal"><span class="pre">ball</span></tt></a> is 0.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.lamps">
+<tt class="descname">lamps</tt><em class="property"> = &lt;procgame.game.gameitems.AttrCollection object at 0x05BC55D0&gt;</em><a class="headerlink" href="#procgame.game.GameController.lamps" title="Permalink to this definition">¶</a></dt>
+<dd><p>An <a class="reference internal" href="#procgame.game.AttrCollection" title="procgame.game.AttrCollection"><tt class="xref py py-class docutils literal"><span class="pre">AttrCollection</span></tt></a> of <a class="reference internal" href="#procgame.game.Driver" title="procgame.game.Driver"><tt class="xref py py-class docutils literal"><span class="pre">Driver</span></tt></a> objects.
+Populated by <a class="reference internal" href="#procgame.game.GameController.load_config" title="procgame.game.GameController.load_config"><tt class="xref py py-meth docutils literal"><span class="pre">load_config()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.leds">
+<tt class="descname">leds</tt><em class="property"> = &lt;procgame.game.gameitems.AttrCollection object at 0x05BC56B0&gt;</em><a class="headerlink" href="#procgame.game.GameController.leds" title="Permalink to this definition">¶</a></dt>
+<dd><p>An <a class="reference internal" href="#procgame.game.AttrCollection" title="procgame.game.AttrCollection"><tt class="xref py py-class docutils literal"><span class="pre">AttrCollection</span></tt></a> of <tt class="xref py py-class docutils literal"><span class="pre">LED</span></tt> objects.
+Populated by <a class="reference internal" href="#procgame.game.GameController.load_config" title="procgame.game.GameController.load_config"><tt class="xref py py-meth docutils literal"><span class="pre">load_config()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.load_config">
+<tt class="descname">load_config</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.load_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the YAML machine configuration file into memory.
+Configures the switches, lamps, and coils members.
+Enables notifyHost for the open and closed debounced states on each
+configured switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.load_config_stream">
+<tt class="descname">load_config_stream</tt><big>(</big><em>stream</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.load_config_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the YAML machine configuration in stream form (string or
+opened file) into memory.
+Configures the switches, lamps, and coils members.
+Enables notifyHost for the open and closed debounced states on each
+configured switch.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.load_game_data">
+<tt class="descname">load_game_data</tt><big>(</big><em>template_filename</em>, <em>user_filename</em>, <em>restore=None</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.load_game_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the YAML game data configuration file.  This file contains
+transient information such as audits, high scores and other statistics.
+The <em>template_filename</em> provides default values for the game;
+<em>user_filename</em> contains the values set by the user.</p>
+<p>See also: <a class="reference internal" href="#procgame.game.GameController.save_game_data" title="procgame.game.GameController.save_game_data"><tt class="xref py py-meth docutils literal"><span class="pre">save_game_data()</span></tt></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.load_settings">
+<tt class="descname">load_settings</tt><big>(</big><em>template_filename</em>, <em>user_filename</em>, <em>restore=False</em>, <em>type='settings'</em>, <em>default='default'</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.load_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the YAML game settings configuration file.
+The game settings describe operator configuration options, such as
+balls per game and replay levels. The <em>template_filename</em> provides
+default values for the game; <em>user_filename</em> contains the values set
+by the user.</p>
+<p>See also: <a class="reference internal" href="#procgame.game.GameController.save_settings" title="procgame.game.GameController.save_settings"><tt class="xref py py-meth docutils literal"><span class="pre">save_settings()</span></tt></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.logger">
+<tt class="descname">logger</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameController.logger" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="xref py py-class docutils literal"><span class="pre">Logger</span></tt> object instance; instantiated in <tt class="xref py py-meth docutils literal"><span class="pre">__init__()</span></tt> with
+the logger name &#8220;game&#8221;.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.machine_type">
+<tt class="descname">machine_type</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameController.machine_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Machine type used to configure <a class="reference internal" href="#procgame.game.GameController.proc" title="procgame.game.GameController.proc"><tt class="xref py py-attr docutils literal"><span class="pre">proc</span></tt></a> in this class&#8217;s initializer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.modes">
+<tt class="descname">modes</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameController.modes" title="Permalink to this definition">¶</a></dt>
+<dd><p>An instance of <a class="reference internal" href="#procgame.game.ModeQueue" title="procgame.game.ModeQueue"><tt class="xref py py-class docutils literal"><span class="pre">ModeQueue</span></tt></a>, which manages the presently active
+modes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.old_players">
+<tt class="descname">old_players</tt><em class="property"> = []</em><a class="headerlink" href="#procgame.game.GameController.old_players" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy of <a class="reference internal" href="#procgame.game.GameController.players" title="procgame.game.GameController.players"><tt class="xref py py-attr docutils literal"><span class="pre">players</span></tt></a> made when <tt class="xref py py-meth docutils literal"><span class="pre">reset()</span></tt> is called.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.operator_settings">
+<tt class="descname">operator_settings</tt><em class="property"> = {}</em><a class="headerlink" href="#procgame.game.GameController.operator_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains local game configuration, such as the volume.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.players">
+<tt class="descname">players</tt><em class="property"> = []</em><a class="headerlink" href="#procgame.game.GameController.players" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collection of <a class="reference internal" href="#procgame.game.Player" title="procgame.game.Player"><tt class="xref py py-class docutils literal"><span class="pre">Player</span></tt></a> objects.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.proc">
+<tt class="descname">proc</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameController.proc" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <tt class="xref py py-class docutils literal"><span class="pre">pinproc.PinPROC</span></tt> instance, created in the initializer with
+machine type <a class="reference internal" href="#procgame.game.GameController.machine_type" title="procgame.game.GameController.machine_type"><tt class="xref py py-attr docutils literal"><span class="pre">machine_type</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.process_config">
+<tt class="descname">process_config</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.process_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by <a class="reference internal" href="#procgame.game.GameController.load_config" title="procgame.game.GameController.load_config"><tt class="xref py py-meth docutils literal"><span class="pre">load_config()</span></tt></a> and <a class="reference internal" href="#procgame.game.GameController.load_config_stream" title="procgame.game.GameController.load_config_stream"><tt class="xref py py-meth docutils literal"><span class="pre">load_config_stream()</span></tt></a> to
+process the values in <a class="reference internal" href="#procgame.game.GameController.config" title="procgame.game.GameController.config"><tt class="xref py py-attr docutils literal"><span class="pre">config</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.run_loop">
+<tt class="descname">run_loop</tt><big>(</big><em>min_seconds_per_cycle=None</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.run_loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by the programmer to read and process switch events until
+interrupted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.save_game_data">
+<tt class="descname">save_game_data</tt><big>(</big><em>filename=None</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.save_game_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the game data to <em>filename</em>.  See <a class="reference internal" href="#procgame.game.GameController.load_game_data" title="procgame.game.GameController.load_game_data"><tt class="xref py py-meth docutils literal"><span class="pre">load_game_data()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.save_settings">
+<tt class="descname">save_settings</tt><big>(</big><em>filename=None</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.save_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the game settings to <em>filename</em>.
+See <a class="reference internal" href="#procgame.game.GameController.load_settings" title="procgame.game.GameController.load_settings"><tt class="xref py py-meth docutils literal"><span class="pre">load_settings()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.score">
+<tt class="descname">score</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds or subtracts points for the current player based on the value
+in the scoring section of the &lt;game&gt;.yaml file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.scorePoints">
+<tt class="descname">scorePoints</tt><big>(</big><em>points</em><big>)</big><a class="headerlink" href="#procgame.game.GameController.scorePoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds or subtracts points to the score</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.switches">
+<tt class="descname">switches</tt><em class="property"> = &lt;procgame.game.gameitems.AttrCollection object at 0x05BC5690&gt;</em><a class="headerlink" href="#procgame.game.GameController.switches" title="Permalink to this definition">¶</a></dt>
+<dd><p>An <a class="reference internal" href="#procgame.game.AttrCollection" title="procgame.game.AttrCollection"><tt class="xref py py-class docutils literal"><span class="pre">AttrCollection</span></tt></a> of <a class="reference internal" href="#procgame.game.Switch" title="procgame.game.Switch"><tt class="xref py py-class docutils literal"><span class="pre">Switch</span></tt></a> objects.
+Populated by <a class="reference internal" href="#procgame.game.GameController.load_config" title="procgame.game.GameController.load_config"><tt class="xref py py-meth docutils literal"><span class="pre">load_config()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameController.t0">
+<tt class="descname">t0</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameController.t0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start <tt class="xref py py-class docutils literal"><span class="pre">time.time</span></tt> of the game program.
+i.e., the time of power-up.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.tick">
+<tt class="descname">tick</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by the GameController once per run loop.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.volume_down">
+<tt class="descname">volume_down</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.volume_down" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.GameController.volume_up">
+<tt class="descname">volume_up</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.GameController.volume_up" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="gameitem">
+<h3>GameItem<a class="headerlink" href="#gameitem" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.game.GameItem">
+<em class="property">class </em><tt class="descclassname">procgame.game.</tt><tt class="descname">GameItem</tt><big>(</big><em>game</em>, <em>name</em>, <em>number</em><big>)</big><a class="headerlink" href="#procgame.game.GameItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for <a class="reference internal" href="#procgame.game.Driver" title="procgame.game.Driver"><tt class="xref py py-class docutils literal"><span class="pre">Driver</span></tt></a> and <a class="reference internal" href="#procgame.game.Switch" title="procgame.game.Switch"><tt class="xref py py-class docutils literal"><span class="pre">Switch</span></tt></a>.  Contained in an instance of <a class="reference internal" href="#procgame.game.AttrCollection" title="procgame.game.AttrCollection"><tt class="xref py py-class docutils literal"><span class="pre">AttrCollection</span></tt></a> within the <a class="reference internal" href="#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">GameController</span></tt></a>.</p>
+<dl class="attribute">
+<dt id="procgame.game.GameItem.game">
+<tt class="descname">game</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameItem.game" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">GameController</span></tt></a> to which this item belongs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameItem.label">
+<tt class="descname">label</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameItem.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display name of this item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameItem.name">
+<tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameItem.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>String name of this item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameItem.number">
+<tt class="descname">number</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameItem.number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integer value for this item providing a mapping to the hardware.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameItem.tags">
+<tt class="descname">tags</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameItem.tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of string tags used to group this item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.GameItem.yaml_number">
+<tt class="descname">yaml_number</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.GameItem.yaml_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number string from YAML config file</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="mode">
+<h3>Mode<a class="headerlink" href="#mode" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.game.Mode">
+<em class="property">class </em><tt class="descclassname">procgame.game.</tt><tt class="descname">Mode</tt><big>(</big><em>game</em>, <em>priority</em><big>)</big><a class="headerlink" href="#procgame.game.Mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstraction of a game mode to be subclassed by the game
+programmer.</p>
+<p>Modes are essentially a collection of switch even thandlers.
+Active modes are held in <a class="reference internal" href="#procgame.game.GameController.modes" title="procgame.game.GameController.modes"><tt class="xref py py-attr docutils literal"><span class="pre">GameController.modes</span></tt></a>, an
+instance of <a class="reference internal" href="#procgame.game.ModeQueue" title="procgame.game.ModeQueue"><tt class="xref py py-class docutils literal"><span class="pre">ModeQueue</span></tt></a>,
+which dispatches event notifications to modes in
+order of priority (highest to lowest).  If a higher priority
+mode&#8217;s switch event handler method returns
+<a class="reference internal" href="#procgame.game.procgame.game.SwitchStop" title="procgame.game.procgame.game.SwitchStop"><tt class="xref py py-data docutils literal"><span class="pre">SwitchStop</span></tt></a>, the event
+is not passed down to lower modes.</p>
+<p>Switch event handlers are detected when the <a class="reference internal" href="#procgame.game.Mode" title="procgame.game.Mode"><tt class="xref py py-class docutils literal"><span class="pre">Mode</span></tt></a>
+initializer is called by the subclass.
+Various switch event handler formats are recognized:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">sw_switchName_open(self,</span> <span class="pre">sw)</span></tt></dt>
+<dd>Called when a switch (named switchName) is opened.</dd>
+<dt><tt class="docutils literal"><span class="pre">sw_switchName_closed(self,</span> <span class="pre">sw)</span></tt></dt>
+<dd>Closed variant of the above.</dd>
+<dt><tt class="docutils literal"><span class="pre">sw_switchName_open_for_1s(self,</span> <span class="pre">sw)</span></tt></dt>
+<dd>Called when switchName has been open continuously for one second</dd>
+</dl>
+<p>Example variants of the above:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">sw_switchName_closed_for_2s</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sw</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">sw_switchName_closed_for_100ms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sw</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">sw_switchName_open_for_500ms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sw</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Presently only switch names with the characters a-z, A-Z, and 0-9 are recognized.
+If a switch name has an underscore in it, the switch handler will not be recognized.</p>
+</div>
+<p>Modes can be programatically configured using <a class="reference internal" href="#procgame.game.Mode.add_switch_handler" title="procgame.game.Mode.add_switch_handler"><tt class="xref py py-meth docutils literal"><span class="pre">add_switch_handler()</span></tt></a>.</p>
+<dl class="method">
+<dt id="procgame.game.Mode.add_child_mode">
+<tt class="descname">add_child_mode</tt><big>(</big><em>mode</em><big>)</big><a class="headerlink" href="#procgame.game.Mode.add_child_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add <em>mode</em> as a child of the receiver.
+Child modes are added and removed from the game&#8217;s mode queue when
+<a class="reference internal" href="#procgame.game.Mode.mode_started" title="procgame.game.Mode.mode_started"><tt class="xref py py-meth docutils literal"><span class="pre">mode_started()</span></tt></a> and <a class="reference internal" href="#procgame.game.Mode.mode_stopped" title="procgame.game.Mode.mode_stopped"><tt class="xref py py-meth docutils literal"><span class="pre">mode_stopped()</span></tt></a> are called, respectively.</p>
+<p>If this mode is already on the mode queue (<a class="reference internal" href="#procgame.game.Mode.is_started" title="procgame.game.Mode.is_started"><tt class="xref py py-meth docutils literal"><span class="pre">is_started()</span></tt></a> ==
+<tt class="docutils literal"><span class="pre">True</span></tt>), then <em>mode</em> will be added (started) immediately.</p>
+<p>Sets <em>mode</em>&#8216;s <a class="reference internal" href="#procgame.game.Mode.parent_mode" title="procgame.game.Mode.parent_mode"><tt class="xref py py-attr docutils literal"><span class="pre">parent_mode</span></tt></a> to the receiver.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><em>mode</em></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.add_switch_handler">
+<tt class="descname">add_switch_handler</tt><big>(</big><em>name</em>, <em>event_type</em>, <em>delay</em>, <em>handler</em><big>)</big><a class="headerlink" href="#procgame.game.Mode.add_switch_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Programatically configure a switch event handler.</p>
+<p>Keyword arguments:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">name</span></tt></dt>
+<dd>valid switch name</dd>
+<dt><tt class="docutils literal"><span class="pre">event_type</span></tt></dt>
+<dd>&#8216;open&#8217;,&#8217;closed&#8217;,&#8217;active&#8217;, or &#8216;inactive&#8217;</dd>
+<dt><tt class="docutils literal"><span class="pre">delay</span></tt></dt>
+<dd>float number of seconds that the state should be held
+before invoking the handler, or None if it should be
+invoked immediately.</dd>
+<dt><tt class="docutils literal"><span class="pre">handler</span></tt></dt>
+<dd>method to call with signature <tt class="docutils literal"><span class="pre">handler(self,</span> <span class="pre">switch)</span></tt></dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.cancel_delayed">
+<tt class="descname">cancel_delayed</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#procgame.game.Mode.cancel_delayed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the given named delays from the delayed list,
+cancelling their execution. Can receive a string or a list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.clear_layer">
+<tt class="descname">clear_layer</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Mode.clear_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple method to clear a DMD layer.
+Need it to be a standalone method so we can use it in delays.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.delay">
+<tt class="descname">delay</tt><big>(</big><em>name=None</em>, <em>event_type=None</em>, <em>delay=0</em>, <em>handler=None</em>, <em>param=None</em><big>)</big><a class="headerlink" href="#procgame.game.Mode.delay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schedule the run loop to call the given handler at a later time.</p>
+<p>Keyword arguments:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">name</span></tt></dt>
+<dd>Switch name for this event.  If using this method for a delayed
+method call, use <tt class="docutils literal"><span class="pre">None</span></tt> and a name will be generated for you.
+The generated name can be obtained from the return value.</dd>
+<dt><tt class="docutils literal"><span class="pre">event_type</span></tt></dt>
+<dd>&#8216;closed&#8217;, &#8216;open&#8217;, or <tt class="docutils literal"><span class="pre">None</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">delay</span></tt></dt>
+<dd>Number of seconds to wait before calling the handler (float).</dd>
+<dt><tt class="docutils literal"><span class="pre">handler</span></tt></dt>
+<dd>Function to be called once delay seconds have elapsed.</dd>
+<dt><tt class="docutils literal"><span class="pre">param</span></tt></dt>
+<dd>Value to be passed as the first (non-self) argument to handler.</dd>
+</dl>
+<p>If param is None, handler&#8217;s signature must be <tt class="docutils literal"><span class="pre">handler(self)</span></tt>.  Otherwise,
+it is <tt class="docutils literal"><span class="pre">handler(self,</span> <span class="pre">param)</span></tt> to match the switch method handler pattern.</p>
+<p>Returns the <tt class="docutils literal"><span class="pre">name</span></tt> of the delay, which may later be used with <a class="reference internal" href="#procgame.game.Mode.cancel_delayed" title="procgame.game.Mode.cancel_delayed"><tt class="xref py py-meth docutils literal"><span class="pre">cancel_delayed()</span></tt></a>.</p>
+<p>Example usage for delayed method invocation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">delayed_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;thatButton was pressed 2 seconds ago!&#39;</span>
+
+<span class="k">def</span> <span class="nf">sw_thatButton_active</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c"># After 2 seconds, call delayed_handler() above.</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">delayed_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">delayed_handler</span><span class="p">)</span>
+    <span class="c"># Store name to cancel the delay later: self.cancel_delayed(self.delayed_name)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.dispatch_delayed">
+<tt class="descname">dispatch_delayed</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Mode.dispatch_delayed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by the GameController to dispatch any delayed events.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.is_started">
+<tt class="descname">is_started</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Mode.is_started" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <tt class="docutils literal"><span class="pre">True</span></tt> if this mode is on the mode queue
+(<a class="reference internal" href="#procgame.game.Mode.mode_started" title="procgame.game.Mode.mode_started"><tt class="xref py py-meth docutils literal"><span class="pre">mode_started()</span></tt></a> has already been called).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.mode_started">
+<tt class="descname">mode_started</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Mode.mode_started" title="Permalink to this definition">¶</a></dt>
+<dd><p>Notifies the mode that it is now active on the mode queue.
+This method should not be invoked directly; it is called by the GameController run loop.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.mode_stopped">
+<tt class="descname">mode_stopped</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Mode.mode_stopped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Notifies the mode that it has been removed from the mode queue.</p>
+<p>This method should not be invoked directly; it is called by the
+GameController run loop.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.mode_tick">
+<tt class="descname">mode_tick</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Mode.mode_tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by the GameController run loop during each loop when the mode
+is running.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.mode_topmost">
+<tt class="descname">mode_topmost</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Mode.mode_topmost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Notifies the mode that it is now the topmost mode on the mode queue.</p>
+<p>This method should not be invoked directly; it is called by the
+GameController run loop.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.Mode.parent_mode">
+<tt class="descname">parent_mode</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.Mode.parent_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parent mode for this mode.  Set by <a class="reference internal" href="#procgame.game.Mode.add_child_mode" title="procgame.game.Mode.add_child_mode"><tt class="xref py py-meth docutils literal"><span class="pre">add_child_mode()</span></tt></a> and cleared in <a class="reference internal" href="#procgame.game.Mode.remove_child_mode" title="procgame.game.Mode.remove_child_mode"><tt class="xref py py-meth docutils literal"><span class="pre">remove_child_mode()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.remove_child_mode">
+<tt class="descname">remove_child_mode</tt><big>(</big><em>mode</em><big>)</big><a class="headerlink" href="#procgame.game.Mode.remove_child_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove <em>mode</em> as a child of the receiver.
+See <a class="reference internal" href="#procgame.game.Mode.add_child_mode" title="procgame.game.Mode.add_child_mode"><tt class="xref py py-meth docutils literal"><span class="pre">add_child_mode()</span></tt></a> for a description of child modes.
+If this mode is already on the mode queue,
+the <em>mode</em> will be removed (stopped) immediately.</p>
+<p>Sets <em>mode</em>&#8216;s <a class="reference internal" href="#procgame.game.Mode.parent_mode" title="procgame.game.Mode.parent_mode"><tt class="xref py py-attr docutils literal"><span class="pre">parent_mode</span></tt></a> to <tt class="docutils literal"><span class="pre">None</span></tt>.</p>
+<p>See also: <a class="reference internal" href="#procgame.game.Mode.add_child_mode" title="procgame.game.Mode.add_child_mode"><tt class="xref py py-meth docutils literal"><span class="pre">add_child_mode()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.remove_switch_handler">
+<tt class="descname">remove_switch_handler</tt><big>(</big><em>name</em>, <em>event_type</em>, <em>delay</em>, <em>handler</em><big>)</big><a class="headerlink" href="#procgame.game.Mode.remove_switch_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>removes a switch handler from a mode. This is based on a certain
+name, event_type, delay, and handler combination. Basically it should
+work if you use it EXACTLY like your add_switch_handler</p>
+<p>This was written by Brian and currently does not work. Do we need this
+in the future? Dunno. I&#8217;ll have to dig into it more to make it work.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.reset_delayed">
+<tt class="descname">reset_delayed</tt><big>(</big><em>name</em>, <em>delay</em><big>)</big><a class="headerlink" href="#procgame.game.Mode.reset_delayed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the named delay time to the value passed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Mode.update_lamps">
+<tt class="descname">update_lamps</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Mode.update_lamps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by the GameController re-apply active lamp schedules</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="modequeue">
+<h3>ModeQueue<a class="headerlink" href="#modequeue" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.game.ModeQueue">
+<em class="property">class </em><tt class="descclassname">procgame.game.</tt><tt class="descname">ModeQueue</tt><big>(</big><em>game</em><big>)</big><a class="headerlink" href="#procgame.game.ModeQueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>A queue of modes which dispatches switch events.</p>
+<dl class="attribute">
+<dt id="procgame.game.ModeQueue.changed">
+<tt class="descname">changed</tt><em class="property"> = False</em><a class="headerlink" href="#procgame.game.ModeQueue.changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the contents of the queue has changed since the last time this variable was set to False.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="player">
+<h3>Player<a class="headerlink" href="#player" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.game.Player">
+<em class="property">class </em><tt class="descclassname">procgame.game.</tt><tt class="descname">Player</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#procgame.game.Player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a player in the game.
+The game maintains a collection of players in <a class="reference internal" href="#procgame.game.GameController.players" title="procgame.game.GameController.players"><tt class="xref py py-attr docutils literal"><span class="pre">GameController.players</span></tt></a>.</p>
+<dl class="attribute">
+<dt id="procgame.game.Player.extra_balls">
+<tt class="descname">extra_balls</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.game.Player.extra_balls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of extra balls that this player has earned.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.Player.game_time">
+<tt class="descname">game_time</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.game.Player.game_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of seconds that this player has had the ball in play.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.Player.name">
+<tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.Player.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>This player&#8217;s name.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.Player.score">
+<tt class="descname">score</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.game.Player.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>This player&#8217;s score.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="switch">
+<h3>Switch<a class="headerlink" href="#switch" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.game.Switch">
+<em class="property">class </em><tt class="descclassname">procgame.game.</tt><tt class="descname">Switch</tt><big>(</big><em>game</em>, <em>name</em>, <em>number</em>, <em>type='NO'</em><big>)</big><a class="headerlink" href="#procgame.game.Switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a switch in a pinball machine.</p>
+<p>Switches are accessed using <a class="reference internal" href="#procgame.game.GameController.switches" title="procgame.game.GameController.switches"><tt class="xref py py-attr docutils literal"><span class="pre">GameController.switches</span></tt></a>.</p>
+<p>Subclass of <a class="reference internal" href="#procgame.game.GameItem" title="procgame.game.GameItem"><tt class="xref py py-class docutils literal"><span class="pre">GameItem</span></tt></a>.</p>
+<dl class="attribute">
+<dt id="procgame.game.Switch.debounce">
+<tt class="descname">debounce</tt><em class="property"> = True</em><a class="headerlink" href="#procgame.game.Switch.debounce" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>True</cite> indicates switch events should only change the state when they are debounced events.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.Switch.hw_timestamp">
+<tt class="descname">hw_timestamp</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.Switch.hw_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hardware timestamp of the last state change of this switch.  <cite>None</cite> until an event is received.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Switch.is_active">
+<tt class="descname">is_active</tt><big>(</big><em>seconds=None</em><big>)</big><a class="headerlink" href="#procgame.game.Switch.is_active" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>True</cite> if the ball is activating this switch, or if this switch is
+somehow being activated. If <cite>seconds</cite> is not <cite>None</cite> (the default),
+only returns <cite>True</cite> if the switch has been active for that number of
+seconds.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Switch.is_inactive">
+<tt class="descname">is_inactive</tt><big>(</big><em>seconds=None</em><big>)</big><a class="headerlink" href="#procgame.game.Switch.is_inactive" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>True</cite> if the ball is not activating this switch
+If <cite>seconds</cite> is not <cite>None</cite> (the default), only returns <cite>True</cite> if the switch has not been active for that number of seconds.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.Switch.last_changed">
+<tt class="descname">last_changed</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.Switch.last_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="xref py py-class docutils literal"><span class="pre">time</span></tt> of the last state change of this switch.  <cite>None</cite> if the <a class="reference internal" href="#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">GameController</span></tt></a> has not yet initialized this switch&#8217;s state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Switch.reset_timer">
+<tt class="descname">reset_timer</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Switch.reset_timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the value returned by <a class="reference internal" href="#procgame.game.Switch.time_since_change" title="procgame.game.Switch.time_since_change"><tt class="xref py py-meth docutils literal"><span class="pre">time_since_change()</span></tt></a> to 0.0.
+Normally this is called by the <a class="reference internal" href="#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">GameController</span></tt></a>, but it can be
+triggered manually if needed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.Switch.state">
+<tt class="descname">state</tt><em class="property"> = False</em><a class="headerlink" href="#procgame.game.Switch.state" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>False</cite> indicates open, <cite>True</cite> is closed.
+In most applications the <a class="reference internal" href="#procgame.game.Switch.is_active" title="procgame.game.Switch.is_active"><tt class="xref py py-meth docutils literal"><span class="pre">is_active()</span></tt></a> and <a class="reference internal" href="#procgame.game.Switch.is_inactive" title="procgame.game.Switch.is_inactive"><tt class="xref py py-meth docutils literal"><span class="pre">is_inactive()</span></tt></a> methods should be used to determine a switch&#8217;s state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.game.Switch.time_since_change">
+<tt class="descname">time_since_change</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.game.Switch.time_since_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of seconds that this switch has been in its current state.
+This value is reset to 0 by the <a class="reference internal" href="#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">GameController</span></tt></a> <em>after</em> the
+switch event has been processed by the active <a class="reference internal" href="#procgame.game.Mode" title="procgame.game.Mode"><tt class="xref py py-class docutils literal"><span class="pre">Mode</span></tt></a> instances.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.game.Switch.type">
+<tt class="descname">type</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.game.Switch.type" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">'NO'</span></tt> (normally open) or <tt class="docutils literal"><span class="pre">'NC'</span></tt> (normally closed).  Mechanical switches are usually NO, while opto switches are almost always NC.
+This is used to determine whether a switch is active (&#8220;in contact with the ball&#8221;) without ruleset code needing to be concerned with the details of the switch hardware.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="helper-classes">
+<h2>Helper Classes<a class="headerlink" href="#helper-classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="basicgame">
+<h3>BasicGame<a class="headerlink" href="#basicgame" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="procgame.game.procgame.game.SwitchContinue">
+<tt class="descclassname">procgame.game.</tt><tt class="descname">SwitchContinue</tt><a class="headerlink" href="#procgame.game.procgame.game.SwitchContinue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used as a return value from a <a class="reference internal" href="#procgame.game.Mode" title="procgame.game.Mode"><tt class="xref py py-class docutils literal"><span class="pre">Mode</span></tt></a> switch handler to indicate that lower priority modes should receive this switch event.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="procgame.game.procgame.game.SwitchStop">
+<tt class="descclassname">procgame.game.</tt><tt class="descname">SwitchStop</tt><a class="headerlink" href="#procgame.game.procgame.game.SwitchStop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used as a return value from a <a class="reference internal" href="#procgame.game.Mode" title="procgame.game.Mode"><tt class="xref py py-class docutils literal"><span class="pre">Mode</span></tt></a> switch handler to indicate that lower priority modes should not receive this switch event.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">game Submodule</a><ul>
+<li><a class="reference internal" href="#core-classes">Core Classes</a><ul>
+<li><a class="reference internal" href="#attrcollection">AttrCollection</a></li>
+<li><a class="reference internal" href="#driver">Driver</a></li>
+<li><a class="reference internal" href="#gamecontroller">GameController</a></li>
+<li><a class="reference internal" href="#gameitem">GameItem</a></li>
+<li><a class="reference internal" href="#mode">Mode</a></li>
+<li><a class="reference internal" href="#modequeue">ModeQueue</a></li>
+<li><a class="reference internal" href="#player">Player</a></li>
+<li><a class="reference internal" href="#switch">Switch</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#helper-classes">Helper Classes</a><ul>
+<li><a class="reference internal" href="#basicgame">BasicGame</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#constants">Constants</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="events.html"
+                        title="previous chapter">events Submodule</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="highscore.html"
+                        title="next chapter">highscore Submodule</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ref/game.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="highscore.html" title="highscore Submodule"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="events.html" title="events Submodule"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" >procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

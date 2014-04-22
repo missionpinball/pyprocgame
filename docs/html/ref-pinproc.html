@@ -1,0 +1,691 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pinproc Module Reference &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="index.html" />
+    <link rel="next" title="procgame Command Line Tool" href="tools.html" />
+    <link rel="prev" title="sound Submodule" href="ref/sound.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tools.html" title="procgame Command Line Tool"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ref/sound.html" title="sound Submodule"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pyprocgame  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pinproc">
+<span id="pinproc-module-reference"></span><h1>pinproc Module Reference<a class="headerlink" href="#module-pinproc" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-pinproc" title="pinproc"><tt class="xref py py-mod docutils literal"><span class="pre">pinproc</span></tt></a> module enables control of the P-ROC hardware from within Python (using <a class="reference internal" href="#pinproc.pinproc.PinPROC" title="pinproc.pinproc.PinPROC"><tt class="xref py py-class docutils literal"><span class="pre">PinPROC</span></tt></a>), as well as helper routines written in native code (C) to assist with tasks like DMD buffer manipulation.</p>
+<div class="section" id="pinproc-class">
+<h2>PinPROC Class<a class="headerlink" href="#pinproc-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pinproc.pinproc.PinPROC">
+<em class="property">class </em><tt class="descclassname">pinproc.</tt><tt class="descname">PinPROC</tt><big>(</big><em>machine_type</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the P-ROC hardware interface.  This class is initialized with <em>machine_type</em>.  <em>machine_type</em> can be one of the <a class="reference internal" href="#machine-type-constants"><em>Machine Type Constants</em></a> or, for compatibility, a string (wpc, wpc95, wpcAlphanumeric, sternSAM, sternWhitestar, or custom).  The machine type is used for the initial configuration of the P-ROC hardware interface.</p>
+<p>An <tt class="docutils literal"><span class="pre">IOError</span></tt> is raised if the P-ROC device cannot be found.  A <tt class="docutils literal"><span class="pre">ValueError</span></tt> is raised if <em>machine_type</em> is invalid.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All I/O between the software and the P-ROC hardware is buffered to ensure maximum USB throughput.  This means that driver update commands are only sent to the hardware when the software buffer is full, or when <a class="reference internal" href="#pinproc.pinproc.PinPROC.flush" title="pinproc.pinproc.PinPROC.flush"><tt class="xref py py-meth docutils literal"><span class="pre">flush()</span></tt></a> is called.  If you are using the <a class="reference internal" href="ref/game.html#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">procgame.game.GameController</span></tt></a> run loop you do not need to manually flush the buffers, as they are flushed after every run loop cycle.</p>
+</div>
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.aux_send_commands">
+<tt class="descname">aux_send_commands</tt><big>(</big><em>address</em>, <em>aux_commands</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.aux_send_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes <em>aux_commands</em> (a list of commands) to the P-ROC’s auxiliary bus instruction memory, starting at <em>address</em>, which is an offset into the instruction memory.</p>
+<p>See <a class="reference internal" href="#aux-command-functions"><em>Auxiliary Command Functions</em></a> and <a class="reference internal" href="#aux-bus-programming"><em>Auxiliary Bus Programming</em></a> for more on the auxiliary bus.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.dmd_draw">
+<tt class="descname">dmd_draw</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.dmd_draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays <em>data</em> on the dot matrix display, which may be a <tt class="xref py py-class docutils literal"><span class="pre">DMDBuffer</span></tt> (recommended) or a string (not recommended).</p>
+<p>A <tt class="xref py py-class docutils literal"><span class="pre">DMDBuffer</span></tt> is interpreted as a 128x32 8-bits-per-pixel 16-color (<tt class="docutils literal"><span class="pre">0x0</span></tt> thru <tt class="docutils literal"><span class="pre">0xF</span></tt>) image.  Each pixel value is mapped using the mapping described in <a class="reference internal" href="#pinproc.pinproc.PinPROC.set_dmd_color_mapping" title="pinproc.pinproc.PinPROC.set_dmd_color_mapping"><tt class="xref py py-meth docutils literal"><span class="pre">set_dmd_color_mapping()</span></tt></a>.  A <tt class="docutils literal"><span class="pre">ValueError</span></tt> is raised if the buffer is not 128x32.</p>
+<p>If a string is passed it will be interpreted as a 128x32 image with raw 32-bits-per-pixel 8-bits-per-channel pixel data.  The channels of each pixel are summed and then divided to derive a 4-color image.</p>
+<p>If the DMD has not been previously configured using <a class="reference internal" href="#pinproc.pinproc.PinPROC.dmd_update_config" title="pinproc.pinproc.PinPROC.dmd_update_config"><tt class="xref py py-meth docutils literal"><span class="pre">dmd_update_config()</span></tt></a> it will be configured with the default settings prior to updating the display.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.dmd_update_config">
+<tt class="descname">dmd_update_config</tt><big>(</big><em>high_cycles=None</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.dmd_update_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures the DMD using defaults except where specified otherwise.</p>
+<p><em>high_cycles</em> is optional.  If supplied it must be a sequence of 4 integers representing the <tt class="docutils literal"><span class="pre">high_cycles</span></tt> values for the display.  These values affect the timing of the display (frames per second) as well as the brightness of the dots.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.driver_disable">
+<tt class="descname">driver_disable</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.driver_disable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disables (de-energizes) the specified driver <em>number</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.driver_pulse">
+<tt class="descname">driver_pulse</tt><big>(</big><em>number</em>, <em>milliseconds</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.driver_pulse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pulses driver <em>number</em> for the specified number of <em>milliseconds</em>.  0 indicates forever; the maximum is 255.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.driver_schedule">
+<tt class="descname">driver_schedule</tt><big>(</big><em>number</em>, <em>schedule</em>, <em>cycle_seconds</em>, <em>now</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.driver_schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns on/off the specified driver <em>number</em> according to the schedule.</p>
+<p><em>schedule</em> is a 32-bit mask where each bit corresponds to a 1/32 of a second timeslot.  Active bits identify timeslots during which the driver number should be on.  The least significant bit corresponds to the first timeslot.</p>
+<p>The schedule is driven for the specified number of <em>cycle_seconds</em>, 0 = forever, max 255.</p>
+<p><em>now</em> determines whether the schedule is activated immediately (<tt class="docutils literal"><span class="pre">True</span></tt>) or if it is synchronized to a 1 second timer internal to the P-ROC (<tt class="docutils literal"><span class="pre">False</span></tt>).  When <tt class="docutils literal"><span class="pre">now</span> <span class="pre">=</span> <span class="pre">False</span></tt> is used with multiple drivers, the schedules of all of the drivers will be synchronized.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.driver_patter">
+<tt class="descname">driver_patter</tt><big>(</big><em>number</em>, <em>milliseconds_on</em>, <em>milliseconds_off</em>, <em>original_on_time</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.driver_patter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drives the specified driver <em>number</em> with an indefinite pitter-patter sequence, where the driver is repeatedly turned on for <em>milliseconds_on</em> and the off for <em>milliseconds_off</em>, each with a max of 127.</p>
+<p>If <em>original_on_time</em> is non-zero, the driver is first pulsed for that number of milliseconds before the pitter-patter sequence begins, with a max 255.</p>
+<p>Pitter-patter sequences are commonly used for duty cycle control of driver circuits.  A case where <em>original_on_time</em> might be non-zero would be for a single coil flipper circuit that needs to be driven to activate the flipper before the pitter-patter sequence is used to hold the flipper up.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.driver_pulsed_patter">
+<tt class="descname">driver_pulsed_patter</tt><big>(</big><em>number</em>, <em>milliseconds_on</em>, <em>milliseconds_off</em>, <em>milliseconds_overall_patter_time</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.driver_pulsed_patter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drives the specified driver <em>number</em> with a timed pitter-patter sequence, where the driver is repeatedly turned on for <em>milliseconds_on</em> and then off for <em>milliseconds_off</em>, each with a max of 127.</p>
+<p>The driver is disabled after <em>milliseconds_overall_patter_time</em>, max 255.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.driver_get_state">
+<tt class="descname">driver_get_state</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.driver_get_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary containing the state information for the specified driver.  See <a class="reference internal" href="#driver-state-dict"><em>Driver State Dictionary</em></a> for a description of the dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.driver_update_global_config">
+<tt class="descname">driver_update_global_config</tt><big>(</big><em>enable_outputs</em>, <em>global_polarity</em>, <em>use_clear</em>, <em>strobe_start_select</em>, <em>start_strobe_time</em>, <em>matrix_row_enable_index_0</em>, <em>matrix_row_enable_index_1</em>, <em>active_low_matrix_rows</em>, <em>tickle_stern_watchdog</em>, <em>encode_enables</em>, <em>watchdog_expired</em>, <em>watchdog_enable</em>, <em>watchdog_reset_time</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.driver_update_global_config" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">enable_outputs</span></tt></dt>
+<dd>bool</dd>
+<dt><tt class="docutils literal"><span class="pre">global_polarity</span></tt></dt>
+<dd>bool</dd>
+<dt><tt class="docutils literal"><span class="pre">use_clear</span></tt></dt>
+<dd>bool, ignored by the hardware.</dd>
+<dt><tt class="docutils literal"><span class="pre">strobe_start_select</span></tt></dt>
+<dd>bool - use external strobe to start driver update loop. Ignored by the hardware.</dd>
+<dt><tt class="docutils literal"><span class="pre">start_strobe_time</span></tt></dt>
+<dd>bool - driver update loop time.  Ignored by the hardware.</dd>
+<dt><tt class="docutils literal"><span class="pre">matrix_row_enable_index_0</span></tt></dt>
+<dd>int</dd>
+<dt><tt class="docutils literal"><span class="pre">matrix_row_enable_index_1</span></tt></dt>
+<dd>int</dd>
+<dt><tt class="docutils literal"><span class="pre">active_low_matrix_rows</span></tt></dt>
+<dd>bool</dd>
+<dt><tt class="docutils literal"><span class="pre">tickle_stern_watchdog</span></tt></dt>
+<dd>bool</dd>
+<dt><tt class="docutils literal"><span class="pre">encode_enables</span></tt></dt>
+<dd>bool - use muxed enables or individual lines.</dd>
+<dt><tt class="docutils literal"><span class="pre">watchdog_expired</span></tt></dt>
+<dd>bool</dd>
+<dt><tt class="docutils literal"><span class="pre">watchdog_enable</span></tt></dt>
+<dd>bool</dd>
+<dt><tt class="docutils literal"><span class="pre">watchdog_reset_time</span></tt></dt>
+<dd>int - milliseconds</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.driver_update_group_config">
+<tt class="descname">driver_update_group_config</tt><big>(</big><em>group_num</em>, <em>slow_time</em>, <em>enable_index</em>, <em>row_activate_index</em>, <em>row_enable_select</em>, <em>matrixed</em>, <em>polarity</em>, <em>active</em>, <em>disable_strobe_after</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.driver_update_group_config" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">group_num</span></tt></dt>
+<dd>int</dd>
+<dt><tt class="docutils literal"><span class="pre">slow_time</span></tt></dt>
+<dd>int - milliseconds to keep each group active matrix - only.</dd>
+<dt><tt class="docutils literal"><span class="pre">enable_index</span></tt></dt>
+<dd>int - enable index to use for each group of data.</dd>
+<dt><tt class="docutils literal"><span class="pre">row_activate_index</span></tt></dt>
+<dd>int - data bit to enable for the group&#8217;s row - matrix only.</dd>
+<dt><tt class="docutils literal"><span class="pre">row_enable_select</span></tt></dt>
+<dd>int - which of the 2 global matrix_row_enable_indexes to which to send the row_activate_index - matrix only</dd>
+<dt><tt class="docutils literal"><span class="pre">matrixed</span></tt></dt>
+<dd>bool</dd>
+<dt><tt class="docutils literal"><span class="pre">polarity</span></tt></dt>
+<dd>bool - takes precedence over global polarity.</dd>
+<dt><tt class="docutils literal"><span class="pre">active</span></tt></dt>
+<dd>bool - enables the group.</dd>
+<dt><tt class="docutils literal"><span class="pre">disable_strobe_after</span></tt></dt>
+<dd>bool - set if the data should be disabled after it has been driven - used mostly with matrix groups.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.driver_update_state">
+<tt class="descname">driver_update_state</tt><big>(</big><em>dict</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.driver_update_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates a driver configuration using the passed dictionary.  The driver number is contained within the dictionary.  See <a class="reference internal" href="#driver-state-dict"><em>Driver State Dictionary</em></a> for a description of the dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.flush">
+<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes all buffered commands to the P-ROC hardware.  This method is necessary because the internal command buffer is written to hardware only when it is full.</p>
+<p><strong>Why do the driver commands not flush themselves?</strong></p>
+<p>In order to maximize USB efficiency this method should be called only when necessary.  For example, the <a class="reference internal" href="ref/game.html#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">procgame.game.GameController</span></tt></a> class&#8217;s run loop only calls this method once per loop.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.get_events">
+<tt class="descname">get_events</tt><big>(</big><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.get_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of dictionaries representing P-ROC events.  Each dictionary contains a <tt class="docutils literal"><span class="pre">type</span></tt> key and a <tt class="docutils literal"><span class="pre">value</span></tt> key.  Event types include:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="94%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Type</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>The switch has changed from open to closed and the signal has been debounced.</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>The switch has changed from closed to open and the signal has been debounced.</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>The switch has changed from open to closed and the signal has not been debounced.</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>The switch has changed from closed to open and the signal has not been debounced.</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>A new frame has been displayed on the DMD and there is room in the buffer for another.</td>
+</tr>
+</tbody>
+</table>
+<p>This module provides constants for these values; see <a class="reference internal" href="#event-type-constants"><em>Event Type Constants</em></a>.  Switch-related event types contain the switch number as the <tt class="docutils literal"><span class="pre">value</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.reset">
+<tt class="descname">reset</tt><big>(</big><em>resetFlags</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the P-ROC interface to its defaults.  <em>resetFlags</em> has two possible values:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="4%" />
+<col width="96%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>0</td>
+<td>Resets the software only.</td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>Resets the software to its defaults and applies the changes to the hardware.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.set_dmd_color_mapping">
+<tt class="descname">set_dmd_color_mapping</tt><big>(</big><em>mapping</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.set_dmd_color_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assigns the color mapping that is used by <a class="reference internal" href="#pinproc.pinproc.PinPROC.dmd_draw" title="pinproc.pinproc.PinPROC.dmd_draw"><tt class="xref py py-meth docutils literal"><span class="pre">dmd_draw()</span></tt></a>.  <em>mapping</em> must be a sequence of 16 integer values.  These values are initially set to 0..15, but can be modified to affect the contrast of the display and compensate for brightness differences.  Unlike <a class="reference internal" href="#pinproc.pinproc.PinPROC.dmd_update_config" title="pinproc.pinproc.PinPROC.dmd_update_config"><tt class="xref py py-meth docutils literal"><span class="pre">dmd_update_config()</span></tt></a> these values do not affect the timing of the display.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.switch_get_states">
+<tt class="descname">switch_get_states</tt><big>(</big><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.switch_get_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of integers representing the last known state of each switch.  See the table in <a class="reference internal" href="#pinproc.pinproc.PinPROC.get_events" title="pinproc.pinproc.PinPROC.get_events"><tt class="xref py py-meth docutils literal"><span class="pre">get_events()</span></tt></a> for a list of state values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.switch_update_rule">
+<tt class="descname">switch_update_rule</tt><big>(</big><em>number</em>, <em>event_type</em>, <em>rule</em>, <em>linked_drivers</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.switch_update_rule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures the rule for the given switch <em>number</em> when its state changes to <em>event_type</em>.
+Rules are used to configure automatic hardware actions in response to switch events.
+Actions include notifying the host and changing driver states.</p>
+<p><em>event_type</em> is one of: <tt class="docutils literal"><span class="pre">'closed_debounced'</span></tt>, <tt class="docutils literal"><span class="pre">'open_debounced'</span></tt>, <tt class="docutils literal"><span class="pre">'closed_nondebounced'</span></tt> or <tt class="docutils literal"><span class="pre">'open_nondebounced'</span></tt>.</p>
+<p><em>rule</em> is a dictionary with keys <tt class="docutils literal"><span class="pre">'notifyHost'</span></tt> and <tt class="docutils literal"><span class="pre">'reloadActive'</span></tt>, both with integer values.  If <tt class="docutils literal"><span class="pre">'notifyHost'</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt> a switch event will be received via <a class="reference internal" href="#pinproc.pinproc.PinPROC.get_events" title="pinproc.pinproc.PinPROC.get_events"><tt class="xref py py-meth docutils literal"><span class="pre">get_events()</span></tt></a> when this rule is triggered.  If <tt class="docutils literal"><span class="pre">'reloadActive'</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt> a 125ms reload timer will be set on this rule which will prevent it from re-driving any associated drivers repeatedly if the switch activates repeatedly.</p>
+<p><em>linked_drivers</em> is a list of driver state dictionaries, which may be constructed with <a class="reference internal" href="#driver-state-functions"><em>Driver State Functions</em></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.watchdog_tickle">
+<tt class="descname">watchdog_tickle</tt><big>(</big><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.watchdog_tickle" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method resets the hardware watchdog timer.  The timer should be tickled regularly, as the drivers are disabled when the watchdog timer expires.  The default watchdog timer period is 1 second.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.PinPROC.write_data">
+<tt class="descname">write_data</tt><big>(</big><em>module</em>, <em>address</em>, <em>data</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.PinPROC.write_data" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">module</span></tt></dt>
+<dd>P-ROC FPGA module number</dd>
+<dt><tt class="docutils literal"><span class="pre">address</span></tt></dt>
+<dd>P-ROC FPGA Register address</dd>
+<dt><tt class="docutils literal"><span class="pre">data</span></tt></dt>
+<dd>32-bit data</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="functions-constants-and-data-structures">
+<h2>Functions, Constants, and Data Structures<a class="headerlink" href="#functions-constants-and-data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="driver-state-functions">
+<span id="id1"></span><h3>Driver State Functions<a class="headerlink" href="#driver-state-functions" title="Permalink to this headline">¶</a></h3>
+<p>The following functions each take a driver state dictionary (<a class="reference internal" href="#driver-state-dict"><em>ref</em></a>) and zero or more parameters describing how to modify the dictionary.  The modified copy is returned by the function.  These functions are designed to facilitate configuring switch rules with <tt class="xref py py-meth docutils literal"><span class="pre">PinPROC.switch_update_rule()</span></tt>.</p>
+<dl class="function">
+<dt id="pinproc.driver_state_disable">
+<tt class="descclassname">pinproc.</tt><tt class="descname">driver_state_disable</tt><big>(</big><em>state</em><big>)</big><a class="headerlink" href="#pinproc.driver_state_disable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Corresponds to <tt class="xref py py-meth docutils literal"><span class="pre">PinPROC.driver_disable()</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pinproc.driver_state_pulse">
+<tt class="descclassname">pinproc.</tt><tt class="descname">driver_state_pulse</tt><big>(</big><em>state</em>, <em>milliseconds</em><big>)</big><a class="headerlink" href="#pinproc.driver_state_pulse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Corresponds to <tt class="xref py py-meth docutils literal"><span class="pre">PinPROC.driver_pulse()</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pinproc.driver_state_schedule">
+<tt class="descclassname">pinproc.</tt><tt class="descname">driver_state_schedule</tt><big>(</big><em>state</em>, <em>schedule</em>, <em>seconds</em>, <em>now</em><big>)</big><a class="headerlink" href="#pinproc.driver_state_schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Corresponds to <tt class="xref py py-meth docutils literal"><span class="pre">PinPROC.driver_schedule()</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pinproc.driver_state_patter">
+<tt class="descclassname">pinproc.</tt><tt class="descname">driver_state_patter</tt><big>(</big><em>state</em>, <em>milliseconds_on</em>, <em>milliseconds_off</em>, <em>original_on_time</em><big>)</big><a class="headerlink" href="#pinproc.driver_state_patter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Corresponds to <tt class="xref py py-meth docutils literal"><span class="pre">PinPROC.driver_patter()</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pinproc.driver_state_pulsed_patter">
+<tt class="descclassname">pinproc.</tt><tt class="descname">driver_state_pulsed_patter</tt><big>(</big><em>state</em>, <em>milliseconds_on</em>, <em>milliseconds_off</em>, <em>milliseconds_overall_patter_time</em><big>)</big><a class="headerlink" href="#pinproc.driver_state_pulsed_patter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Corresponds to <tt class="xref py py-meth docutils literal"><span class="pre">PinPROC.driver_pulsed_patter()</span></tt>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="driver-state-dictionary">
+<span id="driver-state-dict"></span><h3>Driver State Dictionary<a class="headerlink" href="#driver-state-dictionary" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Key</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">driverNum</span></tt></td>
+<td>Hardware driver number.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">outputDriveTime</span></tt></td>
+<td>Output drive time., 0-255.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">polarity</span></tt></td>
+<td>Polarity of the driver.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">state</span></tt></td>
+<td>On or off: 1 or 0.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">waitForFirstTimeSlot</span></tt></td>
+<td>1 instructs P-ROC to wait for the next time slot.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">timeslots</span></tt></td>
+<td>32-bit driver schedule.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">patterOnTime</span></tt></td>
+<td>0-127.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">patterOffTime</span></tt></td>
+<td>0-127.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">patterEnable</span></tt></td>
+<td>0 or 1 to enable patter behavior.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="event-type-constants">
+<span id="id2"></span><h3>Event Type Constants<a class="headerlink" href="#event-type-constants" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt id="pinproc.EventTypeSwitchClosedDebounced">
+<tt class="descclassname">pinproc.</tt><tt class="descname">EventTypeSwitchClosedDebounced</tt><a class="headerlink" href="#pinproc.EventTypeSwitchClosedDebounced" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pinproc.EventTypeSwitchOpenDebounced">
+<tt class="descclassname">pinproc.</tt><tt class="descname">EventTypeSwitchOpenDebounced</tt><a class="headerlink" href="#pinproc.EventTypeSwitchOpenDebounced" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pinproc.EventTypeSwitchClosedNondebounced">
+<tt class="descclassname">pinproc.</tt><tt class="descname">EventTypeSwitchClosedNondebounced</tt><a class="headerlink" href="#pinproc.EventTypeSwitchClosedNondebounced" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pinproc.EventTypeSwitchOpenNondebounced">
+<tt class="descclassname">pinproc.</tt><tt class="descname">EventTypeSwitchOpenNondebounced</tt><a class="headerlink" href="#pinproc.EventTypeSwitchOpenNondebounced" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pinproc.EventTypeDMDFrameDisplayed">
+<tt class="descclassname">pinproc.</tt><tt class="descname">EventTypeDMDFrameDisplayed</tt><a class="headerlink" href="#pinproc.EventTypeDMDFrameDisplayed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="machine-type-constants">
+<span id="id3"></span><h3>Machine Type Constants<a class="headerlink" href="#machine-type-constants" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt id="pinproc.MachineTypeWPC">
+<tt class="descclassname">pinproc.</tt><tt class="descname">MachineTypeWPC</tt><a class="headerlink" href="#pinproc.MachineTypeWPC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pinproc.MachineTypeWPC95">
+<tt class="descclassname">pinproc.</tt><tt class="descname">MachineTypeWPC95</tt><a class="headerlink" href="#pinproc.MachineTypeWPC95" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pinproc.MachineTypeWPCAlphanumeric">
+<tt class="descclassname">pinproc.</tt><tt class="descname">MachineTypeWPCAlphanumeric</tt><a class="headerlink" href="#pinproc.MachineTypeWPCAlphanumeric" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pinproc.MachineTypeSternSAM">
+<tt class="descclassname">pinproc.</tt><tt class="descname">MachineTypeSternSAM</tt><a class="headerlink" href="#pinproc.MachineTypeSternSAM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pinproc.MachineTypeSternWhitestar">
+<tt class="descclassname">pinproc.</tt><tt class="descname">MachineTypeSternWhitestar</tt><a class="headerlink" href="#pinproc.MachineTypeSternWhitestar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pinproc.MachineTypeCustom">
+<tt class="descclassname">pinproc.</tt><tt class="descname">MachineTypeCustom</tt><a class="headerlink" href="#pinproc.MachineTypeCustom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="auxiliary-command-functions">
+<span id="aux-command-functions"></span><h3>Auxiliary Command Functions<a class="headerlink" href="#auxiliary-command-functions" title="Permalink to this headline">¶</a></h3>
+<p>Auxiliary bus commands provide a way to control auxiliary bus devices, like alphanumeric displays or custom displays found on various playfields.  When written to the P-ROC using <a class="reference internal" href="#pinproc.pinproc.PinPROC.aux_send_commands" title="pinproc.pinproc.PinPROC.aux_send_commands"><tt class="xref py py-meth docutils literal"><span class="pre">aux_send_commands()</span></tt></a>, commands are stored in a 256-entry memory from which they are executed in a manner similar to a microcontroller executing commands stored in an instruction memory.</p>
+<p>Auxiliary bus devices are typically hung off of the standard multiplexed data bus that connects the P-ROC to a machine’s Power/Driver board.  They therefore receive data from the data bus only when the associated enable lines are driven.  The auxiliary bus commands are therefore made up of both data and enables.  See <a class="reference internal" href="#aux-bus-programming"><em>Auxiliary Bus Programming</em></a> for more.</p>
+<p>The following helper functions assist with creating aux commands:</p>
+<dl class="function">
+<dt id="pinproc.aux_command_output_custom">
+<tt class="descclassname">pinproc.</tt><tt class="descname">aux_command_output_custom</tt><big>(</big><em>data</em>, <em>extra_data</em>, <em>enables</em>, <em>mux_enables</em><big>)</big><a class="headerlink" href="#pinproc.aux_command_output_custom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drives <em>data and *extra_data</em> onto the P-ROC’s multiplexed data bus.</p>
+<p><em>enables</em> identifies the enable line to activate with the data, and <em>mux_enables</em> determines whether the enable line is driven directly (WPC machines) or multiplexed (Stern machines).</p>
+<p>The <em>extra_data</em> lines on the P-ROC are shared with the dot-matrix-display control signals and will only work when <em>machine_type</em> is <a class="reference internal" href="#pinproc.MachineTypeWPCAlphanumeric" title="pinproc.MachineTypeWPCAlphanumeric"><tt class="xref py py-attr docutils literal"><span class="pre">MachineTypeWPCAlphanumeric</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pinproc.aux_command_output_primary">
+<tt class="descclassname">pinproc.</tt><tt class="descname">aux_command_output_primary</tt><big>(</big><em>data</em>, <em>extra_data</em><big>)</big><a class="headerlink" href="#pinproc.aux_command_output_primary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drives <em>data</em> and <em>extra_data</em> to the primary auxiliary bus device.</p>
+<p>On <a class="reference internal" href="#pinproc.MachineTypeWPCAlphanumeric" title="pinproc.MachineTypeWPCAlphanumeric"><tt class="xref py py-attr docutils literal"><span class="pre">MachineTypeWPCAlphanumeric</span></tt></a> machines, the primary auxiliary bus enable is 8.
+On <a class="reference internal" href="#pinproc.MachineTypeSternWhitestar" title="pinproc.MachineTypeSternWhitestar"><tt class="xref py py-attr docutils literal"><span class="pre">MachineTypeSternWhitestar</span></tt></a> and <a class="reference internal" href="#pinproc.MachineTypeSternSAM" title="pinproc.MachineTypeSternSAM"><tt class="xref py py-attr docutils literal"><span class="pre">MachineTypeSternSAM</span></tt></a> machines, the primary auxiliary bus enable is 6.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pinproc.aux_command_output_secondary">
+<tt class="descclassname">pinproc.</tt><tt class="descname">aux_command_output_secondary</tt><big>(</big><em>data</em>, <em>extra_data</em><big>)</big><a class="headerlink" href="#pinproc.aux_command_output_secondary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drives <em>data</em> to the secondary auxiliary bus device.  <em>extra_data</em> is unused.</p>
+<p>There is no secondary auxiliary bus enable on <a class="reference internal" href="#pinproc.MachineTypeWPCAlphanumeric" title="pinproc.MachineTypeWPCAlphanumeric"><tt class="xref py py-attr docutils literal"><span class="pre">MachineTypeWPCAlphanumeric</span></tt></a> machines.
+On <a class="reference internal" href="#pinproc.MachineTypeSternWhitestar" title="pinproc.MachineTypeSternWhitestar"><tt class="xref py py-attr docutils literal"><span class="pre">MachineTypeSternWhitestar</span></tt></a> and <a class="reference internal" href="#pinproc.MachineTypeSternSAM" title="pinproc.MachineTypeSternSAM"><tt class="xref py py-attr docutils literal"><span class="pre">MachineTypeSternSAM</span></tt></a> machines, the secondary auxiliary bus enable is 11.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pinproc.aux_command_delay">
+<tt class="descclassname">pinproc.</tt><tt class="descname">aux_command_delay</tt><big>(</big><em>delay_time</em><big>)</big><a class="headerlink" href="#pinproc.aux_command_delay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tells the auxiliary bus logic to wait for <em>delay_time</em> microseconds. Max <em>delay_time</em> is 16383.  For longer delays, consecutive delay commands can be used.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pinproc.aux_command_jump">
+<tt class="descclassname">pinproc.</tt><tt class="descname">aux_command_jump</tt><big>(</big><em>address</em><big>)</big><a class="headerlink" href="#pinproc.aux_command_jump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tells the auxiliary bus logic to jump to the specified <em>address</em> in the auxiliary bus instruction memory.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pinproc.aux_command_disable">
+<tt class="descclassname">pinproc.</tt><tt class="descname">aux_command_disable</tt><big>(</big><big>)</big><a class="headerlink" href="#pinproc.aux_command_disable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deactivates the command.  When the auxiliary bus logic reads an inactive command, it will do nothing until the command is overwritten with an active command.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="other-functions">
+<h3>Other Functions<a class="headerlink" href="#other-functions" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="pinproc.decode">
+<tt class="descclassname">pinproc.</tt><tt class="descname">decode</tt><big>(</big><em>machine_type</em>, <em>number</em><big>)</big><a class="headerlink" href="#pinproc.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a string (<em>number</em>) describing a coil, lamp, switch, or GI string into an integer P-ROC driver number.
+This allows coils and switches to be specified (for example in a YAML file) in a format that corresponds to the
+printed manual numbering and not to the actual P-ROC hardware coil or switch.</p>
+<p>The following formats are accepted: <tt class="docutils literal"><span class="pre">Cxx</span></tt> (coil), <tt class="docutils literal"><span class="pre">Lxx</span></tt> (lamp), <tt class="docutils literal"><span class="pre">Sxx</span></tt> (matrix switch), <tt class="docutils literal"><span class="pre">SFx</span></tt> (flipper grounded switch), or <tt class="docutils literal"><span class="pre">SDx</span></tt> (dedicated grounded switch).</p>
+<p>If the string does not match this format it will be converted directly into an integer.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="dmdbuffer-class">
+<h2>DMDBuffer Class<a class="headerlink" href="#dmdbuffer-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pinproc.pinproc.DMDBuffer">
+<em class="property">class </em><tt class="descclassname">pinproc.</tt><tt class="descname">DMDBuffer</tt><big>(</big><em>width</em>, <em>height</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.DMDBuffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Buffer of dots.  Initializes the buffer with a size of <cite>width</cite> x <cite>height</cite>.</p>
+<p>A dot is 8 bits/1 byte in size and can have a value between 0 and 255 (0xff).  Thus a <tt class="docutils literal"><span class="pre">DMDBuffer</span></tt> can be used to store arbitrary values (and is in the case of <a class="reference internal" href="ref/dmd.html#procgame.dmd.Font" title="procgame.dmd.Font"><tt class="xref py py-class docutils literal"><span class="pre">procgame.dmd.Font</span></tt></a>, which uses one buffer to store font character widths).  However, drawing-oriented functions such as <a class="reference internal" href="#pinproc.pinproc.DMDBuffer.copy_to_rect" title="pinproc.pinproc.DMDBuffer.copy_to_rect"><tt class="xref py py-meth docutils literal"><span class="pre">copy_to_rect()</span></tt></a> assume that the maximum value for a dot is 15 (0xf).</p>
+<dl class="method">
+<dt id="pinproc.pinproc.DMDBuffer.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#pinproc.pinproc.DMDBuffer.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the entire buffer with black dots.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.DMDBuffer.copy_to_rect">
+<tt class="descname">copy_to_rect</tt><big>(</big><em>dst</em>, <em>dst_x</em>, <em>dst_y</em>, <em>src_x</em>, <em>src_y</em>, <em>width</em>, <em>height</em>, <em>op='copy'</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.DMDBuffer.copy_to_rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies dots from this instance of <tt class="docutils literal"><span class="pre">DMDBuffer</span></tt> to <tt class="docutils literal"><span class="pre">dst</span></tt>, another <tt class="docutils literal"><span class="pre">DMDBuffer</span></tt>.  The source rectangle has its origin at (<tt class="docutils literal"><span class="pre">src_x</span></tt>, <tt class="docutils literal"><span class="pre">src_y</span></tt>) and its size is <tt class="docutils literal"><span class="pre">width</span></tt> x <tt class="docutils literal"><span class="pre">height</span></tt>.  It is copied to a rectangle in the <tt class="docutils literal"><span class="pre">dst</span></tt> buffer with its origin at (<tt class="docutils literal"><span class="pre">dst_x</span></tt>, <tt class="docutils literal"><span class="pre">dst_y</span></tt>).</p>
+<p><tt class="docutils literal"><span class="pre">copy_to_rect()</span></tt> will adjust the rectangle to fit within the bounds of the source buffer, and will only copy those dots that would be within the bounds at the destination.  This allows negative (out of bounds) origins to be used for the developer&#8217;s convenience.</p>
+<p>The <tt class="docutils literal"><span class="pre">op</span></tt> parameter, or operation, describes how the dots are gathered and applied.  The following are valid <tt class="docutils literal"><span class="pre">op</span></tt> parameter values (all are strings):</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">'copy'</span></tt></dt>
+<dd>Copies dots from the source to the destination.</dd>
+<dt><tt class="docutils literal"><span class="pre">'add'</span></tt></dt>
+<dd>Adds the value of the source dot to that of the destination dot.  The result is capped at 15 (0xf).</dd>
+<dt><tt class="docutils literal"><span class="pre">'sub'</span></tt></dt>
+<dd>Subtracts the value of the source dot from the destination dot.  The result will have a minimum value of 0.</dd>
+<dt><tt class="docutils literal"><span class="pre">'blacksrc'</span></tt></dt>
+<dd>Like copy, except it only copies the dot from source to destination if the destination dot is non-zero.  This allows for primitive alpha channels.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.DMDBuffer.fill_rect">
+<tt class="descname">fill_rect</tt><big>(</big><em>x</em>, <em>y</em>, <em>width</em>, <em>height</em>, <em>value</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.DMDBuffer.fill_rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the rectangle in this buffer described by origin <tt class="docutils literal"><span class="pre">x</span></tt>, <tt class="docutils literal"><span class="pre">y</span></tt> with size <tt class="docutils literal"><span class="pre">width</span></tt> x <tt class="docutils literal"><span class="pre">height</span></tt> with dot value <tt class="docutils literal"><span class="pre">value</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.DMDBuffer.get_data">
+<tt class="descname">get_data</tt><big>(</big><big>)</big><a class="headerlink" href="#pinproc.pinproc.DMDBuffer.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the contents of the buffer as a string of length <tt class="docutils literal"><span class="pre">width</span></tt> x <tt class="docutils literal"><span class="pre">height</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.DMDBuffer.get_dot">
+<tt class="descname">get_dot</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.DMDBuffer.get_dot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the dot value at position <tt class="docutils literal"><span class="pre">x</span></tt>, <tt class="docutils literal"><span class="pre">y</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.DMDBuffer.set_data">
+<tt class="descname">set_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.DMDBuffer.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces contents of this buffer with the string <tt class="docutils literal"><span class="pre">data</span></tt>.  A <tt class="docutils literal"><span class="pre">ValueError</span></tt> exception is thrown if the string&#8217;s length is not equal to  <tt class="docutils literal"><span class="pre">width</span> <span class="pre">*</span> <span class="pre">height</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pinproc.pinproc.DMDBuffer.set_dot">
+<tt class="descname">set_dot</tt><big>(</big><em>x</em>, <em>y</em>, <em>value</em><big>)</big><a class="headerlink" href="#pinproc.pinproc.DMDBuffer.set_dot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assigns the value of the dot at <tt class="docutils literal"><span class="pre">x</span></tt>, <tt class="docutils literal"><span class="pre">y</span></tt> to <tt class="docutils literal"><span class="pre">value</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="auxiliary-bus-programming">
+<span id="aux-bus-programming"></span><h2>Auxiliary Bus Programming<a class="headerlink" href="#auxiliary-bus-programming" title="Permalink to this headline">¶</a></h2>
+<p>After reset, the auxiliary bus logic waits for a command to be written to address 0 of the auxiliary bus instruction memory.  It’s therefore recommended that the programmer writes a full list of commands starting at address 1, and then follows that up with a Jump to address 1 from address 0.  Doing this ensures that the entire sequence of commands is in the memory before the auxiliary bus logic starts trying to execute them.</p>
+<p>Since the auxiliary bus makes use of the same data/enables bus that’s used for all of the drivers, it’s important to not let the auxiliary bus maintain ownership of the data/enables bus for extended periods of time.  It’s therefore recommended that the programmer insert a delay command of 1000 microseconds at least once in a looping auxiliary bus command sequence.</p>
+<p>An example auxiliary bus sequence is shown below.  This list of commands results in the data values of 0-15 being written sequentially and repeatedly to the primary auxiliary bus device:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Initialize a list.</span>
+<span class="n">commands</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c"># Make sure the command at address 0 is disabled so the program doesn’t start</span>
+<span class="c"># running before it is fully written into the instruction memory.</span>
+<span class="n">commands</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pinproc</span><span class="o">.</span><span class="n">aux_command_disable</span><span class="p">()]</span>
+
+<span class="c"># Add the commands to write out the incrementing data pattern.</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">16</span><span class="p">):</span>
+  <span class="n">commands</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pinproc</span><span class="o">.</span><span class="n">aux_command_output_primary</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">)]</span>
+
+<span class="c"># Delay for 1000 microseconds.</span>
+<span class="n">commands</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pinproc</span><span class="o">.</span><span class="n">aux_command_delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">)]</span>
+
+<span class="c"># Jump back to address 1 to loop the program.</span>
+<span class="n">commands</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pinproc</span><span class="o">.</span><span class="n">aux_command_jump</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span>
+
+<span class="c"># Send the commands to the P-ROC.</span>
+<span class="n">pinproc</span><span class="o">.</span><span class="n">send_commands</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">commands</span><span class="p">)</span>
+
+<span class="c"># Clear the commands list for a new sequence.</span>
+<span class="n">commands</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c"># Jump from address 0 to address 1 to begin the program.</span>
+<span class="n">commands</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pinproc</span><span class="o">.</span><span class="n">aux_command_jump</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span>
+
+<span class="c"># Send the command to the P-ROC.</span>
+<span class="n">pinproc</span><span class="o">.</span><span class="n">aux_send_commands</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">commands</span><span class="p">)</span>
+
+<span class="c"># Note - to stop the program, disable the jump at address 18</span>
+<span class="c"># commands = []</span>
+<span class="c"># commands += [pinproc.aux_command_disable()]</span>
+<span class="c"># pinproc.aux_send_commands(18,commands)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pinproc Module Reference</a><ul>
+<li><a class="reference internal" href="#pinproc-class">PinPROC Class</a></li>
+<li><a class="reference internal" href="#functions-constants-and-data-structures">Functions, Constants, and Data Structures</a><ul>
+<li><a class="reference internal" href="#driver-state-functions">Driver State Functions</a></li>
+<li><a class="reference internal" href="#driver-state-dictionary">Driver State Dictionary</a></li>
+<li><a class="reference internal" href="#event-type-constants">Event Type Constants</a></li>
+<li><a class="reference internal" href="#machine-type-constants">Machine Type Constants</a></li>
+<li><a class="reference internal" href="#auxiliary-command-functions">Auxiliary Command Functions</a></li>
+<li><a class="reference internal" href="#other-functions">Other Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dmdbuffer-class">DMDBuffer Class</a></li>
+<li><a class="reference internal" href="#auxiliary-bus-programming">Auxiliary Bus Programming</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ref/sound.html"
+                        title="previous chapter">sound Submodule</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tools.html"
+                        title="next chapter">procgame Command Line Tool</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/ref-pinproc.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tools.html" title="procgame Command Line Tool"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ref/sound.html" title="sound Submodule"
+             >previous</a> |</li>
+        <li><a href="index.html">pyprocgame  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

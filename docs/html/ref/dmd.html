@@ -1,0 +1,697 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dmd Submodule &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="../index.html" />
+    <link rel="up" title="procgame Module Reference" href="../ref-index.html" />
+    <link rel="next" title="events Submodule" href="events.html" />
+    <link rel="prev" title="desktop Submodule" href="desktop.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="events.html" title="events Submodule"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="desktop.html" title="desktop Submodule"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" accesskey="U">procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-procgame.dmd">
+<span id="dmd-submodule"></span><h1>dmd Submodule<a class="headerlink" href="#module-procgame.dmd" title="Permalink to this headline">¶</a></h1>
+<p>The dmd submodule provides classes and functions to facilitate generating both text and graphics for on the dot matrix display:</p>
+<ul class="simple">
+<li>Load and save <tt class="file docutils literal"><span class="pre">.dmd</span></tt> files from/to disk using <a class="reference internal" href="#procgame.dmd.Animation.load" title="procgame.dmd.Animation.load"><tt class="xref py py-meth docutils literal"><span class="pre">Animation.load()</span></tt></a> and <a class="reference internal" href="#procgame.dmd.Animation.save" title="procgame.dmd.Animation.save"><tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt></a>.</li>
+<li>Extract and reorder individual <a class="reference internal" href="#procgame.dmd.Frame" title="procgame.dmd.Frame"><tt class="xref py py-class docutils literal"><span class="pre">Frame</span></tt></a> objects that compose an <a class="reference internal" href="#procgame.dmd.Animation" title="procgame.dmd.Animation"><tt class="xref py py-class docutils literal"><span class="pre">Animation</span></tt></a> with <a class="reference internal" href="#procgame.dmd.Animation.frames" title="procgame.dmd.Animation.frames"><tt class="xref py py-attr docutils literal"><span class="pre">Animation.frames</span></tt></a>.</li>
+<li>Use <a class="reference internal" href="#procgame.dmd.Layer" title="procgame.dmd.Layer"><tt class="xref py py-class docutils literal"><span class="pre">Layer</span></tt></a> subclasses such as <a class="reference internal" href="#procgame.dmd.GroupedLayer" title="procgame.dmd.GroupedLayer"><tt class="xref py py-class docutils literal"><span class="pre">GroupedLayer</span></tt></a> to control and generate sophisticated sequences.</li>
+<li>Display a sequence of frames using <a class="reference internal" href="#procgame.dmd.AnimatedLayer" title="procgame.dmd.AnimatedLayer"><tt class="xref py py-class docutils literal"><span class="pre">AnimatedLayer</span></tt></a>.</li>
+<li>Automatically update the DMD based on the active modes using <a class="reference internal" href="#procgame.dmd.DisplayController" title="procgame.dmd.DisplayController"><tt class="xref py py-class docutils literal"><span class="pre">DisplayController</span></tt></a>.</li>
+</ul>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The pyprocgame display system is designed specifically to take advantage of the mode queue architecture.  This provides the game developer with a relatively simple means to supply the player with the most relevant information at all times.</p>
+<p>The <a class="reference internal" href="#procgame.dmd.DisplayController" title="procgame.dmd.DisplayController"><tt class="xref py py-class docutils literal"><span class="pre">DisplayController</span></tt></a> class is the glue that makes this architecture work.  If you wish to implement a different architecture you can certainly ignore <a class="reference internal" href="#procgame.dmd.DisplayController" title="procgame.dmd.DisplayController"><tt class="xref py py-class docutils literal"><span class="pre">DisplayController</span></tt></a> but most developers will want to take advantage of it.</p>
+<p>When integrated within your <a class="reference internal" href="game.html#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">GameController</span></tt></a> subclass, <a class="reference internal" href="#procgame.dmd.DisplayController" title="procgame.dmd.DisplayController"><tt class="xref py py-class docutils literal"><span class="pre">DisplayController</span></tt></a>&#8216;s <a class="reference internal" href="#procgame.dmd.DisplayController.update" title="procgame.dmd.DisplayController.update"><tt class="xref py py-meth docutils literal"><span class="pre">update()</span></tt></a> method is called whenever the DMD is ready for a new frame.  <tt class="xref py py-meth docutils literal"><span class="pre">update()</span></tt> iterates over the mode queue in search of modes that have a <tt class="xref py py-attr docutils literal"><span class="pre">layer</span></tt> attribute.  This attribute should be an instance of a subclass of <a class="reference internal" href="#procgame.dmd.Layer" title="procgame.dmd.Layer"><tt class="xref py py-class docutils literal"><span class="pre">Layer</span></tt></a>, which provides a sequence of frames, one at a time, via its <a class="reference internal" href="#procgame.dmd.Layer.next_frame" title="procgame.dmd.Layer.next_frame"><tt class="xref py py-meth docutils literal"><span class="pre">next_frame()</span></tt></a> method.  If a mode does not provide this layer attribute it is ignored; otherwise the next frame is obtained and the frames are composited from bottom to top (lowest priority modes being at the bottom).</p>
+<p>All layers have an <a class="reference internal" href="#procgame.dmd.Layer.opaque" title="procgame.dmd.Layer.opaque"><tt class="xref py py-attr docutils literal"><span class="pre">Layer.opaque</span></tt></a> attribute, which defaults to <tt class="docutils literal"><span class="pre">False</span></tt>.  If a layer is opaque, no layers below that one (with lower priority) will be fetched or composited.  Also, if a layer&#8217;s <tt class="xref py py-meth docutils literal"><span class="pre">next_frame()</span></tt> method returns <tt class="docutils literal"><span class="pre">None</span></tt> it is considered to be transparent.</p>
+<p>By using this mode-layer arrangement the developer has a direct connection between modes and what&#8217;s being displayed, without having to manage a separate display queue.  For example, the score display might be a layer associated with a low-priority mode.  If the game enters a hurry-up mode, which has a higher priority due to its interest in switch events, the hurry-up mode can supply its own layer which is automatically displayed above the score layer.</p>
+</div>
+<div class="section" id="core-classes">
+<h2>Core Classes<a class="headerlink" href="#core-classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="animation">
+<h3>Animation<a class="headerlink" href="#animation" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.dmd.Animation">
+<em class="property">class </em><tt class="descclassname">procgame.dmd.</tt><tt class="descname">Animation</tt><a class="headerlink" href="#procgame.dmd.Animation" title="Permalink to this definition">¶</a></dt>
+<dd><p>An ordered collection of <a class="reference internal" href="#procgame.dmd.Frame" title="procgame.dmd.Frame"><tt class="xref py py-class docutils literal"><span class="pre">Frame</span></tt></a> objects.</p>
+<dl class="attribute">
+<dt id="procgame.dmd.Animation.frames">
+<tt class="descname">frames</tt><em class="property"> = []</em><a class="headerlink" href="#procgame.dmd.Animation.frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ordered collection of <a class="reference internal" href="#procgame.dmd.Frame" title="procgame.dmd.Frame"><tt class="xref py py-class docutils literal"><span class="pre">Frame</span></tt></a> objects.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Animation.height">
+<tt class="descname">height</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.dmd.Animation.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Height of each of the animation frames in dots.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.Animation.load">
+<tt class="descname">load</tt><big>(</big><em>filename</em>, <em>allow_cache=True</em><big>)</big><a class="headerlink" href="#procgame.dmd.Animation.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads <em>filename</em> from disk.  The native animation format is the
+<a class="reference internal" href="#dmd-format"><em>DMD File Format Specification</em></a>, which can be created using <a class="reference internal" href="../tools.html#tool-dmdconvert"><em>dmdconvert</em></a>, or
+<a class="reference external" href="https://github.com/preble/DMDAnimator">DMDAnimator</a>.</p>
+<p>This method also supports loading common image formats such as PNG, GIF,
+and so forth using
+<a class="reference external" href="http://www.pythonware.com/products/pil/">Python Imaging Library</a>.
+Note that loading such images can be time-consuming.  As such, a caching
+facility is provided.  To enable animation caching, provide a path using the
+<tt class="docutils literal"><span class="pre">dmd_cache_path</span></tt> key in <a class="reference internal" href="../install.html#config-yaml"><em>System Configuration File</em></a>.  Note that only non-native
+images are cached (.dmd files are not cached).</p>
+<p><em>filename</em> can be a string or a list.  If it is a list, the images pointed
+to will be appended to the animation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.Animation.save">
+<tt class="descname">save</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#procgame.dmd.Animation.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the animation as a .dmd file at the given location, <cite>filename</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Animation.width">
+<tt class="descname">width</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.dmd.Animation.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Width of each of the animation frames in dots.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="displaycontroller">
+<h3>DisplayController<a class="headerlink" href="#displaycontroller" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.dmd.DisplayController">
+<em class="property">class </em><tt class="descclassname">procgame.dmd.</tt><tt class="descname">DisplayController</tt><big>(</big><em>game</em>, <em>width=128</em>, <em>height=32</em>, <em>message_font=None</em><big>)</big><a class="headerlink" href="#procgame.dmd.DisplayController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages the process of obtaining DMD frames from active modes and compositing them together for
+display on the DMD.</p>
+<p><strong>Using DisplayController</strong></p>
+<ol class="arabic">
+<li><p class="first">Add a <a class="reference internal" href="#procgame.dmd.DisplayController" title="procgame.dmd.DisplayController"><tt class="xref py py-class docutils literal"><span class="pre">DisplayController</span></tt></a> instance to your <a class="reference internal" href="game.html#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">GameController</span></tt></a> subclass:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">GameController</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">machine_type</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">Game</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">machine_type</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dmd</span> <span class="o">=</span> <span class="n">dmd</span><span class="o">.</span><span class="n">DisplayController</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+                                     <span class="n">message_font</span><span class="o">=</span><span class="n">font_tiny7</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">In your subclass&#8217;s <a class="reference internal" href="game.html#procgame.game.GameController.dmd_event" title="procgame.game.GameController.dmd_event"><tt class="xref py py-meth docutils literal"><span class="pre">dmd_event()</span></tt></a> call <a class="reference internal" href="#procgame.dmd.DisplayController.update" title="procgame.dmd.DisplayController.update"><tt class="xref py py-meth docutils literal"><span class="pre">DisplayController.update()</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">dmd_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dmd</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<dl class="attribute">
+<dt id="procgame.dmd.DisplayController.frame_handlers">
+<tt class="descname">frame_handlers</tt><em class="property"> = []</em><a class="headerlink" href="#procgame.dmd.DisplayController.frame_handlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set, frames obtained by <a class="reference internal" href="#procgame.dmd.DisplayController.update" title="procgame.dmd.DisplayController.update"><tt class="xref py py-meth docutils literal"><span class="pre">update()</span></tt></a> will be sent to the functions
+in this list with the frame as the only parameter.</p>
+<p>This list is initialized to contain only <tt class="docutils literal"><span class="pre">self.game.proc.dmd_draw</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.DisplayController.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.dmd.DisplayController.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterates over <a class="reference internal" href="game.html#procgame.game.GameController.modes" title="procgame.game.GameController.modes"><tt class="xref py py-attr docutils literal"><span class="pre">procgame.game.GameController.modes</span></tt></a> from lowest to highest
+and composites a DMD image for this
+point in time by checking for a <tt class="docutils literal"><span class="pre">layer</span></tt> attribute on each <a class="reference internal" href="game.html#procgame.game.Mode" title="procgame.game.Mode"><tt class="xref py py-class docutils literal"><span class="pre">Mode</span></tt></a>.
+If the mode has a layer attribute, that layer&#8217;s <a class="reference internal" href="#procgame.dmd.Layer.composite_next" title="procgame.dmd.Layer.composite_next"><tt class="xref py py-meth docutils literal"><span class="pre">composite_next()</span></tt></a> method is called
+to apply that layer&#8217;s next frame to the frame in progress.</p>
+<p>The resulting frame is sent to the <a class="reference internal" href="#procgame.dmd.DisplayController.frame_handlers" title="procgame.dmd.DisplayController.frame_handlers"><tt class="xref py py-attr docutils literal"><span class="pre">frame_handlers</span></tt></a> and then returned from this method.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="font">
+<h3>Font<a class="headerlink" href="#font" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.dmd.Font">
+<em class="property">class </em><tt class="descclassname">procgame.dmd.</tt><tt class="descname">Font</tt><big>(</big><em>filename=None</em><big>)</big><a class="headerlink" href="#procgame.dmd.Font" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable-width bitmap font.</p>
+<p>Fonts can be loaded manually, using <a class="reference internal" href="#procgame.dmd.Font.load" title="procgame.dmd.Font.load"><tt class="xref py py-meth docutils literal"><span class="pre">load()</span></tt></a>, or with the <a class="reference internal" href="#procgame.dmd.font_named" title="procgame.dmd.font_named"><tt class="xref py py-func docutils literal"><span class="pre">font_named()</span></tt></a> utility function
+which supports searching a font path.</p>
+<dl class="attribute">
+<dt id="procgame.dmd.Font.char_widths">
+<tt class="descname">char_widths</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.dmd.Font.char_widths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array of dot widths for each character, 0-indexed from &lt;space&gt;.
+This array is populated by <a class="reference internal" href="#procgame.dmd.Font.load" title="procgame.dmd.Font.load"><tt class="xref py py-meth docutils literal"><span class="pre">load()</span></tt></a>.  You may alter this array
+in order to update the font and then <a class="reference internal" href="#procgame.dmd.Font.save" title="procgame.dmd.Font.save"><tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt></a> it.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Font.composite_op">
+<tt class="descname">composite_op</tt><em class="property"> = 'copy'</em><a class="headerlink" href="#procgame.dmd.Font.composite_op" title="Permalink to this definition">¶</a></dt>
+<dd><p>Composite operation used by <a class="reference internal" href="#procgame.dmd.Font.draw" title="procgame.dmd.Font.draw"><tt class="xref py py-meth docutils literal"><span class="pre">draw()</span></tt></a> when calling <tt class="xref py py-meth docutils literal"><span class="pre">copy_rect()</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.Font.draw">
+<tt class="descname">draw</tt><big>(</big><em>frame</em>, <em>text</em>, <em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#procgame.dmd.Font.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses this font&#8217;s characters to draw the given string at the given position.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.Font.draw_in_rect">
+<tt class="descname">draw_in_rect</tt><big>(</big><em>frame</em>, <em>text</em>, <em>rect=(0</em>, <em>0</em>, <em>128</em>, <em>32)</em>, <em>anchor=0</em><big>)</big><a class="headerlink" href="#procgame.dmd.Font.draw_in_rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw <em>text</em> on <em>frame</em> within the given <em>rect</em>, aligned in accordance with <em>anchor</em>.</p>
+<p><em>rect</em> is a tuple of length 4: (origin_x, origin_y, height, width). 0,0 is in the upper left (NW) corner.</p>
+<p><em>anchor</em> is one of:
+<tt class="xref py py-attr docutils literal"><span class="pre">AnchorN</span></tt>,
+<tt class="xref py py-attr docutils literal"><span class="pre">AnchorE</span></tt>,
+<tt class="xref py py-attr docutils literal"><span class="pre">AnchorS</span></tt>,
+<tt class="xref py py-attr docutils literal"><span class="pre">AnchorW</span></tt>,
+<tt class="xref py py-attr docutils literal"><span class="pre">AnchorNE</span></tt>,
+<tt class="xref py py-attr docutils literal"><span class="pre">AnchorNW</span></tt>,
+<tt class="xref py py-attr docutils literal"><span class="pre">AnchorSE</span></tt>,
+<tt class="xref py py-attr docutils literal"><span class="pre">AnchorSW</span></tt>, or
+<tt class="xref py py-attr docutils literal"><span class="pre">AnchorCenter</span></tt> (the default).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.Font.load">
+<tt class="descname">load</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#procgame.dmd.Font.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the font from a <tt class="docutils literal"><span class="pre">.dmd</span></tt> file (see <a class="reference internal" href="#procgame.dmd.Animation.load" title="procgame.dmd.Animation.load"><tt class="xref py py-meth docutils literal"><span class="pre">Animation.load()</span></tt></a>).
+Fonts are stored in .dmd files with frame 0 containing the bitmap data
+and frame 1 containing the character widths.  96 characters (32..127,
+ASCII printables) are stored in a 10x10 grid, starting with space (<tt class="docutils literal"><span class="pre">'</span> <span class="pre">'</span></tt>) 
+in the upper left at 0, 0.  The character widths are stored in the second frame
+within the &#8216;raw&#8217; bitmap data in bytes 0-95.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.Font.save">
+<tt class="descname">save</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#procgame.dmd.Font.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the font to the given path.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.Font.size">
+<tt class="descname">size</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#procgame.dmd.Font.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a tuple of the width and height of this text as rendered with this font.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Font.tracking">
+<tt class="descname">tracking</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.dmd.Font.tracking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of dots to adjust the horizontal position between characters, in addition to the last character&#8217;s width.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="frame">
+<h3>Frame<a class="headerlink" href="#frame" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.dmd.Frame">
+<em class="property">class </em><tt class="descclassname">procgame.dmd.</tt><tt class="descname">Frame</tt><big>(</big><em>width</em>, <em>height</em><big>)</big><a class="headerlink" href="#procgame.dmd.Frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>DMD frame/bitmap.</p>
+<p>Subclass of <tt class="xref py py-class docutils literal"><span class="pre">pinproc.DMDBuffer</span></tt>.</p>
+<dl class="method">
+<dt id="procgame.dmd.Frame.ascii">
+<tt class="descname">ascii</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.dmd.Frame.ascii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an ASCII representation of itself.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.Frame.copy">
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.dmd.Frame.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of itself.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="procgame.dmd.Frame.copy_rect">
+<em class="property">static </em><tt class="descname">copy_rect</tt><big>(</big><em>dst</em>, <em>dst_x</em>, <em>dst_y</em>, <em>src</em>, <em>src_x</em>, <em>src_y</em>, <em>width</em>, <em>height</em>, <em>op='copy'</em><big>)</big><a class="headerlink" href="#procgame.dmd.Frame.copy_rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Static method which performs some type checking before calling <tt class="xref py py-meth docutils literal"><span class="pre">pinproc.DMDBuffer.copy_to_rect()</span></tt>.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="procgame.dmd.Frame.create_with_text">
+<em class="property">static </em><tt class="descname">create_with_text</tt><big>(</big><em>lines</em>, <em>palette={' ': 0</em>, <em>'*': 15}</em><big>)</big><a class="headerlink" href="#procgame.dmd.Frame.create_with_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a frame based on text.</p>
+<p>This class method can be used to generate small sprites within the game&#8217;s source code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="o">.</span><span class="n">create_with_text</span><span class="p">(</span><span class="n">lines</span><span class="o">=</span><span class="p">[</span> \
+    <span class="s">&#39;*+++*&#39;</span><span class="p">,</span> \
+    <span class="s">&#39; *+* &#39;</span><span class="p">,</span> \
+    <span class="s">&#39;  *  &#39;</span><span class="p">],</span> <span class="n">palette</span><span class="o">=</span><span class="p">{</span><span class="s">&#39; &#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;+&#39;</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">:</span><span class="mi">15</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Frame.height">
+<tt class="descname">height</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.dmd.Frame.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Height of the frame in dots.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.Frame.subframe">
+<tt class="descname">subframe</tt><big>(</big><em>x</em>, <em>y</em>, <em>width</em>, <em>height</em><big>)</big><a class="headerlink" href="#procgame.dmd.Frame.subframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a new frame based on a sub rectangle of this frame.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Frame.width">
+<tt class="descname">width</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.dmd.Frame.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Width of the frame in dots.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="layer">
+<h3>Layer<a class="headerlink" href="#layer" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.dmd.Layer">
+<em class="property">class </em><tt class="descclassname">procgame.dmd.</tt><tt class="descname">Layer</tt><big>(</big><em>opaque=False</em><big>)</big><a class="headerlink" href="#procgame.dmd.Layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <tt class="docutils literal"><span class="pre">Layer</span></tt> class is the basis for the pyprocgame display architecture.
+Subclasses override <a class="reference internal" href="#procgame.dmd.Layer.next_frame" title="procgame.dmd.Layer.next_frame"><tt class="xref py py-meth docutils literal"><span class="pre">next_frame()</span></tt></a> to provide a frame for the current moment in time.
+Handles compositing of provided frames and applying transitions within a <a class="reference internal" href="#procgame.dmd.DisplayController" title="procgame.dmd.DisplayController"><tt class="xref py py-class docutils literal"><span class="pre">DisplayController</span></tt></a> context.</p>
+<dl class="method">
+<dt id="procgame.dmd.Layer.composite_next">
+<tt class="descname">composite_next</tt><big>(</big><em>target</em><big>)</big><a class="headerlink" href="#procgame.dmd.Layer.composite_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Composites the next frame of this layer onto the given target buffer.
+Called by <a class="reference internal" href="#procgame.dmd.DisplayController.update" title="procgame.dmd.DisplayController.update"><tt class="xref py py-meth docutils literal"><span class="pre">DisplayController.update()</span></tt></a>.
+Generally subclasses should not override this method; implementing <a class="reference internal" href="#procgame.dmd.Layer.next_frame" title="procgame.dmd.Layer.next_frame"><tt class="xref py py-meth docutils literal"><span class="pre">next_frame()</span></tt></a> is recommended instead.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Layer.composite_op">
+<tt class="descname">composite_op</tt><em class="property"> = 'copy'</em><a class="headerlink" href="#procgame.dmd.Layer.composite_op" title="Permalink to this definition">¶</a></dt>
+<dd><p>Composite operation used by <a class="reference internal" href="#procgame.dmd.Layer.composite_next" title="procgame.dmd.Layer.composite_next"><tt class="xref py py-meth docutils literal"><span class="pre">composite_next()</span></tt></a> when calling <tt class="xref py py-meth docutils literal"><span class="pre">copy_rect()</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Layer.enabled">
+<tt class="descname">enabled</tt><em class="property"> = True</em><a class="headerlink" href="#procgame.dmd.Layer.enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <cite>False</cite>, <a class="reference internal" href="#procgame.dmd.DisplayController" title="procgame.dmd.DisplayController"><tt class="xref py py-class docutils literal"><span class="pre">DisplayController</span></tt></a> will ignore this layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.Layer.next_frame">
+<tt class="descname">next_frame</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.dmd.Layer.next_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an instance of a Frame object to be shown, or None if there is no frame.
+The default implementation returns <tt class="docutils literal"><span class="pre">None</span></tt>; subclasses should implement this method.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Layer.opaque">
+<tt class="descname">opaque</tt><em class="property"> = False</em><a class="headerlink" href="#procgame.dmd.Layer.opaque" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether layers below this one will be rendered.
+If <cite>True</cite>, the <a class="reference internal" href="#procgame.dmd.DisplayController" title="procgame.dmd.DisplayController"><tt class="xref py py-class docutils literal"><span class="pre">DisplayController</span></tt></a> will not render any layers after this one
+(such as from modes with lower priorities &#8211; see <a class="reference internal" href="#procgame.dmd.DisplayController" title="procgame.dmd.DisplayController"><tt class="xref py py-class docutils literal"><span class="pre">DisplayController</span></tt></a> for more information).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.Layer.set_target_position">
+<tt class="descname">set_target_position</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#procgame.dmd.Layer.set_target_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setter for <a class="reference internal" href="#procgame.dmd.Layer.target_x" title="procgame.dmd.Layer.target_x"><tt class="xref py py-attr docutils literal"><span class="pre">target_x</span></tt></a> and <a class="reference internal" href="#procgame.dmd.Layer.target_y" title="procgame.dmd.Layer.target_y"><tt class="xref py py-attr docutils literal"><span class="pre">target_y</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Layer.target_x">
+<tt class="descname">target_x</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.dmd.Layer.target_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base <cite>x</cite> component of the coordinates at which this layer will be composited upon a target buffer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Layer.target_x_offset">
+<tt class="descname">target_x_offset</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.dmd.Layer.target_x_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translation component used in addition to <a class="reference internal" href="#procgame.dmd.Layer.target_x" title="procgame.dmd.Layer.target_x"><tt class="xref py py-attr docutils literal"><span class="pre">target_x</span></tt></a> as this layer&#8217;s final compositing position.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Layer.target_y">
+<tt class="descname">target_y</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.dmd.Layer.target_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base <cite>y</cite> component of the coordinates at which this layer will be composited upon a target buffer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Layer.target_y_offset">
+<tt class="descname">target_y_offset</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.dmd.Layer.target_y_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translation component used in addition to <a class="reference internal" href="#procgame.dmd.Layer.target_y" title="procgame.dmd.Layer.target_y"><tt class="xref py py-attr docutils literal"><span class="pre">target_y</span></tt></a> as this layer&#8217;s final compositing position.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.Layer.transition">
+<tt class="descname">transition</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.dmd.Layer.transition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transition which <a class="reference internal" href="#procgame.dmd.Layer.composite_next" title="procgame.dmd.Layer.composite_next"><tt class="xref py py-meth docutils literal"><span class="pre">composite_next()</span></tt></a> applies to the result of <a class="reference internal" href="#procgame.dmd.Layer.next_frame" title="procgame.dmd.Layer.next_frame"><tt class="xref py py-meth docutils literal"><span class="pre">next_frame()</span></tt></a> prior to compositing upon the output.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="layer-subclasses">
+<h2>Layer Subclasses<a class="headerlink" href="#layer-subclasses" title="Permalink to this headline">¶</a></h2>
+<p>Subclasses of <a class="reference internal" href="#procgame.dmd.Layer" title="procgame.dmd.Layer"><tt class="xref py py-class docutils literal"><span class="pre">Layer</span></tt></a> that provide building blocks for sophisticated display effects.</p>
+<div class="section" id="animatedlayer">
+<h3>AnimatedLayer<a class="headerlink" href="#animatedlayer" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.dmd.AnimatedLayer">
+<em class="property">class </em><tt class="descclassname">procgame.dmd.</tt><tt class="descname">AnimatedLayer</tt><big>(</big><em>opaque=False</em>, <em>hold=True</em>, <em>repeat=False</em>, <em>frame_time=1</em>, <em>frames=None</em><big>)</big><a class="headerlink" href="#procgame.dmd.AnimatedLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collection of frames displayed sequentially, as an animation.  Optionally holds the last frame on-screen.</p>
+<dl class="method">
+<dt id="procgame.dmd.AnimatedLayer.add_frame_listener">
+<tt class="descname">add_frame_listener</tt><big>(</big><em>frame_index</em>, <em>listener</em><big>)</big><a class="headerlink" href="#procgame.dmd.AnimatedLayer.add_frame_listener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers a method (<tt class="docutils literal"><span class="pre">listener</span></tt>) to be called when a specific 
+frame number (<tt class="docutils literal"><span class="pre">frame_index</span></tt>) in the animation has been reached.
+Negative numbers, like Python list indexes, indicate a number of
+frames from the last frame.  That is, a <tt class="docutils literal"><span class="pre">frame_index</span></tt> of -1 will
+trigger on the last frame of the animation.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.AnimatedLayer.frame_pointer">
+<tt class="descname">frame_pointer</tt><em class="property"> = 0</em><a class="headerlink" href="#procgame.dmd.AnimatedLayer.frame_pointer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index of the next frame to display.  Incremented by <a class="reference internal" href="#procgame.dmd.AnimatedLayer.next_frame" title="procgame.dmd.AnimatedLayer.next_frame"><tt class="xref py py-meth docutils literal"><span class="pre">next_frame()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.AnimatedLayer.frame_time">
+<tt class="descname">frame_time</tt><em class="property"> = 1</em><a class="headerlink" href="#procgame.dmd.AnimatedLayer.frame_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of frame times each frame should be shown on screen before advancing to the next frame.  The default is 1.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.AnimatedLayer.hold">
+<tt class="descname">hold</tt><em class="property"> = True</em><a class="headerlink" href="#procgame.dmd.AnimatedLayer.hold" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">True</span></tt> if the last frame of the animation should be held on-screen indefinitely.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.AnimatedLayer.next_frame">
+<tt class="descname">next_frame</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.dmd.AnimatedLayer.next_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the frame to be shown, or None if there is no frame.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.AnimatedLayer.repeat">
+<tt class="descname">repeat</tt><em class="property"> = False</em><a class="headerlink" href="#procgame.dmd.AnimatedLayer.repeat" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">True</span></tt> if the animation should be repeated indefinitely.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.AnimatedLayer.reset">
+<tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.dmd.AnimatedLayer.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the animation back to the first frame.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="framelayer">
+<h3>FrameLayer<a class="headerlink" href="#framelayer" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.dmd.FrameLayer">
+<em class="property">class </em><tt class="descclassname">procgame.dmd.</tt><tt class="descname">FrameLayer</tt><big>(</big><em>opaque=False</em>, <em>frame=None</em><big>)</big><a class="headerlink" href="#procgame.dmd.FrameLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a single frame.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="groupedlayer">
+<h3>GroupedLayer<a class="headerlink" href="#groupedlayer" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.dmd.GroupedLayer">
+<em class="property">class </em><tt class="descclassname">procgame.dmd.</tt><tt class="descname">GroupedLayer</tt><big>(</big><em>width</em>, <em>height</em>, <em>layers=None</em><big>)</big><a class="headerlink" href="#procgame.dmd.GroupedLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#procgame.dmd.Layer" title="procgame.dmd.Layer"><tt class="xref py py-class docutils literal"><span class="pre">Layer</span></tt></a> subclass that composites several sublayers (members of its <a class="reference internal" href="#procgame.dmd.GroupedLayer.layers" title="procgame.dmd.GroupedLayer.layers"><tt class="xref py py-attr docutils literal"><span class="pre">layers</span></tt></a> list attribute) together.</p>
+<dl class="attribute">
+<dt id="procgame.dmd.GroupedLayer.layers">
+<tt class="descname">layers</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.dmd.GroupedLayer.layers" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of layers to be composited together whenever this layer&#8217;s <a class="reference internal" href="#procgame.dmd.Layer.next_frame" title="procgame.dmd.Layer.next_frame"><tt class="xref py py-meth docutils literal"><span class="pre">next_frame()</span></tt></a> is called.</p>
+<p>Layers are composited first to last using each layer&#8217;s
+<a class="reference internal" href="#procgame.dmd.Layer.composite_next" title="procgame.dmd.Layer.composite_next"><tt class="xref py py-meth docutils literal"><span class="pre">composite_next()</span></tt></a> method.  Compositing is ended after a layer that returns
+non-<tt class="docutils literal"><span class="pre">None</span></tt> from <a class="reference internal" href="#procgame.dmd.Layer.composite_next" title="procgame.dmd.Layer.composite_next"><tt class="xref py py-meth docutils literal"><span class="pre">composite_next()</span></tt></a> is <a class="reference internal" href="#procgame.dmd.Layer.opaque" title="procgame.dmd.Layer.opaque"><tt class="xref py py-attr docutils literal"><span class="pre">opaque</span></tt></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="scriptedlayer">
+<h3>ScriptedLayer<a class="headerlink" href="#scriptedlayer" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.dmd.ScriptedLayer">
+<em class="property">class </em><tt class="descclassname">procgame.dmd.</tt><tt class="descname">ScriptedLayer</tt><big>(</big><em>width</em>, <em>height</em>, <em>script</em><big>)</big><a class="headerlink" href="#procgame.dmd.ScriptedLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a set of layers based on a simple script.</p>
+<p><strong>Script Format</strong></p>
+<p>The script is an list of dictionaries.  Each dictionary contains two keys: <tt class="docutils literal"><span class="pre">seconds</span></tt> and
+<tt class="docutils literal"><span class="pre">layer</span></tt>.  <tt class="docutils literal"><span class="pre">seconds</span></tt> is the number of seconds that <tt class="docutils literal"><span class="pre">layer</span></tt> will be displayed before 
+advancing to the next script element.</p>
+<p>If <tt class="docutils literal"><span class="pre">layer</span></tt> is <tt class="docutils literal"><span class="pre">None</span></tt>, no frame will be returned by this layer for the duration of that script
+element.</p>
+<p>Example script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">&#39;seconds&#39;</span><span class="p">:</span><span class="mf">3.0</span><span class="p">,</span> <span class="s">&#39;layer&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">game_over_layer</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;seconds&#39;</span><span class="p">:</span><span class="mf">3.0</span><span class="p">,</span> <span class="s">&#39;layer&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">}]</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="procgame.dmd.ScriptedLayer.duration">
+<tt class="descname">duration</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.dmd.ScriptedLayer.duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the complete duration of the script.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.ScriptedLayer.force_next">
+<tt class="descname">force_next</tt><big>(</big><em>forward=True</em><big>)</big><a class="headerlink" href="#procgame.dmd.ScriptedLayer.force_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advances to the next script element in the given direction.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="textlayer">
+<h3>TextLayer<a class="headerlink" href="#textlayer" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.dmd.TextLayer">
+<em class="property">class </em><tt class="descclassname">procgame.dmd.</tt><tt class="descname">TextLayer</tt><big>(</big><em>x</em>, <em>y</em>, <em>font</em>, <em>justify='left'</em>, <em>opaque=False</em>, <em>width=128</em>, <em>height=32</em>, <em>fill_color=None</em><big>)</big><a class="headerlink" href="#procgame.dmd.TextLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layer that displays text.</p>
+<dl class="attribute">
+<dt id="procgame.dmd.TextLayer.fill_color">
+<tt class="descname">fill_color</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.dmd.TextLayer.fill_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dot value to fill the frame with.  Requres that <tt class="docutils literal"><span class="pre">width</span></tt> and <tt class="docutils literal"><span class="pre">height</span></tt> be set.  If <tt class="docutils literal"><span class="pre">None</span></tt> only the font characters will be drawn.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.TextLayer.set_text">
+<tt class="descname">set_text</tt><big>(</big><em>text</em>, <em>seconds=None</em>, <em>blink_frames=None</em><big>)</big><a class="headerlink" href="#procgame.dmd.TextLayer.set_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the given message for the given number of seconds.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="font-utilities">
+<h3>Font Utilities<a class="headerlink" href="#font-utilities" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="procgame.dmd.font_named">
+<tt class="descclassname">procgame.dmd.</tt><tt class="descname">font_named</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#procgame.dmd.font_named" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches the <a class="reference internal" href="#procgame.dmd.font_path" title="procgame.dmd.font_path"><tt class="xref py py-attr docutils literal"><span class="pre">font_path</span></tt></a> for a font file of the given name and returns an instance of <a class="reference internal" href="#procgame.dmd.Font" title="procgame.dmd.Font"><tt class="xref py py-class docutils literal"><span class="pre">Font</span></tt></a> if it exists.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="procgame.dmd.font_path">
+<tt class="descclassname">procgame.dmd.</tt><tt class="descname">font_path</tt><em class="property"> = ['z:\\Pinball\\pincode\\v3\\dmd']</em><a class="headerlink" href="#procgame.dmd.font_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>list() -&gt; new empty list
+list(iterable) -&gt; new list initialized from iterable&#8217;s items</p>
+</dd></dl>
+
+</div>
+<div class="section" id="markupframegenerator">
+<h3>MarkupFrameGenerator<a class="headerlink" href="#markupframegenerator" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.dmd.MarkupFrameGenerator">
+<em class="property">class </em><tt class="descclassname">procgame.dmd.</tt><tt class="descname">MarkupFrameGenerator</tt><big>(</big><em>width=128</em>, <em>min_height=32</em><big>)</big><a class="headerlink" href="#procgame.dmd.MarkupFrameGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders a <a class="reference internal" href="#procgame.dmd.Frame" title="procgame.dmd.Frame"><tt class="xref py py-class docutils literal"><span class="pre">Frame</span></tt></a> for given text-based markup.</p>
+<p>The markup format presently uses three markup tokens: 
+<tt class="docutils literal"><span class="pre">#</span></tt> (for headlines) and <tt class="docutils literal"><span class="pre">[</span></tt> and <tt class="docutils literal"><span class="pre">]</span></tt> for plain text.  The markup tokens
+indicate justification.  Lines with no markup or a leading <tt class="docutils literal"><span class="pre">#</span></tt> or <tt class="docutils literal"><span class="pre">[</span></tt>
+will be left-justified.  Lines with a trailing <tt class="docutils literal"><span class="pre">#</span></tt> or <tt class="docutils literal"><span class="pre">]</span></tt> will be right-
+justified.  Lines with both will be centered.</p>
+<p>The width and min_height are specified with instantiation.</p>
+<p>Fonts can be adjusted by assigning the <a class="reference internal" href="#procgame.dmd.MarkupFrameGenerator.font_plain" title="procgame.dmd.MarkupFrameGenerator.font_plain"><tt class="xref py py-attr docutils literal"><span class="pre">font_plain</span></tt></a> and <a class="reference internal" href="#procgame.dmd.MarkupFrameGenerator.font_bold" title="procgame.dmd.MarkupFrameGenerator.font_bold"><tt class="xref py py-attr docutils literal"><span class="pre">font_bold</span></tt></a> member variables.</p>
+<dl class="attribute">
+<dt id="procgame.dmd.MarkupFrameGenerator.font_bold">
+<tt class="descname">font_bold</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.dmd.MarkupFrameGenerator.font_bold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Font used for bold characters.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.dmd.MarkupFrameGenerator.font_plain">
+<tt class="descname">font_plain</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.dmd.MarkupFrameGenerator.font_plain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Font used for plain, non-bold characters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.dmd.MarkupFrameGenerator.frame_for_markup">
+<tt class="descname">frame_for_markup</tt><big>(</big><em>markup</em>, <em>y_offset=0</em><big>)</big><a class="headerlink" href="#procgame.dmd.MarkupFrameGenerator.frame_for_markup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Frame with the given markup rendered within it.
+The frame width is fixed, but the height will be adjusted
+to fit the contents while respecting min_height.</p>
+<p>The Y offset can be configured supplying <em>y_offset</em>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="dmd-file-format-specification">
+<span id="dmd-format"></span><h2>DMD File Format Specification<a class="headerlink" href="#dmd-file-format-specification" title="Permalink to this headline">¶</a></h2>
+<p>.dmd files are the native format for DMD animations in pyprocgame.
+The file format is as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>4 bytes - header data (unused)
+4 bytes - frame_count
+4 bytes - width of animation frames in pixels
+4 bytes - height of animation frames in pixels
+? bytes - Frames: frame_count * width * height bytes
+</pre></div>
+</div>
+<p>Frame data is laid out row0..rowN.  Byte values of each pixel
+are in two parts: the lower 4 bits are the dot &#8220;color&#8221;, <tt class="docutils literal"><span class="pre">0x0</span></tt>
+being black and <tt class="docutils literal"><span class="pre">0xF</span></tt> being the brightest value and the upper
+4 bits are alpha (<tt class="docutils literal"><span class="pre">0x0</span></tt> is fully transparent, <tt class="docutils literal"><span class="pre">0xF</span></tt> is fully
+opaque).  Note that transparency is optional and only supported
+by the alpha blending modes in <a class="reference internal" href="#procgame.dmd.Frame.copy_rect" title="procgame.dmd.Frame.copy_rect"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.Frame.copy_rect()</span></tt></a>.
+Alpha values are ignored by <tt class="xref py py-meth docutils literal"><span class="pre">pinproc.PinPROC.dmd_draw()</span></tt>.</p>
+<p>.dmd files are loaded using <a class="reference internal" href="#procgame.dmd.Animation.load" title="procgame.dmd.Animation.load"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.Animation.load()</span></tt></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">dmd Submodule</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#core-classes">Core Classes</a><ul>
+<li><a class="reference internal" href="#animation">Animation</a></li>
+<li><a class="reference internal" href="#displaycontroller">DisplayController</a></li>
+<li><a class="reference internal" href="#font">Font</a></li>
+<li><a class="reference internal" href="#frame">Frame</a></li>
+<li><a class="reference internal" href="#layer">Layer</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#layer-subclasses">Layer Subclasses</a><ul>
+<li><a class="reference internal" href="#animatedlayer">AnimatedLayer</a></li>
+<li><a class="reference internal" href="#framelayer">FrameLayer</a></li>
+<li><a class="reference internal" href="#groupedlayer">GroupedLayer</a></li>
+<li><a class="reference internal" href="#scriptedlayer">ScriptedLayer</a></li>
+<li><a class="reference internal" href="#textlayer">TextLayer</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilities">Utilities</a><ul>
+<li><a class="reference internal" href="#font-utilities">Font Utilities</a></li>
+<li><a class="reference internal" href="#markupframegenerator">MarkupFrameGenerator</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dmd-file-format-specification">DMD File Format Specification</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="desktop.html"
+                        title="previous chapter">desktop Submodule</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="events.html"
+                        title="next chapter">events Submodule</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ref/dmd.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="events.html" title="events Submodule"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="desktop.html" title="desktop Submodule"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" >procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

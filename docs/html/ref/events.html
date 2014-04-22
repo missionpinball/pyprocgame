@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>events Submodule &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="../index.html" />
+    <link rel="up" title="procgame Module Reference" href="../ref-index.html" />
+    <link rel="next" title="game Submodule" href="game.html" />
+    <link rel="prev" title="dmd Submodule" href="dmd.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="game.html" title="game Submodule"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dmd.html" title="dmd Submodule"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" accesskey="U">procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-procgame.events">
+<span id="events-submodule"></span><h1>events Submodule<a class="headerlink" href="#module-procgame.events" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-procgame.events" title="procgame.events"><tt class="xref py py-mod docutils literal"><span class="pre">procgame.events</span></tt></a> submodule contains general purpose classes for passing events around.</p>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="event">
+<h3>Event<a class="headerlink" href="#event" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.events.Event">
+<em class="property">class </em><tt class="descclassname">procgame.events.</tt><tt class="descname">Event</tt><big>(</big><em>name</em>, <em>object</em>, <em>info</em><big>)</big><a class="headerlink" href="#procgame.events.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes an event dispatched by <a class="reference internal" href="#procgame.events.EventManager" title="procgame.events.EventManager"><tt class="xref py py-class docutils literal"><span class="pre">EventManager</span></tt></a>.</p>
+<dl class="attribute">
+<dt id="procgame.events.Event.info">
+<tt class="descname">info</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.events.Event.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Any information associated with the event.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.events.Event.name">
+<tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.events.Event.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the event.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="procgame.events.Event.object">
+<tt class="descname">object</tt><em class="property"> = None</em><a class="headerlink" href="#procgame.events.Event.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object this event is associated with.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="eventmanager">
+<h3>EventManager<a class="headerlink" href="#eventmanager" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="procgame.events.EventManager">
+<em class="property">class </em><tt class="descclassname">procgame.events.</tt><tt class="descname">EventManager</tt><a class="headerlink" href="#procgame.events.EventManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dispatches events to event handlers.
+Most users will want to obtain the default instance using <a class="reference internal" href="#procgame.events.EventManager.default" title="procgame.events.EventManager.default"><tt class="xref py py-meth docutils literal"><span class="pre">default()</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">EventManager</span><span class="o">.</span><span class="n">default</span><span class="p">()</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="procgame.events.EventManager.add_event_handler">
+<tt class="descname">add_event_handler</tt><big>(</big><em>name</em>, <em>handler</em>, <em>object=None</em><big>)</big><a class="headerlink" href="#procgame.events.EventManager.add_event_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handlers take a single parameter, the <a class="reference internal" href="#procgame.events.Event" title="procgame.events.Event"><tt class="xref py py-class docutils literal"><span class="pre">Event</span></tt></a> object being
+posted.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="procgame.events.EventManager.default">
+<em class="property">classmethod </em><tt class="descname">default</tt><big>(</big><big>)</big><a class="headerlink" href="#procgame.events.EventManager.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the default (shared) EventManager instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.events.EventManager.post">
+<tt class="descname">post</tt><big>(</big><em>name</em>, <em>object=None</em>, <em>info=None</em><big>)</big><a class="headerlink" href="#procgame.events.EventManager.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post an <a class="reference internal" href="#procgame.events.Event" title="procgame.events.Event"><tt class="xref py py-class docutils literal"><span class="pre">Event</span></tt></a> with the given properties.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.events.EventManager.post_event">
+<tt class="descname">post_event</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#procgame.events.EventManager.post_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post the given <a class="reference internal" href="#procgame.events.Event" title="procgame.events.Event"><tt class="xref py py-class docutils literal"><span class="pre">Event</span></tt></a> instance. Blocks while the resulting
+handlers are called.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="procgame.events.EventManager.remove_event_handler">
+<tt class="descname">remove_event_handler</tt><big>(</big><em>handler</em><big>)</big><a class="headerlink" href="#procgame.events.EventManager.remove_event_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the given handler.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">events Submodule</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#event">Event</a></li>
+<li><a class="reference internal" href="#eventmanager">EventManager</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dmd.html"
+                        title="previous chapter">dmd Submodule</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="game.html"
+                        title="next chapter">game Submodule</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ref/events.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="game.html" title="game Submodule"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dmd.html" title="dmd Submodule"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li>
+          <li><a href="../ref-index.html" >procgame Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

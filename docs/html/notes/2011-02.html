@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyprocgame 1.x (Development) Release Notes &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="../index.html" />
+    <link rel="prev" title="pyprocgame 1.0 Release Notes" href="2011-01.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="2011-01.html" title="pyprocgame 1.0 Release Notes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pyprocgame-1-x-development-release-notes">
+<h1>pyprocgame 1.x (Development) Release Notes<a class="headerlink" href="#pyprocgame-1-x-development-release-notes" title="Permalink to this headline">¶</a></h1>
+<p>The following change notes are a summary of changes since <a class="reference external" href="https://github.com/preble/pyprocgame/tree/1.0">1.0</a>:</p>
+<div class="section" id="pyprocgame">
+<h2>pyprocgame<a class="headerlink" href="#pyprocgame" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Changed named parameter for <a class="reference internal" href="../ref/game.html#procgame.game.Driver.patter" title="procgame.game.Driver.patter"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.Driver.patter()</span></tt></a>: <tt class="docutils literal"><span class="pre">orig_on_time</span></tt> is now <tt class="docutils literal"><span class="pre">original_on_time</span></tt>, to be consistent with pypinproc and other existing methods.</li>
+<li>Added child modes.  See <a class="reference internal" href="../ref/game.html#procgame.game.Mode.add_child_mode" title="procgame.game.Mode.add_child_mode"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.Mode.add_child_mode()</span></tt></a> for more details.</li>
+<li><a class="reference internal" href="../ref/game.html#procgame.game.Mode.delay" title="procgame.game.Mode.delay"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.Mode.delay()</span></tt></a> now has more optional parameters, and will autogenerate a unique name and return it.</li>
+<li>Added <a class="reference internal" href="../ref/dmd.html#procgame.dmd.Font.draw_in_rect" title="procgame.dmd.Font.draw_in_rect"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.Font.draw_in_rect()</span></tt></a>.</li>
+<li>Added <a class="reference internal" href="../ref/dmd.html#procgame.dmd.TextLayer.fill_color" title="procgame.dmd.TextLayer.fill_color"><tt class="xref py py-attr docutils literal"><span class="pre">procgame.dmd.TextLayer.fill_color</span></tt></a>.</li>
+<li><a class="reference internal" href="../ref/game.html#procgame.game.Switch.hw_timestamp" title="procgame.game.Switch.hw_timestamp"><tt class="xref py py-attr docutils literal"><span class="pre">procgame.game.Switch.hw_timestamp</span></tt></a> is now set when available.</li>
+<li>Added <tt class="xref py py-attr docutils literal"><span class="pre">procgame.modes.ScoreDisplay.credit_string_callback</span></tt>.</li>
+<li><a class="reference internal" href="../ref/dmd.html#procgame.dmd.DisplayController.update" title="procgame.dmd.DisplayController.update"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.DisplayController.update()</span></tt></a> now returns the frame it generated.</li>
+<li>Added <tt class="docutils literal"><span class="pre">dmdimage</span></tt> tool.</li>
+<li>Game configuration file: game items (switches, coils, and lamps) can now have a <tt class="docutils literal"><span class="pre">tags</span></tt> key. This allows obtaining game items with a certain tag via <a class="reference internal" href="../ref/game.html#procgame.game.AttrCollection.items_tagged" title="procgame.game.AttrCollection.items_tagged"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.AttrCollection.items_tagged()</span></tt></a>.</li>
+<li>Fixed an issue where <a class="reference internal" href="../ref/game.html#procgame.game.Switch.time_since_change" title="procgame.game.Switch.time_since_change"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.Switch.time_since_change()</span></tt></a> did not behave as documented. Previously, querying <tt class="xref py py-meth docutils literal"><span class="pre">time_since_changed()</span></tt> would always return 0 if called within that switch&#8217;s handler. Now the time will be properly reset <em>after</em> the switch&#8217;s events are handled.</li>
+<li>Added <a class="reference internal" href="../ref/game.html#procgame.game.GameController.load_config_stream" title="procgame.game.GameController.load_config_stream"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.GameController.load_config_stream()</span></tt></a>.</li>
+<li>Added <a class="reference internal" href="../ref/events.html#procgame.events.EventManager" title="procgame.events.EventManager"><tt class="xref py py-class docutils literal"><span class="pre">procgame.events.EventManager</span></tt></a>, a general purpose event dispatcher.</li>
+<li>In <tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.GameController.end_game()</span></tt>, <a class="reference internal" href="../ref/game.html#procgame.game.GameController.ball" title="procgame.game.GameController.ball"><tt class="xref py py-attr docutils literal"><span class="pre">ball</span></tt></a> is now set to 0 before calling <tt class="xref py py-meth docutils literal"><span class="pre">game_ended()</span></tt>.</li>
+<li>Added <a class="reference internal" href="../ref/game.html#procgame.game.GameController.is_game_over" title="procgame.game.GameController.is_game_over"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.GameController.is_game_over()</span></tt></a>.</li>
+<li>Added &#8216;now&#8217; parameter to <a class="reference internal" href="../ref/game.html#procgame.game.Driver.patter" title="procgame.game.Driver.patter"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.Driver.patter()</span></tt></a>.</li>
+<li>Added <a class="reference internal" href="../ref/game.html#procgame.game.Driver.future_pulse" title="procgame.game.Driver.future_pulse"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.Driver.future_pulse()</span></tt></a></li>
+<li>Added <tt class="xref py py-class docutils literal"><span class="pre">procgame.game.PDBConfig</span></tt> to handle &#8216;pdb&#8217; machineType YAML parsing</li>
+<li>Added &#8216;polarity&#8217; field to YAML driver parsing</li>
+<li>Added &#8216;pulseTime&#8217; field to YAML driver parsing to set a driver&#8217;s default pulse width.</li>
+<li>Added &#8216;label&#8217; field to YAML item parsing for human readable item descriptions.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyprocgame 1.x (Development) Release Notes</a><ul>
+<li><a class="reference internal" href="#pyprocgame">pyprocgame</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="2011-01.html"
+                        title="previous chapter">pyprocgame 1.0 Release Notes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/notes/2011-02.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="2011-01.html" title="pyprocgame 1.0 Release Notes"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

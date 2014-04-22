@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyprocgame 0.9 Release Notes &mdash; pyprocgame  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyprocgame  documentation" href="../index.html" />
+    <link rel="next" title="pyprocgame 1.0 Release Notes" href="2011-01.html" />
+    <link rel="prev" title="procgame Command Line Tool" href="../tools.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="2011-01.html" title="pyprocgame 1.0 Release Notes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../tools.html" title="procgame Command Line Tool"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pyprocgame-0-9-release-notes">
+<h1>pyprocgame 0.9 Release Notes<a class="headerlink" href="#pyprocgame-0-9-release-notes" title="Permalink to this headline">¶</a></h1>
+<p>The following change notes are a summary of changes between git hash
+<a class="reference external" href="http://github.com/preble/pyprocgame/commit/8482d6009a3b81f8624ef620a60126aafdcad8d2">8482d6009a3b81f8624e</a> and
+<a class="reference external" href="http://github.com/preble/pyprocgame/commit/8a769c077d1c184f5dcd76cfb0e1275318695095">8a769c077d1c184f5dcd</a>:</p>
+<div class="section" id="general-game">
+<h2>General &amp; Game<a class="headerlink" href="#general-game" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Reorganized pyprocgame module source into separate files but consolidated submodules.  Most classes are still at the same module path externally, but the following have moved:</p>
+<ul class="simple">
+<li><tt class="xref py py-class docutils literal"><span class="pre">procgame.scoredisplay.ScoreDisplay</span></tt> moved to <tt class="xref py py-class docutils literal"><span class="pre">procgame.modes.ScoreDisplay</span></tt></li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">procgame.trough.Trough</span></tt> moved to <tt class="xref py py-class docutils literal"><span class="pre">procgame.modes.Trough</span></tt></li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">procgame.ballsave.BallSave</span></tt> moved to <tt class="xref py py-class docutils literal"><span class="pre">procgame.modes.BallSave</span></tt></li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">procgame.ballsearch.BallSearch</span></tt> moved to <tt class="xref py py-class docutils literal"><span class="pre">procgame.modes.BallSearch</span></tt></li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">procgame.replay.Replay</span></tt> moved to <tt class="xref py py-class docutils literal"><span class="pre">procgame.modes.Replay</span></tt></li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">procgame.highscoreentry.HighScoreEntry</span></tt> moved to <tt class="xref py py-class docutils literal"><span class="pre">procgame.modes.HighScoreEntry</span></tt></li>
+</ul>
+<p>Most of the changes can be seen in commit <a class="reference external" href="http://github.com/preble/pyprocgame/commit/c06a031d1505c30a86b424ee8073ce6036010f2e">c06a031d1505c30a86b4</a>.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="../ref/game.html#procgame.game.Mode" title="procgame.game.Mode"><tt class="xref py py-class docutils literal"><span class="pre">Mode</span></tt></a> switch handlers should now return <tt class="xref py py-data docutils literal"><span class="pre">procgame.game.SwitchStop</span></tt> or <tt class="xref py py-data docutils literal"><span class="pre">SwitchContinue</span></tt>, instead of <cite>True</cite> or <cite>False</cite>.  Although the values are the same the meaning is much clearer.</p>
+</li>
+<li><p class="first">Added <tt class="xref py py-class docutils literal"><span class="pre">procgame.game.BasicGame</span></tt>, a new subclass of <a class="reference internal" href="../ref/game.html#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">procgame.game.GameController</span></tt></a> that comes with helpful classes like <tt class="xref py py-class docutils literal"><span class="pre">procgame.modes.ScoreDisplay</span></tt> already installed.  Recommended for new game development.</p>
+</li>
+<li><p class="first">Added <tt class="xref py py-mod docutils literal"><span class="pre">procgame.config</span></tt> module to facilitate system-wide configuration such as the path to DMD files (used to populate <a class="reference internal" href="../ref/dmd.html#procgame.dmd.font_path" title="procgame.dmd.font_path"><tt class="xref py py-attr docutils literal"><span class="pre">procgame.dmd.font_path</span></tt></a> and used within <a class="reference internal" href="../ref/dmd.html#procgame.dmd.font_named" title="procgame.dmd.font_named"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.font_named()</span></tt></a>).</p>
+</li>
+<li><p class="first">Added <a class="reference internal" href="../ref/desktop.html#procgame.desktop.Desktop" title="procgame.desktop.Desktop"><tt class="xref py py-class docutils literal"><span class="pre">procgame.desktop.Desktop</span></tt></a> which provides a virtual DMD and incorporates keyboard-to-event features previously in <tt class="xref py py-mod docutils literal"><span class="pre">procgame.keyboard</span></tt>.  Both are demonstrated in the source code to <tt class="xref py py-class docutils literal"><span class="pre">procgame.game.BasicGame</span></tt>.</p>
+</li>
+<li><p class="first">Removed <tt class="xref py py-attr docutils literal"><span class="pre">procgame.game.Player.info_record</span></tt>.  Devs should use a game-specific subclass of <tt class="xref py py-class docutils literal"><span class="pre">Player</span></tt> with the new method <a class="reference internal" href="../ref/game.html#procgame.game.GameController.create_player" title="procgame.game.GameController.create_player"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.GameController.create_player()</span></tt></a>.</p>
+</li>
+<li><p class="first">Added <tt class="xref py py-class docutils literal"><span class="pre">procgame.fakepinproc.FakePinPROC</span></tt>, a <tt class="xref py py-class docutils literal"><span class="pre">pinproc.PinPROC</span></tt> stand-in.</p>
+</li>
+<li><p class="first">Added <a class="reference internal" href="../ref/game.html#procgame.game.GameController.create_pinproc" title="procgame.game.GameController.create_pinproc"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.GameController.create_pinproc()</span></tt></a> to enable subclassing or replacing <tt class="xref py py-class docutils literal"><span class="pre">pinproc.PinPROC</span></tt>.</p>
+</li>
+<li><p class="first">The <a class="reference internal" href="../ref/sound.html#procgame.sound.SoundController" title="procgame.sound.SoundController"><tt class="xref py py-class docutils literal"><span class="pre">procgame.sound.SoundController</span></tt></a> will disable itself if it cannot initialize <tt class="xref py py-mod docutils literal"><span class="pre">pygame.mixer</span></tt>.</p>
+</li>
+<li><p class="first">Added <a class="reference internal" href="../ref/game.html#procgame.game.GameController.get_events" title="procgame.game.GameController.get_events"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.GameController.get_events()</span></tt></a> and <a class="reference internal" href="../ref/game.html#procgame.game.GameController.tick" title="procgame.game.GameController.tick"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.GameController.tick()</span></tt></a>.</p>
+</li>
+<li><p class="first">Renamed <em>machineType</em> variables to the more Pythonic <em>machine_type</em>.</p>
+</li>
+<li><p class="first">Renamed <tt class="xref py py-meth docutils literal"><span class="pre">procgame.game.GameController.write_settings()</span></tt> to <a class="reference internal" href="../ref/game.html#procgame.game.GameController.save_settings" title="procgame.game.GameController.save_settings"><tt class="xref py py-meth docutils literal"><span class="pre">save_settings()</span></tt></a>.  Renamed <tt class="xref py py-meth docutils literal"><span class="pre">write_game_data()</span></tt> to <a class="reference internal" href="../ref/game.html#procgame.game.GameController.save_game_data" title="procgame.game.GameController.save_game_data"><tt class="xref py py-meth docutils literal"><span class="pre">save_game_data()</span></tt></a>.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="dmd">
+<h2>DMD<a class="headerlink" href="#dmd" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed <a class="reference internal" href="../ref/dmd.html#procgame.dmd.Animation.save" title="procgame.dmd.Animation.save"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.Animation.save()</span></tt></a> on some Windows platforms.</li>
+<li>Removed <tt class="xref py py-attr docutils literal"><span class="pre">procgame.dmd.DisplayController.capture</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">procgame.dmd.DisplayController.alt_frame_handler</span></tt> in favor of <a class="reference internal" href="../ref/dmd.html#procgame.dmd.DisplayController.frame_handlers" title="procgame.dmd.DisplayController.frame_handlers"><tt class="xref py py-attr docutils literal"><span class="pre">procgame.dmd.DisplayController.frame_handlers</span></tt></a>.</li>
+<li>Added <a class="reference internal" href="../ref/dmd.html#procgame.dmd.Frame.subframe" title="procgame.dmd.Frame.subframe"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.Frame.subframe()</span></tt></a> and <a class="reference internal" href="../ref/dmd.html#procgame.dmd.Frame.create_with_text" title="procgame.dmd.Frame.create_with_text"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.Frame.create_with_text()</span></tt></a>.</li>
+<li>Fixed a case where the <a class="reference internal" href="../ref/dmd.html#procgame.dmd.Layer.opaque" title="procgame.dmd.Layer.opaque"><tt class="xref py py-attr docutils literal"><span class="pre">procgame.dmd.Layer.opaque</span></tt></a> property was not checked by <a class="reference internal" href="../ref/dmd.html#procgame.dmd.DisplayController.update" title="procgame.dmd.DisplayController.update"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.DisplayController.update()</span></tt></a>.</li>
+<li>Added <a class="reference internal" href="../ref/dmd.html#procgame.dmd.ScriptedLayer.force_next" title="procgame.dmd.ScriptedLayer.force_next"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.ScriptedLayer.force_next()</span></tt></a>.  Added transitions to <a class="reference internal" href="../ref/dmd.html#procgame.dmd.ScriptedLayer" title="procgame.dmd.ScriptedLayer"><tt class="xref py py-class docutils literal"><span class="pre">procgame.dmd.ScriptedLayer</span></tt></a> (experimental).</li>
+<li><a class="reference internal" href="../ref/dmd.html#procgame.dmd.AnimatedLayer" title="procgame.dmd.AnimatedLayer"><tt class="xref py py-class docutils literal"><span class="pre">procgame.dmd.AnimatedLayer</span></tt></a> changed to no longer destructively edit the frames list.  Added <tt class="xref py py-class docutils literal"><span class="pre">procgame.dmd.FrameQueueLayer</span></tt>, which does destructively edit the frames list.</li>
+<li>dmdconvert.py now sets upper four bits of each DMD dot to the source image&#8217;s alpha channel value, if present.</li>
+<li>Added <a class="reference internal" href="../ref/highscore.html#module-procgame.highscore" title="procgame.highscore"><tt class="xref py py-mod docutils literal"><span class="pre">procgame.highscore</span></tt></a> module, with new <tt class="xref py py-class docutils literal"><span class="pre">procgame.highscore.EntrySequenceManager</span></tt>.</li>
+<li>Added <cite>y_offset</cite> parameter to <a class="reference internal" href="../ref/dmd.html#procgame.dmd.MarkupFrameGenerator.frame_for_markup" title="procgame.dmd.MarkupFrameGenerator.frame_for_markup"><tt class="xref py py-meth docutils literal"><span class="pre">procgame.dmd.MarkupFrameGenerator.frame_for_markup()</span></tt></a>.</li>
+<li>Added <tt class="xref py py-class docutils literal"><span class="pre">procgame.dmd.PanningLayer</span></tt>.</li>
+<li>Added support for coils to <tt class="xref py py-class docutils literal"><span class="pre">procgame.lamps.LampShowTrack</span></tt> and fixed a bug (thanks Koen) in name processing.</li>
+</ul>
+</div>
+<div class="section" id="pypinproc">
+<h2>pypinproc<a class="headerlink" href="#pypinproc" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../ref/game.html#procgame.game.GameController" title="procgame.game.GameController"><tt class="xref py py-class docutils literal"><span class="pre">procgame.game.GameController</span></tt></a> now calls <tt class="xref py py-meth docutils literal"><span class="pre">pinproc.PinPROC.flush()</span></tt> after every game loop.  This is in response to removing <tt class="xref py py-func docutils literal"><span class="pre">PRFlush()</span></tt> calls from within pypinproc driver update calls.</li>
+<li>Added event type constants <a class="reference internal" href="../ref-pinproc.html#pinproc.EventTypeSwitchClosedDebounced" title="pinproc.EventTypeSwitchClosedDebounced"><tt class="xref py py-attr docutils literal"><span class="pre">pinproc.EventTypeSwitchClosedDebounced</span></tt></a> and others.</li>
+<li>Added machine type constants <a class="reference internal" href="../ref-pinproc.html#pinproc.MachineTypeWPC" title="pinproc.MachineTypeWPC"><tt class="xref py py-attr docutils literal"><span class="pre">pinproc.MachineTypeWPC</span></tt></a> and others.  Added support for <tt class="docutils literal"><span class="pre">wpc95</span></tt> and <tt class="docutils literal"><span class="pre">wpcAlphanumeric</span></tt> machine types.</li>
+<li>Added auxiliary bus commands.</li>
+<li>Added <tt class="xref py py-meth docutils literal"><span class="pre">pinproc.PinPROC.driver_pulsed_patter()</span></tt>.</li>
+<li>Added switch rule reload; see <tt class="xref py py-meth docutils literal"><span class="pre">pinproc.PinPROC.switch_update_rule()</span></tt>.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyprocgame 0.9 Release Notes</a><ul>
+<li><a class="reference internal" href="#general-game">General &amp; Game</a></li>
+<li><a class="reference internal" href="#dmd">DMD</a></li>
+<li><a class="reference internal" href="#pypinproc">pypinproc</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../tools.html"
+                        title="previous chapter">procgame Command Line Tool</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="2011-01.html"
+                        title="next chapter">pyprocgame 1.0 Release Notes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/notes/2010-01.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="2011-01.html" title="pyprocgame 1.0 Release Notes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../tools.html" title="procgame Command Line Tool"
+             >previous</a> |</li>
+        <li><a href="../index.html">pyprocgame  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014, Adam Preble &amp; Gerry Stellenberg.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
