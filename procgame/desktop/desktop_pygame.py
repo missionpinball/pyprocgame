@@ -61,7 +61,6 @@ class Desktop():
 			print 'Desktop init skipping setup_window(); pygame does not appear to be loaded.'
 		self.add_key_map(pygame.locals.K_LSHIFT, 3)
 		self.add_key_map(pygame.locals.K_RSHIFT, 1)
-		self.key_events = []
 	
 	def add_key_map(self, key, switch_number):
 		"""Maps the given *key* to *switch_number*, where *key* is one of the key constants in :mod:`pygame.locals`."""
@@ -74,7 +73,7 @@ class Desktop():
 	def get_keyboard_events(self):
 		"""Asks :mod:`pygame` for recent keyboard events and translates them into an array
 		of events similar to what would be returned by :meth:`pinproc.PinPROC.get_events`."""
-		#key_events = []
+		key_events = []
 		for event in pygame.event.get():
 			EventManager.default().post(name=self.event_name_for_pygame_event_type(event.type), object=self, info=event)
 			key_event = {}
@@ -99,9 +98,7 @@ class Desktop():
 					key_event['value'] = self.key_map[event.key]
 			if len(key_event):
 				key_events.append(key_event)
-		e = self.key_events
-		self.key_events = []
-		return e
+		return key_events
 	
 	
 	event_listeners = {}
