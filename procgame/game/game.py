@@ -596,7 +596,6 @@ class GameController(object):
 		loops = 0
 		self.done = False
 		self.dmd_event()
-		self.LED_event()
 		try:
 			while self.done == False:
 
@@ -609,6 +608,7 @@ class GameController(object):
 				self.tick()
 				self.tick_virtual_drivers()
 				self.modes.tick()
+				self.LED_event()
 				if self.proc:
 					self.proc.watchdog_tickle()
 					self.proc.flush()
