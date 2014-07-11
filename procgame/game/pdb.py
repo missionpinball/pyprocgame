@@ -89,6 +89,10 @@ class LED(GameItem):
 		# If the number of colors is the same or greater than the number of LED
 		# outputs:
 		if len(color) >= len(self.addrs):
+			# match the number of colors to the number of LED outputs
+			if len(color) > len(self.addrs):
+				color = color[-len(self.addrs):]
+
 			for i in range(len(self.addrs)):
 				self.game.proc.led_color(self.board_addr, self.addrs[i],
 										 self.normalize_color(int(color[i] *
@@ -113,6 +117,10 @@ class LED(GameItem):
 		# If the number of colors is the same or greater than the number of LED
 		# outputs:
 		if len(color) >= len(self.addrs):
+			# match the number of colors to the number of LED outputs
+			if len(color) > len(self.addrs):
+				color = color[-len(self.addrs):]
+
 			for i in range(len(self.addrs)):
 				self.game.proc.led_fade_color(self.board_addr,
 											  self.addrs[i],
@@ -150,9 +158,12 @@ class LED(GameItem):
 
 		fadetime = int(fadetime/4)
 
+		# If the number of colors is the same or greater than the number of LED
+		# outputs:
 		if len(color) >= len(self.addrs):
-			# if the number of colors is the same or greater than the number
-			# of LED outputs
+			# match the number of colors to the number of LED outputs
+			if len(color) > len(self.addrs):
+				color = color[-len(self.addrs):]
 
 			for i in range(len(self.addrs)):
 				self.game.proc.led_fade(self.board_addr,
